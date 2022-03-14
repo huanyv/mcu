@@ -1,0 +1,49 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              06/02/2021 07:42:04 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\ProgramFiles\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          #define     uint       unsigned int
+   4          #define     uchar      unsigned char
+   5          
+   6          #define     LED        P2
+   7          
+   8          void delayms(uint i)
+   9          {
+  10   1              uint a, b;
+  11   1              for(a = 0; a < i; a++)
+  12   1              {
+  13   2                      for(b = 0; b < 123; b++);
+  14   2              }
+  15   1      }
+  16          
+  17          int main(void)
+  18          {
+  19   1              uint i = 0;
+  20   1              for(i = 0; i < 8; i++)
+  21   1              {
+  22   2                      LED = ~(0x01 << i);
+  23   2                      delayms(500);
+  24   2              }       
+  25   1              return 0;
+  26   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     73    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

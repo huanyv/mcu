@@ -1,0 +1,78 @@
+C51 COMPILER V9.57.0.0   HCSR04                                                            04/24/2019 16:51:36 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE HCSR04
+OBJECT MODULE PLACED IN .\Objects\hcsr04.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE HC-SR04\hcsr04.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\LCD1602;.\HC-SR04) DE
+                    -BUG OBJECTEXTEND PRINT(.\Listings\hcsr04.lst) TABS(2) OBJECT(.\Objects\hcsr04.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "hcsr04.h"
+   3          #include "intrins.h"
+   4          
+   5          void HC_SR04Status(void) {
+   6   1          TRIG = 0;
+   7   1          TRIG = 1;
+   8   1          _nop_();
+   9   1          _nop_();
+  10   1          _nop_();
+  11   1          _nop_();
+  12   1          _nop_();
+  13   1          _nop_();
+  14   1          _nop_();
+  15   1          _nop_();
+  16   1          _nop_();
+  17   1          _nop_();
+  18   1          _nop_();
+  19   1          _nop_();
+  20   1          _nop_();
+  21   1          _nop_();
+  22   1          _nop_();
+  23   1          TRIG = 0;
+  24   1      }
+  25          int HC_SR04EchoTime(void) {
+  26   1          int time = 0;
+  27   1          TH0 = 0x00;
+  28   1          TL0 = 0x00;
+  29   1          while(!ECHO);
+  30   1          TR0 = 1;
+  31   1          while(ECHO);
+  32   1          TR0 = 0;
+  33   1          time = TH0;
+  34   1          time <<= 8;
+  35   1          time |= TL0;
+  36   1      
+  37   1      
+  38   1          return time;
+  39   1      }
+  40          uint HC_SR04EchoDistance(void) {
+  41   1          uint time;
+  42   1          uint distance;
+  43   1          HC_SR04Status();
+  44   1          time = HC_SR04EchoTime();
+  45   1          distance = (((double)time*0.034624)/2.0)*10+0.5;//25
+  46   1      //    distance = (((double)time*0.034566)/2.0)*10+0.5;//24
+  47   1      //    distance = (((double)time*0.034508)/2.0)*10+0.5;//23
+  48   1      //    distance = (((double)time*0.034449)/2.0)*10+0.5;//22
+  49   1      //    distance = (((double)time*0.034491)/2.0)*10+0.5;//21
+  50   1      //    distance = (((double)time*0.034432)/2.0)*10+0.5;//20
+  51   1          return distance;
+  52   1      }
+
+
+C51 COMPILER V9.57.0.0   HCSR04                                                            04/24/2019 16:51:36 PAGE 2   
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    104    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

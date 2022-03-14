@@ -1,0 +1,102 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    04/08/2019  19:37:40  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE 定时器T0.obj TO 定时器T0 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  定时器T0.obj (______T0)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  定时器T0 (______T0)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0002H     UNIT         ?DT?______T0
+            IDATA   000AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0005H     UNIT         ?C_INITSEG
+                    0008H     0003H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    009AH     0036H     UNIT         ?PR?TIME0?______T0
+            CODE    00D0H     0010H     UNIT         ?PR?MAIN?______T0
+
+
+
+OVERLAY MAP OF MODULE:   定时器T0 (______T0)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?______T0
+  +--> ?C_INITSEG
+
+
+
+SYMBOL TABLE OF MODULE:  定时器T0 (______T0)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ______T0
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/08/2019  19:37:40  PAGE 2
+
+
+  D:00B8H         PUBLIC        IP
+  C:00D0H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:00A0H.1       PUBLIC        led
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  C:009AH         PUBLIC        time0
+  D:00C8H         PUBLIC        T2CON
+  D:0008H         PUBLIC        i
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:00D0H         LINE#         11
+  C:00D0H         LINE#         12
+  C:00D0H         LINE#         13
+  C:00D3H         LINE#         14
+  C:00D5H         LINE#         15
+  C:00D8H         LINE#         16
+  C:00DBH         LINE#         17
+  C:00DEH         LINE#         18
+  -------         ENDPROC       MAIN
+  -------         PROC          TIME0
+  C:009AH         LINE#         22
+  C:00A5H         LINE#         24
+  C:00A8H         LINE#         25
+  C:00ABH         LINE#         26
+  C:00BCH         LINE#         27
+  C:00BCH         LINE#         28
+  C:00C4H         LINE#         29
+  C:00C7H         LINE#         30
+  C:00C7H         LINE#         32
+  -------         ENDPROC       TIME0
+  -------         ENDMOD        ______T0
+
+Program Size: data=11.0 xdata=0 code=221
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

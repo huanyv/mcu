@@ -1,0 +1,179 @@
+C51 COMPILER V9.01   MAIN                                                                  02/13/2019 16:35:37 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\OBJ\main.obj
+COMPILER INVOKED BY: F:\00000000\000exe\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND OBJECT(..\OBJ\main.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          #define dula P0
+   7          #define PINC P3
+   8          
+   9          //#define count 50000
+  10          //#define THx (65536-count)/256
+  11          //#define TLx (65536-count)%256
+  12          
+  13          sbit A38=P2^2;
+  14          sbit B38=P2^3;
+  15          sbit C38=P2^4;
+  16          
+  17          sbit k1=P3^1;
+  18          sbit k2=P3^0;
+  19          sbit k3=P3^2;
+  20          sbit k4=P3^3;
+  21          
+  22          uchar a=0,b=0,c=0,d=0;
+  23          
+  24          uchar code distab[17] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d, 
+  25                                                          0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0x40};
+  26          void delay(uint iii)
+  27          {
+  28   1              while(iii--);
+  29   1      }
+  30          void display()
+  31          {
+  32   1              uchar i;
+  33   1              for(i=1;i<9;i++)
+  34   1              {
+  35   2                      switch(i)
+  36   2                      {
+  37   3                              case 1:C38=0;B38=0;A38=0;
+  38   3                              dula=distab[d];break;
+  39   3                              case 2:C38=0;B38=0;A38=1;
+  40   3                              dula=distab[c];break;
+  41   3                              case 3:C38=0;B38=1;A38=0;
+  42   3                              dula=distab[b];break;
+  43   3                              case 4:C38=0;B38=1;A38=1;
+  44   3                              dula=distab[a];break;
+  45   3                              case 5:C38=1;B38=0;A38=0;break;
+  46   3              
+  47   3                              
+  48   3                              case 6:C38=1;B38=0;A38=1;break;
+  49   3                                                      
+  50   3                              
+  51   3                              case 7:C38=1;B38=1;A38=0;break;
+  52   3      
+  53   3                              case 8:C38=1;B38=1;A38=1;break;
+  54   3                                                      
+  55   3                      }
+C51 COMPILER V9.01   MAIN                                                                  02/13/2019 16:35:37 PAGE 2   
+
+  56   2                      delay(200);
+  57   2                      dula=0x00;
+  58   2              }
+  59   1      }
+  60          uchar readkey(void)
+  61          {
+  62   1              uchar keyval=0;  //////keyvai是最终键码，4个按键分别对应的键码是0x0e,0x0d,0x0b,0x07
+  63   1              uchar newkey;      ////////newkey是当前键码，需要和上次键码比较
+  64   1              static uchar keystate=0; ////状态值，起始为0，注意它是静态变量赋值后就保持到改写为止
+  65   1              static uchar lastkey; /////lastkey记录上次检查时的键码，也是静态变量
+  66   1              newkey=PINC&0X0F; /////键码就是PC口低4位取值每次都要读取
+  67   1              switch(keystate)        //////按照状态值进行不同的处理，单片机启动后总是状态0，
+  68   1              {
+  69   2              case 0:                      /////状态0
+  70   2                      if(newkey!=0x0f)       //////如果有键
+  71   2                      {
+  72   3                              keystate=1;               //////有键记下状态1
+  73   3                              lastkey=newkey;        /////有键就用当前键码代替原来键码等待下次检查
+  74   3                      }
+  75   2                      break;                          //////如果无键直接跳出，有键进行上述处理后跳出，注意有键状态值已变
+  76   2              case 1:                       ///////如上次有键，这次就转到状态1
+  77   2                      if(newkey==lastkey)   /////这次读取的键值如果和上次记录的一样，就是确认按键了
+  78   2                      {
+  79   3                              keyval=newkey;          /////取得键码
+  80   3                              keystate=2;                //////按键状态下次要转状态2
+  81   3                      }
+  82   2                      else                       //////如果读键和上次不同，不确认按键，除了不进行以上处理还要把状态值清0
+  83   2                              keystate=0;
+  84   2                      break;                   ///////跳出
+  85   2              case 2:                 /////////状态2
+  86   2                      if(newkey==0x0f)   ///////如果10毫秒后仍然无键
+  87   2                              keystate=0;            //////下次回到状态0
+  88   2                      break;
+  89   2              }
+  90   1              return keyval;      ////////返回键码
+  91   1      }
+  92          void key()
+  93          {
+  94   1              uchar kkk;
+  95   1              kkk=readkey();
+  96   1              if(kkk==0x0d)
+  97   1              {
+  98   2                      a++;
+  99   2                      if(a==10)a=0;
+ 100   2              }
+ 101   1              if(kkk==0x0e)
+ 102   1              {
+ 103   2                      b++;
+ 104   2                      if(b==10)b=0;
+ 105   2              }
+ 106   1              if(kkk==0x0b)
+ 107   1              {
+ 108   2                      c++;
+ 109   2                      if(c==10)c=0;
+ 110   2              }
+ 111   1              if(kkk==0x07)
+ 112   1              {
+ 113   2                      d++;
+ 114   2                      if(a==10)d=0;
+ 115   2              }
+ 116   1      }
+ 117          void main()
+C51 COMPILER V9.01   MAIN                                                                  02/13/2019 16:35:37 PAGE 3   
+
+ 118          {
+ 119   1              while(1)
+ 120   1              {
+ 121   2                      display();
+ 122   2                      key();
+ 123   2              }
+ 124   1      }
+ 125          
+ 126          //void timer0() interrupt 1
+ 127          //{
+ 128          //      static i=0;
+ 129          //      TH0=THx;TL0=TLx;
+ 130          //      if(++i==20)
+ 131          //      {
+ 132          //      
+ 133          //      }
+ 134          //}
+ 135          
+ 136          
+ 137          
+ 138          
+ 139          
+ 140          
+ 141          
+ 142          
+ 143          
+ 144          
+ 145          
+ 146          
+ 147          
+ 148          
+ 149          
+ 150          
+ 151          
+ 152          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    268    ----
+   CONSTANT SIZE    =     17    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

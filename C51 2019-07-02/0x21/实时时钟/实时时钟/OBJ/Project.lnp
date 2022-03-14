@@ -1,0 +1,8 @@
+"..\OBJ\buling.obj",
+"..\OBJ\ds18b20.obj",
+"..\OBJ\ds1302.obj",
+"..\OBJ\IIC.obj",
+"..\OBJ\lcd1602.obj",
+"..\OBJ\main.obj" 
+TO "..\OBJ\Project" 
+PRINT(".\Project.m51") RAMSIZE(256) 

@@ -1,0 +1,103 @@
+C51 COMPILER V9.01   _韄私_背媳妇禵                                                        03/02/2019 09:20:02 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE _韄私_背媳妇禵
+OBJECT MODULE PLACED IN 猪八戒背媳妇儿.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE 猪八戒背媳妇儿.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h> 
+   2          #define uchar unsigned char 
+   3          #define uint unsigned int 
+   4          sbit fm=P1^5;// 蜂鸣器控制端口
+   5          uchar timeh,timel;// 用于存放定时器的高 8 位和低 8 位
+   6          uchar code zbjbxf[]={//定义猪八戒背媳妇的简谱数组
+   7                  0x64,0xA3,0xC1,0xA2,0x62,0x84,0x61,0x81,0x61,0xA4,
+   8                  0xA1, 0x91,0xA1,0x81,0x64,0xA3,0xC1,0xD2,0xD2,0xD2,
+   9                  0xA2,0xC4, 0xA1,0xC1,0xA1,0xC1,0xD2,0xD2,0xD2,0xA2,0xC4,0xC2,0x62, 
+  10                  0xC2,0x62,0xA2,0xA2,0x84,0x94,0x94,0x92,0x81,0x91, 
+  11                  0xA2,0xC2,0xD4,0xE4,0xA4,0xE4,0xA2,0xE2,0xA2,0xE2,0xA2, 
+  12                  0xA2,0x84,0x94,0x94,0x92,0x81,0x91,0xA2,0xC2,0xD8}; 
+  13                  // 适合 12M 的晶振定时器初值表，高低 8 位分开
+  14                  uchar code chuzhi[]={ 
+  15                          0xff,0xff,//占位0xFC,0x8E,//中央 C调 1-7 
+  16                          0xFC,0xED, 
+  17                          0xFD,0x43, 
+  18                          0xFD,0x6A, 
+  19                          0xFD,0xB3, 
+  20                          0xFD,0xF3, 
+  21                          0xFE,0x2D, 
+  22                          0xFE,0x47,//高八度 1-7 
+  23                          0xFE,0x76, 
+  24                          0xFE,0xA1, 
+  25                          0xFE,0xC7, 
+  26                          0xFE,0xD9, 
+  27                          0xFE,0xF9, 
+  28                          0xFF,0x16//-西安科技大学 - 
+  29                  }; 
+  30                  void timer0() interrupt 1 // 定时器 0 中断服务程序
+  31                  { 
+  32   1                      TH0=timeh; // 将 timeh 赋给计时器的高 8 位
+  33   1                      TL0=timel; // 将 timel 赋给计时器的低 8 位
+  34   1                      fm=~fm; // 定时器每次到时将蜂鸣器反相
+  35   1              } 
+  36                  void delay(uint z) //延时 165MS,即十六分音符
+  37                  { uint y; 
+  38   1              for(z;z>0;z--) 
+  39   1                      for(y=19000;y>0;y--);//大致时间
+  40   1              } 
+  41                  void delay1(uint z) // 延时 1MS 
+  42                  { uint y; 
+  43   1              for(z;z>0;z--) 
+  44   1                      for(y=112;y>0;y--);//大致时间
+  45   1              } 
+  46                  void main() 
+  47                  { 
+  48   1                      uint temp; // 存放简谱数组中的每一个音符的临时变量
+  49   1                      uchar i=0; 
+  50   1                      uchar jp; //jp 用于取出 temp 中的高 8 位和低 8 位
+  51   1                      TMOD=0x01;//设置定时器 T0工作于方式 1 
+  52   1                      IE=0x82; // 允许 T0中断
+  53   1                      while(1) 
+  54   1                      { 
+  55   2                              temp=zbjbxf[i]; 
+C51 COMPILER V9.01   _韄私_背媳妇禵                                                        03/02/2019 09:20:02 PAGE 2   
+
+  56   2                              if(temp==0xff) 
+  57   2                                      break; 
+  58   2                              jp=temp/16; // 取数的高 4 位，音频数值-西安科技大学 - 
+  59   2                              if(jp!=0) 
+  60   2                              { 
+  61   3                                      timeh=chuzhi[jp*2];// 构造定时器初值高 8 位
+  62   3                                      timel=chuzhi[jp*2+1]; // 构造定时器初值低 8 位
+  63   3                                      TR0=1; // 开定时器
+  64   3                              } 
+  65   2                              else 
+  66   2                              { 
+  67   3                                      TR0=0; // 关定时器
+  68   3                                      fm=1; // 关蜂鸣器
+  69   3                              } 
+  70   2                              delay(temp%16); //取数的低 4 位,节拍（音符总时延）
+  71   2                              TR0=0; // 唱完一个音停 5MS 
+  72   2                              fm=1; 
+  73   2                              delay1(5); //TR0=1; 
+  74   2                              i++; 
+  75   2                      } 
+  76   1                      TR0=0; //关定时器
+  77   1                      fm=1; //关蜂鸣器
+  78   1              }  
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    176    ----
+   CONSTANT SIZE    =     92    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

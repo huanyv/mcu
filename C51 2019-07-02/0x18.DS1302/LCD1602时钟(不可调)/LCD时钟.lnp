@@ -1,0 +1,5 @@
+"ds1302.obj",
+"lcd1602.obj",
+"main.obj" 
+TO "LCD ±÷”" 
+RAMSIZE(256) 

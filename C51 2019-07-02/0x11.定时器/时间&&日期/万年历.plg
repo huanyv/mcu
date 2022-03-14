@@ -1,0 +1,15 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\311\Desktop\实验\万年历.uvproj
+Project File Date:  12/03/2018
+
+<h2>Output:</h2>
+Build target '目标 1'
+compiling 万年历.c...
+linking...
+Program Size: data=41.0 xdata=0 code=1273
+creating hex file from "万年历"...
+"万年历" - 0 Error(s), 0 Warning(s).

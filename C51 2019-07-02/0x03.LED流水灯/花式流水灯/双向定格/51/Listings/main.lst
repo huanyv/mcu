@@ -1,0 +1,86 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              04/17/2019 19:44:53 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include"reg52.h"
+   2          
+   3          #define    LED_Direction      1
+   4          
+   5          #define    LED                P2
+   6          
+   7          void delay(unsigned int i) {
+   8   1          unsigned char a;
+   9   1          while(i--) {
+  10   2              for(a = 0; a<123; a++);
+  11   2          }
+  12   1      }
+  13          void main(void) {
+  14   1      
+  15   1          unsigned char i , j;
+  16   1          unsigned char LED_H        = 0;
+  17   1          unsigned char LED_L        = 0;
+  18   1          unsigned char LED_STOP_L   = 0xff;
+  19   1          unsigned char LED_STOP_H   = 0xff;
+  20   1          unsigned char LED_STOP_AND = 0xff;
+  21   1      
+  22   1          for(i = 0; i<4; i++) {
+  23   2              LED_H = 0x7f;
+  24   2              LED_L = 0xfe;
+  25   2              for(j = 4; j > i; j--) {
+  26   3                
+  27   3      #if     LED_Direction
+  28   3                
+  29   3                  LED  = LED_H & LED_L & LED_STOP_AND;//向内
+  30   3                
+  31   3      #else
+                        
+                          LED = ((LED_H & LED_L & LED_STOP_AND) <<4) | ((LED_H & LED_L & LED_STOP_AND) >>4);//向外
+                        
+              #endif
+  36   3                
+  37   3                  LED_H = LED_H>>1 | 0x80;
+  38   3                  LED_L = LED_L<<1 | 0x01;
+  39   3      
+  40   3                  delay(500);
+  41   3              }
+  42   2              LED_STOP_L >>= 1;
+  43   2              LED_STOP_H <<= 1;
+  44   2      
+  45   2              LED_STOP_AND = (LED_STOP_L >>4) | (LED_STOP_H <<4);
+  46   2          }
+  47   1          while(1);
+  48   1      }
+  49          
+  50          
+  51          
+  52          
+  53          
+  54          
+C51 COMPILER V9.57.0.0   MAIN                                                              04/17/2019 19:44:53 PAGE 2   
+
+  55          
+  56          
+  57          
+  58          
+  59          
+  60          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    107    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

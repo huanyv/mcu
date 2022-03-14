@@ -1,0 +1,86 @@
+C51 COMPILER V9.57.0.0   KEY                                                               03/28/2019 16:27:05 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN ..\Obj\key.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\Hardware\KEY\key.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Hardware\KEY;..
+                    -\Hardware\GAME) DEBUG OBJECTEXTEND PRINT(.\Listings\key.lst) TABS(2) OBJECT(..\Obj\key.obj)
+
+line level    source
+
+   1          #include"reg52.h"
+   2          #include"key.h"
+   3          
+   4          uchar Read_Key() {
+   5   1        static uchar key_state = 0;
+   6   1        static uint key_time = 0;
+   7   1        uchar key_return = 0;
+   8   1        uchar key_count = 0;
+   9   1        KEY = 0xf0;
+  10   1        key_count = KEY;
+  11   1        switch(key_state) {
+  12   2          case 0:
+  13   2            if(key_count!=0xf0) {
+  14   3              key_state = 1;
+  15   3              key_time = 0;
+  16   3            }break;
+  17   2          case 1:
+  18   2            if(key_count != 0xf0) {
+  19   3              key_time++;
+  20   3              if(key_time>=10) {
+  21   4                
+  22   4                KEY = 0x0f;
+  23   4                key_count |= KEY;
+  24   4                
+  25   4                switch(key_count) {
+  26   5                  case 0x77:key_return=1;break;
+  27   5                  case 0x7b:key_return=2;break;
+  28   5                  case 0x7d:key_return=3;break;
+  29   5                  case 0x7e:key_return=4;break;
+  30   5      
+  31   5                  case 0xb7:key_return=5;break;
+  32   5                  case 0xbb:key_return=6;break;
+  33   5                  case 0xbd:key_return=7;break;
+  34   5                  case 0xbe:key_return=8;break;
+  35   5      
+  36   5                  case 0xd7:key_return=9;break;
+  37   5                  case 0xdb:key_return=10;break;
+  38   5                  case 0xdd:key_return=11;break;
+  39   5                  case 0xde:key_return=12;break;
+  40   5                  
+  41   5                  case 0xe7:key_return=13;break;
+  42   5                  case 0xeb:key_return=14;break;
+  43   5                  case 0xed:key_return=15;break;
+  44   5                  case 0xee:key_return=16;break;
+  45   5                }
+  46   4                key_state = 2;
+  47   4              }
+  48   3            }
+  49   2            else {
+  50   3                key_state = 0;
+  51   3            }break;
+  52   2          case 2:
+  53   2            if(key_count == 0xf0) {
+  54   3              key_state = 0;
+C51 COMPILER V9.57.0.0   KEY                                                               03/28/2019 16:27:05 PAGE 2   
+
+  55   3            }break;
+  56   2        }
+  57   1        return key_return;
+  58   1      }
+  59          
+  60          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    236    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

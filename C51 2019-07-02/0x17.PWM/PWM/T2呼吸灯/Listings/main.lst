@@ -1,0 +1,83 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              03/24/2019 19:33:52 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include"STC89C5XRC.H"
+   2          sbit led=P2^0;
+   3          
+   4          #define uchar unsigned char
+   5          #define uint unsigned int
+   6          
+   7          #define count 100
+   8          #define THx (65535-count)/256
+   9          #define TLx (65535-count)%256
+  10          
+  11          void TIM_Init() {
+  12   1        EXEN2=0;//关闭T2EX的跳变
+  13   1        C_T2=0;//使用定时器功能
+  14   1        RCLK=TCLK=0;//
+  15   1        TR2=1;//启动定时器
+  16   1        EA=1;ET2=1;//打开中断
+  17   1      
+  18   1        RCAP2L=TL2=TLx;//低八位
+  19   1        RCAP2H=TH2=THx;//高八位
+  20   1      }
+  21          void main(void){
+  22   1        TIM_Init();
+  23   1        while(1) {
+  24   2          
+  25   2        }
+  26   1      }
+  27          void TIM2() interrupt 5 {
+  28   1        static uchar PWM_Count = 0;
+  29   1        static uchar PWM_Value = 0;
+  30   1        static bit PWM_Flag = 0;
+  31   1        static uint PWM_Huxi = 0;
+  32   1        TF2=0;
+  33   1        PWM_Count++;
+  34   1        PWM_Huxi++;
+  35   1        if(PWM_Count == PWM_Value){
+  36   2          led=1;
+  37   2        }
+  38   1        if(PWM_Count == 10){
+  39   2          PWM_Count = 0;
+  40   2          led=0;
+  41   2        }
+  42   1        if(PWM_Huxi>=500&&PWM_Flag==0){
+  43   2          PWM_Huxi=0;
+  44   2          PWM_Value++;
+  45   2          if(PWM_Value>9)
+  46   2            PWM_Flag=1;
+  47   2        }
+  48   1        if(PWM_Huxi>=500&&PWM_Flag==1){
+  49   2          PWM_Huxi=0;
+  50   2          PWM_Value--;
+  51   2          if(PWM_Value<1)
+  52   2            PWM_Flag=0;
+  53   2        }
+  54   1      }
+C51 COMPILER V9.57.0.0   MAIN                                                              03/24/2019 19:33:52 PAGE 2   
+
+  55          
+  56          
+  57            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    131    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

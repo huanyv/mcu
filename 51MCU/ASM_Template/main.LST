@@ -1,0 +1,62 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 05/24/2021 14:59:22 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN main.OBJ
+ASSEMBLER INVOKED BY: D:\ProgramFiles\Keil_v5\C51\BIN\A51.EXE main.s SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 00H
+                       2     
+0000                   3     START:
+0000 74FF              4         MOV A,#0FFH ;A代表累加器ACC?? ? 发光二极管全熄灭1111 1111
+0002 C3                5             CLR C      ;C代表进位程序状态字中标志位CY?? ??? ?将C清零? CY = 0
+0003 7908              6             MOV R1 ,#8
+                       7     
+0005                   8     LEFT:
+0005 33                9             RLC  A    ;带进位CY在ACC(8位/共9位，以8为周期循环)中左移
+0006 F5A0             10             MOV  P2,A
+0008 1117             11             CALL DELAY
+000A D9F9             12             DJNZ R1,LEFT
+000C 7A07             13             MOV  R2,#7
+                      14     
+000E                  15     RIGHT:
+000E 13               16             RRC  A    ;带进位CY在ACC(8位/共9位)中右移
+000F F5A0             17             MOV  P2,A
+0011 1117             18             CALL DELAY
+0013 DAF9             19             DJNZ R2,RIGHT
+0015 80E9             20             JMP  START
+                      21     
+0017                  22     DELAY:
+0017 7BC8             23             MOV R3,#200
+0019                  24     D1:
+0019 7C1E             25             MOV R4,#30
+001B                  26     D2:
+001B 7D14             27             MOV  R5,#20
+001D DDFE             28             DJNZ R5,$ ;R5减1，不为0，则执行本行
+001F DCFA             29             DJNZ R4,D2;R4减1，不为0，则跳转到D2标号的程序开始处
+0021 DBF6             30             DJNZ R3,D1;R3减1，不为0，则跳转到D1标号的程序开始处
+0023 22               31             RET
+                      32             END
+A51 MACRO ASSEMBLER  MAIN                                                                 05/24/2021 14:59:22 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+D1 . . . . . . . .  C ADDR   0019H   A   
+D2 . . . . . . . .  C ADDR   001BH   A   
+DELAY. . . . . . .  C ADDR   0017H   A   
+LEFT . . . . . . .  C ADDR   0005H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+RIGHT. . . . . . .  C ADDR   000EH   A   
+START. . . . . . .  C ADDR   0000H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

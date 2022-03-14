@@ -1,0 +1,62 @@
+C51 COMPILER V9.60.0.0   LCD1602                                                           06/27/2019 21:33:45 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN .\Objects\lcd1602.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lcd1602.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\l
+                    -cd1602.lst) TABS(2) OBJECT(.\Objects\lcd1602.obj)
+
+line level    source
+
+   1          #include "lcd1602.h"
+   2          
+   3          void delay_1(uint x)
+   4          {
+   5   1        uint i,j;
+   6   1        for(i=0;i<x;i++)
+   7   1          for(j=0;j<10;j++);
+   8   1      }
+   9          
+  10          void LCD_write_0(uchar dat)//写入指令
+  11          {
+  12   1        LCD_DB=dat;
+  13   1        LCD_RS=0;
+  14   1        LCD_RW=0;
+  15   1        LCD_E=1;
+  16   1        LCD_E=0;
+  17   1        delay_1(1);
+  18   1      }
+  19          
+  20          void LCD_write_1(uchar dat)//写入数据  
+  21          {
+  22   1        LCD_DB=dat;
+  23   1        LCD_RS=1;
+  24   1        LCD_RW=0;
+  25   1        LCD_E=1;
+  26   1        LCD_E=0;
+  27   1        delay_1(1);
+  28   1      }
+  29          void LCD_init()//初始化
+  30          {
+  31   1        LCD_write_0(0x38);
+  32   1        delay_1(150);
+  33   1        LCD_write_0(0x38);
+  34   1        LCD_write_0(0x0c);
+  35   1        LCD_write_0(0x06);
+  36   1        LCD_write_0(0x01);
+  37   1        delay_1(200);
+  38   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    105    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

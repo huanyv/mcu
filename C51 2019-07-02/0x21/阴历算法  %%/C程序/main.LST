@@ -1,0 +1,73 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              06/06/2019 16:10:46 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<lcd1602.h>
+   3          #include <zhuanhuan.h>
+   4          
+   5          //typedef unsigned char uchar;
+   6          //typedef unsigned int uint;
+   7          
+   8          
+   9          uchar day=5,month=1,year=19;
+  10          //uchar day1,month1,year1;
+  11          
+  12          void delay(uint i)
+  13          {
+  14   1        while(i--);
+  15   1      }
+  16          void display()
+  17          {//         0123456789
+  18   1        uchar date[]="2018-01-01";
+  19   1        uchar str[8]="";
+  20   1        uchar i=0;
+  21   1        date[2]=year/10+'0';
+  22   1        date[3]=year%10+'0';
+  23   1        date[5]=month/10+'0';
+  24   1        date[6]=month%10+'0';
+  25   1        date[8]=day/10+'0';
+  26   1        date[9]=day%10+'0';
+  27   1        for(i=0;date[i]!='\0';i++)//阳历显示
+  28   1        {
+  29   2          LCD_X_Y(1,i,date[i]);
+  30   2          delay(10);
+  31   2        }
+  32   1        zhuan_huan(year,month,day,str);
+  33   1        for(i=0;str[i]!='\0';i++)//阴历显示
+  34   1        {
+  35   2          LCD_X_Y(2,i,str[i]);
+  36   2          delay(10);
+  37   2        }
+  38   1        LCD_write_0(0x80+15);
+  39   1        LCD_write_1('0');
+  40   1      }
+  41          void main()
+  42          {
+  43   1        LCD_init();
+  44   1        while(1)
+  45   1        {
+  46   2          display();
+  47   2        }
+  48   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    276    ----
+   CONSTANT SIZE    =     19    ----
+   XDATA SIZE       =      3      20
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.0.0   MAIN                                                              06/06/2019 16:10:46 PAGE 2   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

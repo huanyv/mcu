@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"11INT0中断计数.obj" 
+TO "11INT0中断计数" 
+RAMSIZE(256) 

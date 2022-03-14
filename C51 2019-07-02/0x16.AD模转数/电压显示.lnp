@@ -1,0 +1,5 @@
+"电压显示.obj",
+"lcd1602.obj",
+"XPT2046.obj" 
+TO "电压显示" 
+RAMSIZE(256) 

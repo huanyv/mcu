@@ -1,0 +1,53 @@
+C51 COMPILER V9.01   MAIN                                                                  01/22/2019 18:22:22 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\00000000\000exe\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          sbit buzzer=P1^5;
+   7          sbit off=P3^7;
+   8          
+   9          void delay(uint iii)
+  10          {
+  11   1              while(iii--);
+  12   1      }
+  13          
+  14          void _buzzer_()
+  15          {
+  16   1              buzzer=~buzzer;
+  17   1              delay(80);
+  18   1      }
+  19          
+  20          int main()
+  21          {
+  22   1              while(1)
+  23   1              {
+  24   2                      while(off==0)
+  25   2                      {
+  26   3                              _buzzer_();
+  27   3                      }
+  28   2              }
+  29   1              return 0;
+  30   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     28    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,205 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        12/14/2018  20:27:04  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\0000000\KEIL4\C51\BIN\BL51.EXE DA数转模.obj TO DA数转模 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  DA数转模.obj (DA数转模)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  DA数转模 (DA数转模)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0008H     UNIT         ?DT?DA数转模
+                    0010H     0010H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?DA数转模
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     07F2H                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     0063H     UNIT         ?PR?MAIN?DA数转模
+            CODE    08EFH     0038H     UNIT         ?PR?ANJIAN?DA数转模
+            CODE    0927H     0020H     UNIT         ?PR?_DELAY?DA数转模
+            CODE    0947H     001BH     UNIT         ?PR?TIME0?DA数转模
+            CODE    0962H     0010H     UNIT         ?PR?TIME0INIT?DA数转模
+            CODE    0972H     0005H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   DA数转模 (DA数转模)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?DA数转模
+  +--> ?C_INITSEG
+
+?PR?MAIN?DA数转模
+  +--> ?PR?TIME0INIT?DA数转模
+  +--> ?PR?ANJIAN?DA数转模
+
+?PR?ANJIAN?DA数转模
+  +--> ?PR?_DELAY?DA数转模
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/14/2018  20:27:04  PAGE 2
+
+
+
+
+
+SYMBOL TABLE OF MODULE:  DA数转模 (DA数转模)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        DA数转模
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+  C:0927H         PUBLIC        _delay
+  C:0962H         PUBLIC        time0init
+  D:00B8H         PUBLIC        IP
+  D:0008H         PUBLIC        flag
+  B:00B0H.1       PUBLIC        k1
+  B:00B0H.0       PUBLIC        k2
+  D:000AH         PUBLIC        zhouqi
+  C:088CH         PUBLIC        main
+  D:000CH         PUBLIC        zhankongbi
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  C:0947H         PUBLIC        time0
+  D:000EH         PUBLIC        c
+  D:00C8H         PUBLIC        T2CON
+  B:0020H.0       PUBLIC        s
+  C:08EFH         PUBLIC        anjian
+  B:00A0H.1       PUBLIC        PWM
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        i
+  -------         DO            
+  D:0004H         SYMBOL        x
+  D:0002H         SYMBOL        y
+  -------         ENDDO         
+  C:0927H         LINE#         16
+  C:0927H         LINE#         17
+  C:0927H         LINE#         19
+  C:0931H         LINE#         20
+  C:0946H         LINE#         21
+  -------         ENDPROC       _DELAY
+  -------         PROC          TIME0INIT
+  C:0962H         LINE#         23
+  C:0962H         LINE#         24
+  C:0962H         LINE#         25
+  C:0965H         LINE#         26
+  C:096BH         LINE#         27
+  C:0971H         LINE#         28
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/14/2018  20:27:04  PAGE 3
+
+
+  -------         ENDPROC       TIME0INIT
+  -------         PROC          ANJIAN
+  C:08EFH         LINE#         30
+  C:08EFH         LINE#         31
+  C:08EFH         LINE#         32
+  C:08F2H         LINE#         33
+  C:08F2H         LINE#         34
+  C:08F9H         LINE#         35
+  C:08FCH         LINE#         36
+  C:08FCH         LINE#         37
+  C:0908H         LINE#         38
+  C:090BH         LINE#         39
+  C:090BH         LINE#         40
+  C:090BH         LINE#         41
+  C:090EH         LINE#         42
+  C:090EH         LINE#         43
+  C:0915H         LINE#         44
+  C:0918H         LINE#         45
+  C:0918H         LINE#         46
+  C:0923H         LINE#         47
+  C:0926H         LINE#         48
+  C:0926H         LINE#         49
+  C:0926H         LINE#         50
+  -------         ENDPROC       ANJIAN
+  -------         PROC          MAIN
+  C:088CH         LINE#         52
+  C:088CH         LINE#         53
+  C:088CH         LINE#         54
+  C:088FH         LINE#         55
+  C:088FH         LINE#         56
+  C:088FH         LINE#         57
+  C:0892H         LINE#         58
+  C:089DH         LINE#         59
+  C:089DH         LINE#         60
+  C:08A2H         LINE#         61
+  C:08A5H         LINE#         62
+  C:08A5H         LINE#         63
+  C:08ADH         LINE#         64
+  C:08ADH         LINE#         65
+  C:08B0H         LINE#         66
+  C:08B0H         LINE#         67
+  C:08B8H         LINE#         68
+  C:08B8H         LINE#         70
+  C:08B8H         LINE#         71
+  C:08C2H         LINE#         72
+  C:08C2H         LINE#         73
+  C:08C4H         LINE#         74
+  C:08C4H         LINE#         75
+  C:08CAH         LINE#         76
+  C:08CAH         LINE#         77
+  C:08CCH         LINE#         78
+  C:08CCH         LINE#         79
+  C:08D7H         LINE#         80
+  C:08D7H         LINE#         81
+  C:08DCH         LINE#         82
+  C:08DCH         LINE#         83
+  C:08E7H         LINE#         84
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/14/2018  20:27:04  PAGE 4
+
+
+  C:08E7H         LINE#         85
+  C:08E9H         LINE#         86
+  C:08EBH         LINE#         88
+  C:08EBH         LINE#         89
+  C:08EDH         LINE#         90
+  C:08EDH         LINE#         91
+  -------         ENDPROC       MAIN
+  -------         PROC          TIME0
+  C:0947H         LINE#         95
+  C:0949H         LINE#         97
+  C:094FH         LINE#         98
+  C:095FH         LINE#         99
+  -------         ENDPROC       TIME0
+  -------         ENDMOD        DA数转模
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00EDH BYTE (11%) *
+******************************************************************************
+
+Program Size: data=17.1 xdata=0 code=381
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

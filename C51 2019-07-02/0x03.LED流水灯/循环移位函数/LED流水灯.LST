@@ -1,0 +1,54 @@
+C51 COMPILER V9.01   LED流水灯                                                             02/27/2019 15:43:01 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE LED流水灯
+OBJECT MODULE PLACED IN LED流水灯.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE LED流水灯.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include "intrins.h" //intrins.h
+   3          typedef unsigned int uint;
+   4          #define led P2
+   5          void yanshi(uint x)               //   x * 0.5ms  子函数
+   6          {
+   7   1               int i,j;
+   8   1               for(i=0;i<x;i++)
+   9   1                      for(j=0;j<60;j++);
+  10   1      }
+  11          int main()
+  12          {
+  13   1      
+  14   1              uint i;
+  15   1              led=0xfe;                 //1111  1110
+  16   1              yanshi(2000);
+  17   1              while(1)
+  18   1              {        
+  19   2                      for(i=0;i<7;i++)
+  20   2                      {
+  21   3                              led=_crol_(led,1);
+  22   3                              yanshi(2000);            
+  23   3                      }
+  24   2                      for(i=0;i<7;i++)
+  25   2                      {
+  26   3                              led=_cror_(led,1);
+  27   3                              yanshi(2000);   
+  28   3                      }
+  29   2              }
+  30   1              return 0;
+  31   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    103    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

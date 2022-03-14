@@ -1,0 +1,120 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              03/28/2019 16:38:36 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\Obj\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Hardware\KEY;..\Hardware\GAME)
+                    - DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(..\Obj\main.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "key.h"
+   3          #include <game.h>
+   4          
+   5          sbit a38=P2^2;
+   6          sbit b38=P2^3;
+   7          sbit c38=P2^4;
+   8          sbit led = P2^0;
+   9          
+  10          #define dula P0
+  11          //                   0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f    -    
+             -空
+  12          uchar code table[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0x40,0
+             -x00}; 
+  13          uint mima[]={16,16,16,16};
+  14          uchar MEUN1 = 0;//键盘控制变量
+  15          bit MEUN2 = 0;//密码正确控制变量
+  16          
+  17          
+  18          void DisPlay_Init() {
+  19   1        uchar i;
+  20   1        for(i=0;i<8;i++) {
+  21   2          switch(i) {
+  22   3            case 0:c38 = 0;b38 = 0;a38 = 0;
+  23   3                dula = table[mima[3]];break;//显示四个  '-'
+  24   3            case 1:c38 = 0;b38 = 0;a38 = 1;
+  25   3                dula = table[mima[2]];break;
+  26   3            case 2:c38 = 0;b38 = 1;a38 = 0;
+  27   3                dula = table[mima[1]];break;
+  28   3            case 3:c38 = 0;b38 = 1;a38 = 1;
+  29   3                dula = table[mima[0]];break;
+  30   3            case 4:c38 = 1;b38 = 0;a38 = 0;
+  31   3                dula = 0x00;break;
+  32   3            case 5:c38 = 1;b38 = 0;a38 = 1;
+  33   3                dula = 0x00;break;
+  34   3            case 6:c38 = 1;b38 = 1;a38 = 0;
+  35   3                dula = 0x00;break;
+  36   3            case 7:c38 = 1;b38 = 1;a38 = 1;
+  37   3                dula = 0x00;break;
+  38   3          }
+  39   2          delay(10);
+  40   2          dula = 0x00;
+  41   2        }
+  42   1      }
+  43          void Read_Key_Count() {
+  44   1        static uchar i = 0;
+  45   1        uchar Key_Count = 0;
+  46   1        Key_Count = Read_Key();
+  47   1        if(Key_Count != 0) {//如果有按键按下
+  48   2          MEUN1++;
+  49   2          mima[MEUN1-1]=Key_Count-1;
+  50   2          if(MEUN1==4) {
+  51   3            MEUN1 = 0;
+  52   3            if(mima[0] == 0&&mima[1] == 1&&mima[2] == 2&&mima[3] == 3) {//密码正确
+C51 COMPILER V9.57.0.0   MAIN                                                              03/28/2019 16:38:36 PAGE 2   
+
+  53   4              MEUN2 = 1;                                                //开启游戏模式
+  54   4              for(i=0;i<4;i++) {//密码显示处  置位
+  55   5                mima[i]=17;
+  56   5              }
+  57   4            }
+  58   3            else {//密码错误
+  59   4              for(i=0;i<4;i++) {
+  60   5                DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();
+  61   5                DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();
+  62   5                DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();
+  63   5                DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();
+  64   5                DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();
+  65   5                DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();DisPlay_Init();//显示 错误
+             - 跳动  有待完善
+  66   5                delay(50000);
+  67   5              }
+  68   4              for(i=0;i<4;i++) {
+  69   5                mima[i]=16;//回归 四个   '-'
+  70   5              }
+  71   4            }
+  72   3            
+  73   3          }
+  74   2          
+  75   2        }
+  76   1        
+  77   1        
+  78   1        
+  79   1      }
+  80          void main(void){
+  81   1        while(1) {
+  82   2          Read_Key_Count();
+  83   2          DisPlay_Init();
+  84   2          if(MEUN2 == 1){
+  85   3             game();
+  86   3          }
+  87   2            
+  88   2          
+  89   2        }
+  90   1      }
+  91            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    435    ----
+   CONSTANT SIZE    =     18    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

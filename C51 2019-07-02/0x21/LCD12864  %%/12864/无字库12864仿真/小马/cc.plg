@@ -1,0 +1,22 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\Administrator.PCOS-20130125YT\Desktop\无字库12864仿真\小马\cc.uvproj
+Project File Date:  04/10/2015
+
+<h2>Output:</h2>
+compiling dd.c...
+dd.c - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+Program Size: data=14.0 xdata=0 code=1415
+creating hex file from "cc"...
+"cc" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling dd.c...
+linking...
+Program Size: data=14.0 xdata=0 code=1415
+creating hex file from "cc"...
+"cc" - 0 Error(s), 0 Warning(s).

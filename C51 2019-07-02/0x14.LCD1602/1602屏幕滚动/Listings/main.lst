@@ -1,0 +1,77 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              04/04/2019 20:37:14 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\LCD1602) DEBUG OBJECTEXTEND PRI
+                    -NT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include"reg52.h"
+   2          #include"lcd1602.h"
+   3          
+   4          #define FOSC  12000000L
+   5          #define T20MS (65536-FOSC/12/1000)
+   6          
+   7          uchar code table1[] = "xingtaizhiye";
+   8          uchar code table2[] = " liyaolong! ";
+   9          
+  10          void Time_Init() {
+  11   1        C_T2 = 0;
+  12   1        TCLK = RCLK = 0;
+  13   1        CP_RL2 = 0;
+  14   1        RCAP2H = TH2 = T20MS>>8;
+  15   1        RCAP2L = TL2 = T20MS;
+  16   1        EA  = 1;
+  17   1        ET2 = 1;
+  18   1        TR2 = 1;
+  19   1      }
+  20          void main(void){
+  21   1        uchar i = 0;
+  22   1        LCD_init();
+  23   1        Time_Init();
+  24   1        for(i = 0;table1[i]!='\0';i++) {
+  25   2          LCD_X_Y(1,i,table1[i]);
+  26   2        }
+  27   1        for(i = 0;table2[i]!='\0';i++) {
+  28   2          LCD_X_Y(2,i,table2[i]);
+  29   2        }
+  30   1        while(1) {
+  31   2          
+  32   2        }
+  33   1      }
+  34            
+  35          void  Timer2() interrupt 5 
+  36          {
+  37   1        static unsigned int i = 0;
+  38   1        TF2 = 0;
+  39   1        if(++i == 500) {
+  40   2          i = 0;
+  41   2          LCD_write_0(0x1c);
+  42   2        }
+  43   1      }
+  44          
+  45          
+  46          
+  47          
+  48          
+  49          
+  50          
+  51          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.57.0.0   MAIN                                                              04/04/2019 20:37:14 PAGE 2   
+
+   CODE SIZE        =    170    ----
+   CONSTANT SIZE    =     26    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

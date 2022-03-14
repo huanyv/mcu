@@ -1,0 +1,70 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              05/13/2019 11:37:21 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include"reg52.h"
+   2          #include"DHT11.h"
+   3          #include"lcd1602.h"
+   4          
+   5          
+   6          void display() {
+   7   1        int temp;
+   8   1        int hum;
+   9   1        receive(&temp,&hum);
+  10   1        
+  11   1        
+  12   1        LCD_X_Y(1,0,(temp/256/10)+48);//温度整数部分
+  13   1        LCD_X_Y(1,1,(temp/256%10)+48);
+  14   1        LCD_X_Y(1,2,'.');
+  15   1        LCD_X_Y(1,3,(temp%256/10)+48);//温度小数部分
+  16   1        LCD_X_Y(1,4,(temp%256%10)+48);
+  17   1        LCD_X_Y(1,5,0x00);//温度 符号
+  18   1        
+  19   1        LCD_X_Y(2,0,(hum/256/10)+48);//湿度整数部分
+  20   1        LCD_X_Y(2,1,(hum/256%10)+48);
+  21   1        LCD_X_Y(2,2,'.');
+  22   1        LCD_X_Y(2,3,(hum%256/10)+48);//湿度小数部分
+  23   1        LCD_X_Y(2,4,(hum%256%10)+48);
+  24   1        LCD_X_Y(2,5,'%');//湿度 符号
+  25   1      }
+  26          
+  27          void main(void) {
+  28   1        LCD_init();
+  29   1          while(1) {
+  30   2            display();
+  31   2          }
+  32   1      }
+  33          
+  34          
+  35          
+  36          
+  37          
+  38          
+  39          
+  40          
+  41          
+  42          
+  43          
+  44          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    318    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.59.0.0   MAIN                                                              05/13/2019 11:37:21 PAGE 2   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

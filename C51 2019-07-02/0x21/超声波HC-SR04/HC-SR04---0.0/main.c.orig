@@ -1,0 +1,38 @@
+#include "reg52.h"
+#include "lcd1602.h"
+#include "hcsr04.h"
+void delay(unsigned int i)
+{
+	while(i--);
+}
+void display(void) {
+	uint distance = 0;
+	distance = HC_SR04EchoDistance();
+	
+	LCD_write_0(0x80);
+	LCD_write_1(distance/100 + '0');
+	LCD_write_1(distance/10%10 + '0');
+	LCD_write_1(distance%10 + '0');
+	LCD_write_1('C');
+	LCD_write_1('M');
+}
+void main(void) {
+		LCD_Init();
+	  TIM0_Init();
+    while(1) {
+      display();
+			delay(300);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

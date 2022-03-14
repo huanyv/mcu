@@ -1,0 +1,5 @@
+".\Objects\TIME.obj",
+".\Objects\main.obj" 
+TO ".\Objects\Project" 
+
+PRINT(".\Listings\Project.map") REMOVEUNUSED 

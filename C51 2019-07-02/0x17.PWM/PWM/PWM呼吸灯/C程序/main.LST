@@ -1,0 +1,94 @@
+C51 COMPILER V9.01   MAIN                                                                  02/02/2019 17:31:35 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\00000000\000exe\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          sbit LED = P2^1;
+   3          unsigned char CYCLE;
+   4          unsigned char PWM_ON ;
+   5          void delay(unsigned int cnt)
+   6          {
+   7   1              while(--cnt);
+   8   1      }
+   9          void main()
+  10          {
+  11   1              bit Flag;
+  12   1              TMOD |=0x01;
+  13   1              TH0=(65536-100)/256;
+  14   1              TL0=(65536-100)%256;
+  15   1              IE= 0x82;
+  16   1              TR0=1;
+  17   1              CYCLE = 10;
+  18   1              while(!Flag)//0
+  19   1              {
+  20   2                      delay(6000);
+  21   2                      PWM_ON++;   
+  22   2                      if(PWM_ON == 10)
+  23   2                      {         
+  24   3                              Flag=1;
+  25   3                      }
+  26   2              }
+  27   1              while(Flag)//1
+  28   1              {
+  29   2                      delay(6000);
+  30   2                      PWM_ON--;
+  31   2                      if(PWM_ON == 0)
+  32   2                      {
+  33   3                        Flag=0;
+  34   3                      }
+  35   2              }
+  36   1      }
+  37          void tim(void) interrupt 1 using 1
+  38          {
+  39   1              static unsigned char count;
+  40   1              TH0=(65536-100)/256;
+  41   1              TL0=(65536-100)%256;
+  42   1              if(count==PWM_ON)
+  43   1              {
+  44   2                      LED = 1;  
+  45   2              }
+  46   1              count++;
+  47   1              if(count == 10)
+  48   1              {
+  49   2                  count=0;
+  50   2                      if(PWM_ON!=0)
+  51   2                      LED = 0;
+  52   2              }
+  53   1      }
+  54          /*
+  55          这个程序每一条语句你肯定能看懂，给你加注释没有必要，给你讲讲PWM的原理，你再对照程序看就明白了
+C51 COMPILER V9.01   MAIN                                                                  02/02/2019 17:31:35 PAGE 2   
+
+  56          
+  57          你要用51产生PWM去控制LED，首先你要确定PWM的周期T和占空比D，确定了这些以后，
+  58          你可以用定时器产生一个时间基准t，比如定时器溢出n次的时间是PWM的高电平的时间，
+  59          则D*T=n*t，类似的可以求出PWM低电平时间需要多少个时间基准n'
+  60          
+  61          那么你就可以编写程序，根据你定的时间基准 t 去给定时器赋值初始化，然后开启定时器，
+  62          定义一个标志位flag，根据flag的状态决定输出高平还是低电平，假设定义flag=1的时候输出高电平，
+  63          用一个变量去记录定时器中断的次数，每次中断就让记录中断次数的变量+1，在中断程序里面判断这个变量的值是否到了
+             - n ,
+  64          如果到了说明高电平的时间够了，那么就改变flag为0，输出低电平，同时记录中断变量的值清零，
+  65          每次中断的时候依旧+1，根据flag=0的情况跳去判断记录变量的值是否到了 n' 如果到了，
+  66          说明PWM的低电平时间够了，那么就改flag=1，输出改高电平，同时记录次数变量清零，
+  67          重新开始，如此循环便可得到你想要的PWM波形。
+  68          */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    104    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

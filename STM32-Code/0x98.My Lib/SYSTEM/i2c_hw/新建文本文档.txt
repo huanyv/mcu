@@ -1,0 +1,20 @@
+﻿EV1   I2C EVENT SLAVE RECEIVER ADDRESS MATCHED                  I2C事件从接收地址匹配              EV1
+EV1   I2C EVENT SLAVE TRANSMITTER ADDRESS MATCHED               事件从发送地址匹配                 EV1
+EV1   I2C EVENT SLAVE RECEIVER SECONDADDRESS MATCHED            l2C事件从接收器的第二个地址匹配    EV1
+EV1   I2C EVENT SLAVE TRANSMITTER SECONDADDRESS MATCHED         I2C事件从发送器第二个地址匹配      EV1
+EV1   I2C EVENT SLAVE GENERALCALLADDRESS MATCHED                l2C事件从通用呼叫地址匹配          EV1
+EV2   I2C EVENT SLAVE BYTE RECEIVED                             12C事件从字节接收                  EV2
+EV3   I2C EVENT SLAVE BYTE TRANSMITTED                          12C事件从字节传输                  EV3
+EV3-1 I2C EVENT SLAVE ACK FAILURE                               12C事件从ACK失败                   EV3-1
+EV4   I2C EVENT SLAVE STOP DETECTED                             检测到I2C事件从站                  EV4
+EV5   I2C EVENT MASTER MODE SELECT                              I2C事件主控模式选择                EV5
+EV6   I2C EVENT MASTER RECEIVER MODE SELECTED                   选择I2C事件主接收模式              EV6
+EV6   I2C EVENT MASTER TRANSMITTER MODE SELECTED                选择l2C事件主发送模式              EV6
+EV7   I2C EVENT MASTER BYTE RECEIVED                            收到I2C事件主字节                  EV7
+EV8   I2C EVENT MASTER BYTE TRANSMITTED                         传输的I2C事件主字节                EV8
+EV9   12C EVENT MASTER MODE ADDRESS10                           I2C事件主控模式地址                EV9
+
+
+
+
+20.53.30

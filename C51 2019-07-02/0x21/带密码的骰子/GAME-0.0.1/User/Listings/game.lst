@@ -1,0 +1,146 @@
+C51 COMPILER V9.57.0.0   GAME                                                              03/28/2019 16:31:32 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE GAME
+OBJECT MODULE PLACED IN ..\Obj\game.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\Hardware\GAME\game.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Hardware\KEY;
+                    -..\Hardware\GAME) DEBUG OBJECTEXTEND PRINT(.\Listings\game.lst) TABS(2) OBJECT(..\Obj\game.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "intrins.h"
+   3          #include <stdio.h>
+   4          #include <stdlib.h>
+   5          #include <game.h>
+   6          
+   7          uint time_count=0;
+   8          uchar code table1[7][8]={{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
+   9                      {0x00,0x00,0x00,0x18,0x18,0x00,0x00,0x00},
+  10                      {0x00,0x06,0x06,0x00,0x00,0x60,0x60,0x00},
+  11                      {0x03,0x03,0x00,0x18,0x18,0x00,0xC0,0xC0},
+  12                      {0x00,0x66,0x66,0x00,0x00,0x66,0x66,0x00},
+  13                      {0xC3,0xC3,0x00,0x18,0x18,0x00,0xC3,0xC3},
+  14                      {0x00,0xDB,0xDB,0x00,0x00,0xDB,0xDB,0x00}};
+  15          void delay(uint i)
+  16          {
+  17   1        while(i--);
+  18   1      }
+  19          void hc595(uchar dat)
+  20          {
+  21   1        uchar i=0;
+  22   1        stcp=0;
+  23   1        for(i=0;i<8;i++)
+  24   1        {
+  25   2          shcp=0;
+  26   2          ds=dat>>7;
+  27   2          dat=dat<<1;
+  28   2          shcp=1;
+  29   2        }
+  30   1        stcp=1;
+  31   1      }
+  32          void state_switch(void)
+  33          {
+  34   1        uchar i=0,j=6;
+  35   1        srand(time_count);
+  36   1        while(j--)
+  37   1        {
+  38   2          P0=0xfe;
+  39   2          for(i=0;i<8;i++)
+  40   2          {
+  41   3            
+  42   3            hc595(table1[(rand()%5)+1][i]);
+  43   3            delay(100);
+  44   3            hc595(0x00);
+  45   3            P0=P0<<1|0x01;
+  46   3          }
+  47   2          delay(4000);
+  48   2        }
+  49   1      }
+  50          void display()
+  51          {
+  52   1      
+  53   1        uchar i=0;
+  54   1        static bit flag_song=0;
+C51 COMPILER V9.57.0.0   GAME                                                              03/28/2019 16:31:32 PAGE 2   
+
+  55   1        static uchar count=0;
+  56   1        if(flag_song==0&&k1==0)
+  57   1        {
+  58   2          delay(1500);
+  59   2          if(k1==0)
+  60   2          {
+  61   3            flag_song=1;
+  62   3            srand(time_count);
+  63   3            count = (rand()%6)+1;
+  64   3            state_switch();
+  65   3          }
+  66   2        }
+  67   1        if(k1==1)
+  68   1        {
+  69   2          flag_song=0;
+  70   2        }
+  71   1        P0=0xfe;
+  72   1        for(i=0;i<8;i++)
+  73   1        {
+  74   2          hc595(table1[count][i]);
+  75   2          delay(50);
+  76   2          hc595(0x00);
+  77   2          P0=P0<<1|0x01;
+  78   2        }
+  79   1      }
+  80          void time_init(void)
+  81          {
+  82   1        TMOD=0x02;
+  83   1        TH0=200;
+  84   1        TL0=200;
+  85   1        EA=1;
+  86   1        ET0=1;
+  87   1        TR0=1;
+  88   1      }
+  89          void game(void)
+  90          {
+  91   1        time_init();
+  92   1        while(1)
+  93   1        {
+  94   2          display();
+  95   2        }
+  96   1      }
+  97          void time0(void) interrupt 1
+  98          {
+  99   1        static uint i=0;
+ 100   1        if(++i==500)
+ 101   1        {
+ 102   2          i=0;
+ 103   2          time_count++;
+ 104   2          if(time_count==30000)
+ 105   2          {
+ 106   3            time_count=0;
+ 107   3          }
+ 108   2        }
+ 109   1      } 
+ 110          
+ 111          
+ 112          
+ 113          
+ 114          
+ 115          
+ 116          
+C51 COMPILER V9.57.0.0   GAME                                                              03/28/2019 16:31:32 PAGE 3   
+
+ 117          
+ 118          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    344    ----
+   CONSTANT SIZE    =     56    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

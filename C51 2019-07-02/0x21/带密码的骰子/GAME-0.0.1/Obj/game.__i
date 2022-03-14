@@ -1,0 +1,1 @@
+"..\Hardware\GAME\game.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\Hardware\KEY;..\Hardware\GAME) DEBUG OBJECTEXTEND PRINT(.\Listings\game.lst) TABS (2) OBJECT(..\Obj\game.obj)

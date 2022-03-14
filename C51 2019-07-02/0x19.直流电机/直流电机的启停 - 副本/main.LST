@@ -1,0 +1,76 @@
+C51 COMPILER V9.00   MAIN                                                                  12/19/2018 10:47:00 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\0000000\keil4\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /**************************************************************************************
+   2          *                             直流电机实验                                                                                                *
+   3          实现现象：下载程序后，按照光盘内操作视频接线，直流电机旋转大约5S，然后停止
+   4          注意事项：无                                                                                                                                                              
+   5          ***************************************************************************************/
+   6          
+   7          #include "reg52.h"                       //此文件中定义了单片机的一些特殊功能寄存器
+   8          #include<intrins.h>             //因为要用到左右移函数，所以加入这个头文件
+   9          
+  10          typedef unsigned int u16;         //对数据类型进行声明定义
+  11          typedef unsigned char u8;
+  12          
+  13          sbit moto=P1^0;
+  14          
+  15          sbit k1=P3^1;
+  16          sbit k2=P3^0;
+  17          sbit k3=P3^2;            
+  18          
+  19          /*******************************************************************************
+  20          * 函 数 名         : delay
+  21          * 函数功能                 : 延时函数，i=1时，大约延时10us
+  22          *******************************************************************************/
+  23          void delay(u16 i)
+  24          {
+  25   1              while(i--);     
+  26   1      }
+  27          
+  28          void stop()
+  29          {
+  30   1              EA=1;ET0=1;IT0=1;
+  31   1      }
+  32          
+  33          void main()
+  34          {       
+  35   1      //      u8 i;
+  36   1              stop();
+  37   1              moto=0;                 //关闭电机
+  38   1              while(1)
+  39   1              {       
+  40   2                                                      
+  41   2              }
+  42   1      }
+  43          
+  44          void stop0() interrupt 0
+  45          {
+  46   1              delay(2000);
+  47   1              if(k3==0)
+  48   1              {
+  49   2                      moto=~moto;
+  50   2              }
+  51   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     61    ----
+C51 COMPILER V9.00   MAIN                                                                  12/19/2018 10:47:00 PAGE 2   
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

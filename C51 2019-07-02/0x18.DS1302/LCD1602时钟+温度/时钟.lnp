@@ -1,0 +1,6 @@
+"main.obj",
+"ds18b20.obj",
+"ds1302.obj",
+"lcd1602.obj" 
+TO " ±÷”" 
+RAMSIZE(256) 

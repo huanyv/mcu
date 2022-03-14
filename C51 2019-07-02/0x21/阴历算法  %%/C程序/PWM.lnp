@@ -1,0 +1,5 @@
+"main.obj",
+"lcd1602.obj",
+"zhuanhuan.obj" 
+TO "PWM" 
+RAMSIZE(256) 

@@ -1,0 +1,18 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+F:\00000000\一些文档\C51\0x18.DS1302\LCD时钟(不可调)\LCD时钟.uvproj
+Project File Date:  01/06/2019
+
+<h2>Output:</h2>
+Build target '目标 1'
+compiling ds1302.c...
+DS1302.C(43): warning C280: 'temp': unreferenced local variable
+compiling lcd1602.c...
+compiling main.c...
+linking...
+Program Size: data=93.0 xdata=0 code=802
+creating hex file from "LCD时钟"...
+"LCD时钟" - 0 Error(s), 1 Warning(s).

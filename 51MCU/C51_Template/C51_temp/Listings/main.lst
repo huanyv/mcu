@@ -1,0 +1,204 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              06/01/2021 17:00:33 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\ProgramFiles\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<intrins.h>
+   3          #define uchar unsigned char
+   4          #define uint  unsigned int
+   5          sbit OutPut=P1^7;                       //矩形波输出口
+   6          sbit input=P1^0;
+   7          float fosc=12000000;                     //系统时钟频率
+   8          float length=65536;                      //方式1计数长度
+   9          uchar flag,i=8,kz;                                       //状态键标志
+  10          uchar ZKB;                                       //占空比
+  11          uint  PL,TT=50,TTT=50;                                  //频率
+  12          uchar TIMER0_L,TIMER0_H,TIMER1_L,TIMER1_H;
+  13          //T0和T1的定时初值
+  14          uchar code tabl[11]=
+  15          {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0};      //LED共阴极代码
+  16          /*****************************************
+  17                                系统初始化
+  18          *****************************************/
+  19          void system_init(void )
+  20          {
+  21   1          SCON=0x00;
+  22   1          flag=0;
+  23   1          PL=20;
+  24   1          ZKB=50;
+  25   1          TL0=0xb0;                              //初始频率20Hz定时0.05s
+  26   1          TH0=0x3c;
+  27   1          TL1=0x58;                              //初始占空比50定时0.025s
+  28   1          TH1=0x9e;
+  29   1          TMOD=0x11;          //T0和T1为工作方式1的定时模式
+  30   1          IT0=1;                    //选择INT0为下降沿触发方式
+  31   1          IT1=1;                   //选择INT1为下降沿触发方式
+  32   1          EX0=1;
+  33   1          EX1=1;                   //外部中断0允许
+  34   1          ET0=1;                   //定时器1和定时器0中断允许
+  35   1          ET1=1;
+  36   1          EA=1;                    //系统中断允许
+  37   1          TR0=1;                   //定时器1和定时器0开始定时
+  38   1          TR1=1;
+  39   1          TIMER0_L=0xb0;
+  40   1          TIMER0_H=0x3c;
+  41   1          TIMER1_L=0x58;
+  42   1          TIMER1_H=0x9e;
+  43   1      }
+  44          /*****************************************
+  45          
+  46          *****************************************/
+  47          
+  48          void display(uint m,uchar n)
+  49          {
+  50   1        PL=PL%1000;
+  51   1        d=PL/100;
+*** ERROR C202 IN LINE 51 OF main.c: 'd': undefined identifier
+  52   1        PL=PL%100;
+  53   1        e=PL/10;
+C51 COMPILER V9.59.0.0   MAIN                                                              06/01/2021 17:00:33 PAGE 2   
+
+*** ERROR C202 IN LINE 53 OF main.c: 'e': undefined identifier
+  54   1        k=PL%10;
+*** ERROR C202 IN LINE 54 OF main.c: 'k': undefined identifier
+  55   1      
+  56   1        m=ZKB/10;                                    //分离占空比各位数值
+  57   1        n=ZKB%10;
+  58   1              if(PL==0)
+  59   1              b=f=d=e=k=10;
+*** ERROR C202 IN LINE 59 OF main.c: 'b': undefined identifier
+  60   1              if(ZKB==0)
+  61   1              m=n=10;
+  62   1         P2=~0x01;
+  63   1         P0=tabl[b];
+*** ERROR C202 IN LINE 63 OF main.c: 'b': undefined identifier
+  64   1         delay1ms(2);
+  65   1         P2=~0x02;
+  66   1         P0=tabl[f];
+  67   1         delay1ms(2);
+  68   1         P2=~0x04;
+  69   1         P0=tabl[d];
+  70   1         delay1ms(2);
+  71   1         P2=~0x08;
+  72   1         P0=tabl[e];
+  73   1         delay1ms(2);
+  74   1         P2=~0x10;
+  75   1         P0=tabl[k];
+  76   1         delay1ms(2);
+  77   1         P2=~0x40;
+  78   1         P0=tabl[m];
+  79   1         delay1ms(2);
+  80   1         P2=~0x80;
+  81   1         P0=tabl[n];
+  82   1        delay1ms(2);
+  83   1      }
+  84          
+  85          
+  86          /*****************************************
+  87                      键盘扫描
+  88          *****************************************/
+  89          void Key_Scan()
+  90          {   float TC0,TC1;
+  91   1          flag++;
+  92   1          if(flag==3)                                                //状态返回，正常工作
+  93   1          {
+  94   2              flag=0;                                          //清状态标志位
+  95   2              TC0=(length-(fosc*(100-ZKB))/(12*100*PL));
+  96   2              TC1=(length-(fosc*ZKB)/(12*100*PL));    //占空比定时初值
+  97   2              TIMER0_H=(uint)TC0/256;           //计算T0和T1的初值
+  98   2              TIMER0_L=(uint)TC0%256;
+  99   2              TIMER1_H=(uint)TC1/256;
+ 100   2              TIMER1_L=(uint)TC1%256;
+ 101   2          }
+ 102   1      }
+ 103          void Key_Scan1()
+ 104          {
+ 105   1          if(flag==1)
+ 106   1          {
+ 107   2              PL+=10;                        //按键频率加5
+ 108   2              if(PL>10000) PL=50;
+ 109   2              display(PL,ZKB);
+ 110   2          }
+ 111   1          if(flag==2)                        //状态2下对占空比进行调整
+C51 COMPILER V9.59.0.0   MAIN                                                              06/01/2021 17:00:33 PAGE 3   
+
+ 112   1          {
+ 113   2              ZKB+=5;                  //按键占空比加5
+ 114   2              if(ZKB>99) ZKB=5;
+ 115   2          }
+ 116   1          if(flag==3)                        //状态2下对占空比进行调整
+ 117   1          {
+ 118   2              flag=0;
+ 119   2              display(PL,ZKB);
+ 120   2          }
+ 121   1          display(PL,ZKB);
+ 122   1      }
+ 123          void  ccdd()       interrupt 0
+ 124          {
+ 125   1          EX0=0;
+ 126   1          kz=kz<<1;
+ 127   1          i--;
+ 128   1          if(input)
+ 129   1              kz=kz|0x01;
+ 130   1          if(~input)
+ 131   1              kz=kz&0xfe;
+ 132   1          if(~i)
+ 133   1          {
+ 134   2              if(kz==0xaa)
+ 135   2                  Key_Scan();
+ 136   2              if(kz==0xbb)
+ 137   2                  Key_Scan1();
+ 138   2              i=8;
+ 139   2          }
+ 140   1          EX0=1;
+ 141   1      }
+ 142          /*****************************************
+ 143                       主函数
+ 144          *****************************************/
+ 145          void main()
+ 146          {
+ 147   1          uint PL0=0;
+ 148   1          uchar ZKB0=0;
+ 149   1          system_init();              //系统初始化
+ 150   1          while(1)                                                    //死循环，显示频率和占空比
+ 151   1          {
+ 152   2              if(flag==0)               //状态0时，正常显示频率和占空比
+ 153   2                  display(PL,ZKB);
+ 154   2              if(flag==1)            //状态1时，频率调整状态，频率闪烁
+ 155   2              {
+ 156   3                  display(PL0,ZKB);
+ 157   3                  TT--;
+ 158   3                  if(TT==0)
+ 159   3                  {   TT=50;
+ 160   4                      while(TT--)
+ 161   4                      {
+ 162   5                          display(PL,ZKB);
+ 163   5                      }
+ 164   4                      TT=50;
+ 165   4                  }
+ 166   3              }
+ 167   2              if(flag==2)       //状态2时，占空比调整状态，占空比闪烁
+ 168   2              {
+ 169   3                  display(PL,ZKB0);
+ 170   3                  TTT--;
+ 171   3                  if(TTT==0)
+ 172   3                  {   TTT=50;
+ 173   4                      while(TTT--)
+C51 COMPILER V9.59.0.0   MAIN                                                              06/01/2021 17:00:33 PAGE 4   
+
+ 174   4                      {
+ 175   5                          display(PL,ZKB);
+ 176   5                      }
+ 177   4                      TTT=50;
+ 178   4                  }
+ 179   3              }
+ 180   2          }
+ 181   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  5 ERROR(S)

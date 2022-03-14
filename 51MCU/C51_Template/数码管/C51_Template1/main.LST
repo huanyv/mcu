@@ -1,0 +1,55 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              05/24/2021 14:52:10 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\ProgramFiles\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #define uchar unsigned char;
+   3          uchar count = 20;
+   4          uchar i = 0;
+   5          uchar code tab[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+   6          void main()
+   7          {
+   8   1              TMOD=0X01;
+   9   1              TH0=(65536-50000)/256;
+  10   1              TL0=(65536-50000)%256;
+  11   1              EA=1;
+  12   1              ET0=1;
+  13   1              TR0=1;
+  14   1              P1=0x3f;        
+  15   1              while(1)
+  16   1              {       
+  17   2                      if(count >= 20)
+  18   2                      {
+  19   3                              count=0;
+  20   3                              P0 = tab[i];
+  21   3                              i++;
+  22   3                              if(i >= 10)
+  23   3                                      i = 0;
+  24   3                      }
+  25   2              }       
+  26   1      }
+  27          void T0_time (void) interrupt 1 
+  28          {
+  29   1              count++;
+  30   1              TH0=(65536-50000)/256;
+  31   1              TL0=(65536-50000)%256;
+  32   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    105    ----
+   CONSTANT SIZE    =     20    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,85 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\311\Desktop\一些文档\C51\新建文件夹\独立按键.uvproj
+Project File Date:  11/15/2018
+
+<h2>Output:</h2>
+Build target '目标 1'
+compiling 独立按键.c...
+linking...
+Program Size: data=9.0 xdata=0 code=71
+creating hex file from "独立按键"...
+"独立按键" - 0 Error(s), 0 Warning(s).
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.c(2): warning C318: can't open file 'intrsin.h'
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+独立按键.C(23): warning C206: '_corl_': missing function-prototype
+独立按键.C(23): error C267: '_corl_': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling 独立按键.c...
+linking...
+Program Size: data=9.0 xdata=0 code=85
+creating hex file from "独立按键"...
+"独立按键" - 0 Error(s), 0 Warning(s).
+Build target '目标 1'
+compiling 独立按键.c...
+linking...
+Program Size: data=9.0 xdata=0 code=88
+creating hex file from "独立按键"...
+"独立按键" - 0 Error(s), 0 Warning(s).
+Build target '目标 1'
+compiling 独立按键.c...
+linking...
+Program Size: data=9.0 xdata=0 code=88
+creating hex file from "独立按键"...
+"独立按键" - 0 Error(s), 0 Warning(s).
+Build target '目标 1'
+compiling 独立按键.c...
+linking...
+Program Size: data=9.0 xdata=0 code=85
+creating hex file from "独立按键"...
+"独立按键" - 0 Error(s), 0 Warning(s).

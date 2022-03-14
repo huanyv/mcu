@@ -1,0 +1,373 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              03/24/2019 21:10:20 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\OBJ\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2) OBJECT(..\OBJ
+                    -\main.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          #define dula P0
+   7          
+   8          #define count 50000
+   9          #define THx (65536-count)/256
+  10          #define TLx (65536-count)%256
+  11          
+  12          sbit A38=P2^2;
+  13          sbit B38=P2^3;
+  14          sbit C38=P2^4;
+  15          
+  16          sbit buzzer=P1^5;
+  17          
+  18          sbit k1=P3^1;
+  19          sbit k2=P3^0;
+  20          sbit k3=P3^2;
+  21          sbit k4=P3^3;
+  22          
+  23          bit flag_s=0,flag_m=0,flag_h=0;
+  24          
+  25          uchar code distab[17] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,
+  26                                   0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0x40
+  27                                  };
+  28          uchar min=0,hour=0,sec=0;
+  29          
+  30          uchar flag=0;
+  31          
+  32          void delay(uint iii)
+  33          {
+  34   1          while(iii--);
+  35   1      }
+  36          void display()
+  37          {
+  38   1          uchar i;
+  39   1          for(i=1; i<9; i++)
+  40   1          {
+  41   2              switch(i)
+  42   2              {
+  43   3              case 1:
+  44   3                  C38=0;
+  45   3                  B38=0;
+  46   3                  A38=0;
+  47   3                  if(flag_s==0)
+  48   3                  {
+  49   4                      dula=distab[sec%10];
+  50   4                  }
+  51   3                  else
+  52   3                  {
+  53   4                      dula=0x00;
+  54   4                  }
+C51 COMPILER V9.57.0.0   MAIN                                                              03/24/2019 21:10:20 PAGE 2   
+
+  55   3                  break;
+  56   3              case 2:
+  57   3                  C38=0;
+  58   3                  B38=0;
+  59   3                  A38=1;
+  60   3                  if(flag_s==0)
+  61   3                  {
+  62   4                      dula=distab[sec/10];
+  63   4                  }
+  64   3                  else
+  65   3                  {
+  66   4                      dula=0x00;
+  67   4                  }
+  68   3                  break;
+  69   3      
+  70   3              case 3:
+  71   3                  C38=0;
+  72   3                  B38=1;
+  73   3                  A38=0;
+  74   3                  dula=0x40;
+  75   3                  break;
+  76   3      
+  77   3      
+  78   3              case 4:
+  79   3                  C38=0;
+  80   3                  B38=1;
+  81   3                  A38=1;
+  82   3                  if(flag_m==0)
+  83   3                      dula=distab[min%10];
+  84   3                  else
+  85   3                  {
+  86   4                      dula=0x00;
+  87   4                  }
+  88   3                  break;
+  89   3              case 5:
+  90   3                  C38=1;
+  91   3                  B38=0;
+  92   3                  A38=0;
+  93   3                  if(flag_m==0)
+  94   3                      dula=distab[min/10];
+  95   3                  else
+  96   3                  {
+  97   4                      dula=0x00;
+  98   4                  }
+  99   3                  break;
+ 100   3      
+ 101   3              case 6:
+ 102   3                  C38=1;
+ 103   3                  B38=0;
+ 104   3                  A38=1;
+ 105   3                  dula=0x40;
+ 106   3                  break;
+ 107   3      
+ 108   3      
+ 109   3              case 7:
+ 110   3                  C38=1;
+ 111   3                  B38=1;
+ 112   3                  A38=0;
+ 113   3                  if(flag_h==0)
+ 114   3                      dula=distab[hour%10];
+ 115   3                  else
+ 116   3                  {
+C51 COMPILER V9.57.0.0   MAIN                                                              03/24/2019 21:10:20 PAGE 3   
+
+ 117   4                      dula=0x00;
+ 118   4                  }
+ 119   3                  break;
+ 120   3              case 8:
+ 121   3                  C38=1;
+ 122   3                  B38=1;
+ 123   3                  A38=1;
+ 124   3                  if(flag_h==0)
+ 125   3                      dula=distab[hour/10];
+ 126   3                  else
+ 127   3                  {
+ 128   4                      dula=0x00;
+ 129   4                  }
+ 130   3                  break;
+ 131   3      
+ 132   3              }
+ 133   2              delay(130);
+ 134   2              dula=0x00;
+ 135   2      
+ 136   2          }
+ 137   1      }
+ 138          void timer_init()
+ 139          {
+ 140   1          TMOD=0x11;
+ 141   1          ET0=1;
+ 142   1          EA=1;;
+ 143   1          ET1=1;
+ 144   1          TH0=THx;
+ 145   1          TL0=TLx;
+ 146   1          TH1=THx;
+ 147   1          TL1=TLx;
+ 148   1      }
+ 149          void key_ctrl()//启动暂停
+ 150          {
+ 151   1          static bit flag_song=0;//松手检测变量
+ 152   1          static uint flag_time=0;
+ 153   1          if(flag_song==0&&k1==0)
+ 154   1          {
+ 155   2              flag_time++;
+ 156   2              if(flag_time>3&&k1==0)
+ 157   2              {
+ 158   3                  flag_time=0;
+ 159   3                  flag_song=1;
+ 160   3                  if((sec!=0||min!=0||hour!=0)&&flag==0)
+ 161   3                  {
+ 162   4                      TR0=~TR0;
+ 163   4                  }
+ 164   3              }
+ 165   2          }
+ 166   1          if(flag_song==0&&k2==0)//k2控制时间清零和-
+ 167   1          {
+ 168   2              flag_time++;
+ 169   2              if(flag_time>3&&k2==0)
+ 170   2              {
+ 171   3                  flag_time=0;
+ 172   3                  flag_song=1;
+ 173   3                  if((sec!=0||min!=0||hour!=0)&&flag==0&&TR0==0)
+ 174   3                  {
+ 175   4                      sec=0;
+ 176   4                      min=0;
+ 177   4                      hour=0;
+ 178   4                  }
+C51 COMPILER V9.57.0.0   MAIN                                                              03/24/2019 21:10:20 PAGE 4   
+
+ 179   3                  else if(flag==1)
+ 180   3                  {
+ 181   4                      sec--;
+ 182   4                      if(sec==255)sec=59;
+ 183   4                  }
+ 184   3                  else if(flag==2)
+ 185   3                  {
+ 186   4                      min--;
+ 187   4                      if(min==255)min=59;
+ 188   4                  }
+ 189   3                  else if(flag==3)
+ 190   3                  {
+ 191   4                      hour--;
+ 192   4                      if(hour==255)hour=99;
+ 193   4                  }
+ 194   3              }
+ 195   2      
+ 196   2          }
+ 197   1          if(flag_song==0&&k3==0)//k3控制时间+
+ 198   1          {
+ 199   2              flag_time++;
+ 200   2              if(flag_time>3&&k3==0)
+ 201   2              {
+ 202   3                  flag_time=0;
+ 203   3                  flag_song=1;
+ 204   3                  if(flag==1&&TR0==0)
+ 205   3                  {
+ 206   4                      sec++;
+ 207   4                      if(sec==60)sec=0;
+ 208   4                  }
+ 209   3                  if(flag==2&&TR0==0)
+ 210   3                  {
+ 211   4                      min++;
+ 212   4                      if(min==60)min=0;
+ 213   4                  }
+ 214   3                  if(flag==3&&TR0==0)
+ 215   3                  {
+ 216   4                      hour++;
+ 217   4                      if(hour==100)hour=0;
+ 218   4                  }
+ 219   3              }
+ 220   2          }
+ 221   1      
+ 222   1          if(flag_song==0&&k4==0)//设置时间
+ 223   1          {
+ 224   2              flag_time++;
+ 225   2              if(flag_time>3&&k4==0)
+ 226   2              {
+ 227   3                  flag_time=0;
+ 228   3                  flag_song=1;
+ 229   3                  flag++;
+ 230   3              }
+ 231   2          }
+ 232   1      
+ 233   1      
+ 234   1          if(flag==1&&TR0==0)//秒　跳动
+ 235   1          {
+ 236   2              TR1=1;
+ 237   2              flag_m=0;
+ 238   2              flag_h=0;
+ 239   2          }
+ 240   1          else if(flag==2&&TR0==0)//分　跳动
+C51 COMPILER V9.57.0.0   MAIN                                                              03/24/2019 21:10:20 PAGE 5   
+
+ 241   1          {
+ 242   2              TR1=1;
+ 243   2              flag_s=0;
+ 244   2              flag_h=0;
+ 245   2          }
+ 246   1          else if(flag==3&&TR0==0)//时　跳动
+ 247   1          {
+ 248   2              TR1=1;
+ 249   2              flag_s=0;
+ 250   2              flag_m=0;
+ 251   2          }
+ 252   1          else if(flag==4&&TR0==0)//设置关闭
+ 253   1          {
+ 254   2              TR1=0;
+ 255   2              flag=0;
+ 256   2              flag_m=0;
+ 257   2              flag_s=0;
+ 258   2              flag_h=0;
+ 259   2          }
+ 260   1          if(k1==1&&k2==1&&k3==1&&k4==1)//松手
+ 261   1          {
+ 262   2              flag_time=0;
+ 263   2              flag_song=0;
+ 264   2          }
+ 265   1      
+ 266   1          if(hour==0&&min==0&&sec==0)// 全零　计时结束
+ 267   1          {
+ 268   2              TR0=0;
+ 269   2      //    while(sec<9999)
+ 270   2      //    {
+ 271   2      //      if(k1==0)
+ 272   2      //      {
+ 273   2      //        delay(1500);
+ 274   2      //        if(k1==0)
+ 275   2      //        {
+ 276   2      //          break;
+ 277   2      //        }
+ 278   2      //      }
+ 279   2      //    }
+ 280   2          }
+ 281   1      }
+ 282          void main()
+ 283          {
+ 284   1          timer_init();
+ 285   1          while(1)
+ 286   1          {
+ 287   2              display();
+ 288   2              key_ctrl();
+ 289   2          }
+ 290   1      }
+ 291          void timer0() interrupt 1
+ 292          {
+ 293   1          static i=0;
+ 294   1          TH0=THx;
+ 295   1          TL0=TLx;
+ 296   1          if(++i==20)
+ 297   1          {
+ 298   2              i=0;
+ 299   2              sec--;
+ 300   2              if(sec==255)
+ 301   2              {
+ 302   3                  sec=59;
+C51 COMPILER V9.57.0.0   MAIN                                                              03/24/2019 21:10:20 PAGE 6   
+
+ 303   3                  min--;
+ 304   3      
+ 305   3                  if(min==255)
+ 306   3                  {
+ 307   4                      min=59;
+ 308   4                      hour--;
+ 309   4                      if(hour==0&&min==0&&sec==0)
+ 310   4                      {
+ 311   5                          TR0=0;
+ 312   5                      }
+ 313   4                  }
+ 314   3              }
+ 315   2          }
+ 316   1      }
+ 317          void timer1() interrupt 3
+ 318          {
+ 319   1          static i=0;
+ 320   1          TH1=THx;
+ 321   1          TL1=TLx;
+ 322   1          if(++i==13)
+ 323   1          {
+ 324   2              i=0;
+ 325   2              if(flag==1)
+ 326   2              {
+ 327   3                  flag_s=~flag_s;
+ 328   3              }
+ 329   2              if(flag==2)
+ 330   2              {
+ 331   3                  flag_m=~flag_m;
+ 332   3              }
+ 333   2              if(flag==3)
+ 334   2              {
+ 335   3                  flag_h=~flag_h;
+ 336   3              }
+ 337   2      
+ 338   2          }
+ 339   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    737    ----
+   CONSTANT SIZE    =     17    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

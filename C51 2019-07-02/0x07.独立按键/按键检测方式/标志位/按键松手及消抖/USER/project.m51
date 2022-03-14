@@ -1,0 +1,137 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/13/2019  16:38:33  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+F:\00000000\000EXE\KEIL\C51\BIN\BL51.EXE ..\OBJ\main.obj TO ..\OBJ\project PRINT (.\project.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ..\OBJ\main.obj (MAIN)
+  F:\00000000\000EXE\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  F:\00000000\000EXE\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  ..\OBJ\project (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0004H     UNIT         ?DT?MAIN
+                    000CH     0014H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?MAIN
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     003EH     UNIT         ?PR?KEY?MAIN
+            CODE    00CDH     0010H     UNIT         ?CO?MAIN
+            CODE    00DDH     000FH     UNIT         ?PR?DISPLAY?MAIN
+            CODE    00ECH     000BH     UNIT         ?C_INITSEG
+            CODE    00F7H     0008H     UNIT         ?PR?MAIN?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   ..\OBJ\project (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN
+  +--> ?PR?DISPLAY?MAIN
+  +--> ?PR?KEY?MAIN
+
+?PR?DISPLAY?MAIN
+  +--> ?CO?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  ..\OBJ\project (MAIN)
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/13/2019  16:38:33  PAGE 2
+
+
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A0H.2       PUBLIC        LA
+  B:00A0H.3       PUBLIC        LB
+  D:00A8H         PUBLIC        IE
+  B:00A0H.4       PUBLIC        LC
+  D:00B8H         PUBLIC        IP
+  B:00B0H.1       PUBLIC        k1
+  C:00F7H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:008FH         PUBLIC        key
+  D:00C8H         PUBLIC        T2CON
+  D:000AH         PUBLIC        i
+  C:00CDH         PUBLIC        duanxuan
+  C:00DDH         PUBLIC        display
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          DISPLAY
+  C:00DDH         LINE#         22
+  C:00DDH         LINE#         23
+  C:00DDH         LINE#         24
+  C:00E3H         LINE#         25
+  C:00EBH         LINE#         26
+  -------         ENDPROC       DISPLAY
+  -------         PROC          KEY
+  -------         DO            
+  B:0020H.0       SYMBOL        flag_song
+  D:0008H         SYMBOL        flag_delay
+  -------         ENDDO         
+  C:008FH         LINE#         27
+  C:008FH         LINE#         28
+  C:008FH         LINE#         31
+  C:0095H         LINE#         32
+  C:0095H         LINE#         33
+  C:009DH         LINE#         34
+  C:00A9H         LINE#         35
+  C:00A9H         LINE#         36
+  C:00AEH         LINE#         37
+  C:00B0H         LINE#         38
+  C:00B8H         LINE#         39
+  C:00C2H         LINE#         40
+  C:00C2H         LINE#         41
+  C:00C2H         LINE#         42
+  C:00C5H         LINE#         43
+  C:00C5H         LINE#         44
+  C:00C7H         LINE#         45
+  C:00CCH         LINE#         46
+  C:00CCH         LINE#         47
+  -------         ENDPROC       KEY
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/13/2019  16:38:33  PAGE 3
+
+
+  -------         PROC          MAIN
+  C:00F7H         LINE#         48
+  C:00F7H         LINE#         49
+  C:00F7H         LINE#         50
+  C:00F7H         LINE#         51
+  C:00F7H         LINE#         52
+  C:00FAH         LINE#         53
+  C:00FDH         LINE#         54
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+Program Size: data=13.1 xdata=0 code=255
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

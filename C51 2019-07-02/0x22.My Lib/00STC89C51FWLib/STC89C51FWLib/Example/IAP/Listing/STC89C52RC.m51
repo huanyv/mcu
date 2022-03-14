@@ -1,0 +1,316 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/02/2019  16:25:16  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE ..\Output\STARTUP.obj, ..\Output\stc89c51_iap.obj, ..\Output\main.obj, ..\Output\stc89c51_it
+>> .obj TO ..\Output\STC89C52RC PRINT (..\Listing\STC89C52RC.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ..\Output\STARTUP.obj (?C_STARTUP)
+  ..\Output\stc89c51_iap.obj (STC89C51_IAP)
+  ..\Output\main.obj (MAIN)
+  ..\Output\stc89c51_it.obj (STC89C51_IT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  ..\Output\STC89C52RC (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?STC89C51_IT
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+            CODE    0006H     0004H     UNIT         ?C_INITSEG
+            CODE    000AH     0001H     UNIT         ?PR?EXIT0_IRQHANDLER?STC89C51_IT
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     0001H     UNIT         ?PR?EXIT1_IRQHANDLER?STC89C51_IT
+            CODE    000FH     0001H     UNIT         ?PR?TIM1_IRQHANDLER?STC89C51_IT
+            CODE    0010H     0001H     UNIT         ?PR?UART_IRQHANDLER?STC89C51_IT
+            CODE    0011H     0001H     UNIT         ?PR?TIM2_IRQHANDLER?STC89C51_IT
+                    0012H     0001H                  *** GAP ***
+            CODE    0013H     0003H     ABSOLUTE     
+                    0016H     0005H                  *** GAP ***
+            CODE    001BH     0003H     ABSOLUTE     
+                    001EH     0005H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+                    0026H     0005H                  *** GAP ***
+            CODE    002BH     0003H     ABSOLUTE     
+            CODE    002EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    00BAH     004EH     UNIT         ?PR?TIM0_IRQHANDLER?STC89C51_IT
+            CODE    0108H     001EH     UNIT         ?PR?MAIN?MAIN
+            CODE    0126H     0014H     UNIT         ?PR?STC89C51_IAP
+            CODE    013AH     0013H     UNIT         ?PR?_IAP_WRITEDATA?STC89C51_IAP
+            CODE    014DH     000CH     UNIT         ?PR?_IAP_READDATA?STC89C51_IAP
+            CODE    0159H     000AH     UNIT         ?PR?_IAP_ERASESECTOR?STC89C51_IAP
+            CODE    0163H     0007H     UNIT         ?PR?IAP_INIT?STC89C51_IAP
+
+
+
+OVERLAY MAP OF MODULE:   ..\Output\STC89C52RC (?C_STARTUP)
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/02/2019  16:25:16  PAGE 2
+
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN
+  +--> ?PR?IAP_INIT?STC89C51_IAP
+  +--> ?PR?_IAP_ERASESECTOR?STC89C51_IAP
+  +--> ?PR?_IAP_WRITEDATA?STC89C51_IAP
+  +--> ?PR?_IAP_READDATA?STC89C51_IAP
+
+?PR?_IAP_ERASESECTOR?STC89C51_IAP
+  +--> ?PR?STC89C51_IAP
+
+?PR?_IAP_WRITEDATA?STC89C51_IAP
+  +--> ?PR?STC89C51_IAP
+
+?PR?_IAP_READDATA?STC89C51_IAP
+  +--> ?PR?STC89C51_IAP
+
+
+
+UNRESOLVED EXTERNAL SYMBOLS:
+   _TIM_SETRELOAD
+
+
+
+SYMBOL TABLE OF MODULE:  ..\Output\STC89C52RC (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:002EH         SEGMENT       ?C_C51STARTUP
+  I:0009H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0031H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:002EH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/02/2019  16:25:16  PAGE 3
+
+
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:002EH         LINE#         133
+  C:0030H         LINE#         134
+  C:0031H         LINE#         135
+  C:0032H         LINE#         136
+  C:0034H         LINE#         185
+  C:0037H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        STC89C51_IAP
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+  D:00E5H         PUBLIC        IAP_CMD
+  D:00B8H         PUBLIC        IP
+  D:00E3H         PUBLIC        IAP_ADDRH
+  C:0159H         PUBLIC        _IAP_EraseSector
+  D:00E4H         PUBLIC        IAP_ADDRL
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:014DH         PUBLIC        _IAP_ReadData
+  D:00E7H         PUBLIC        IAP_CONTR
+  C:013AH         PUBLIC        _IAP_WriteData
+  C:0163H         PUBLIC        IAP_Init
+  D:00E2H         PUBLIC        IAP_DATA
+  D:00C8H         PUBLIC        T2CON
+  D:00E6H         PUBLIC        IAP_TRIG
+  D:00D0H         PUBLIC        PSW
+  C:0126H         SYMBOL        Com0005
+  C:0126H         SYMBOL        L?0006
+  C:0126H         SYMBOL        L?0007
+  C:012FH         SYMBOL        L?0008
+  -------         PROC          COM0005
+  -------         ENDPROC       COM0005
+  -------         PROC          IAP_INIT
+  C:0163H         LINE#         7
+  C:0163H         LINE#         8
+  C:0163H         LINE#         9
+  C:0166H         LINE#         10
+  C:0169H         LINE#         11
+  -------         ENDPROC       IAP_INIT
+  -------         PROC          _IAP_READDATA
+  D:0004H         SYMBOL        Address
+  C:014DH         LINE#         18
+  C:014DH         LINE#         19
+  C:014DH         LINE#         20
+  C:014DH         LINE#         21
+  C:014DH         LINE#         22
+  C:0150H         LINE#         23
+  C:0153H         LINE#         24
+  C:0153H         LINE#         25
+  C:0153H         LINE#         26
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/02/2019  16:25:16  PAGE 4
+
+
+  C:0156H         LINE#         28
+  C:0158H         LINE#         29
+  -------         ENDPROC       _IAP_READDATA
+  -------         PROC          _IAP_WRITEDATA
+  D:0002H         SYMBOL        Address
+  D:0005H         SYMBOL        ByteData
+  C:013AH         LINE#         36
+  C:013EH         LINE#         37
+  C:013EH         LINE#         38
+  C:0140H         LINE#         39
+  C:0142H         LINE#         40
+  C:0144H         LINE#         41
+  C:0146H         LINE#         42
+  C:0149H         LINE#         43
+  C:0149H         LINE#         44
+  C:0149H         LINE#         45
+  C:014CH         LINE#         46
+  -------         ENDPROC       _IAP_WRITEDATA
+  -------         PROC          _IAP_ERASESECTOR
+  D:0004H         SYMBOL        Address
+  C:0159H         LINE#         53
+  C:0159H         LINE#         54
+  C:0159H         LINE#         55
+  C:0159H         LINE#         56
+  C:0159H         LINE#         57
+  C:015CH         LINE#         58
+  C:015FH         LINE#         59
+  C:015FH         LINE#         60
+  C:015FH         LINE#         61
+  C:0162H         LINE#         62
+  -------         ENDPROC       _IAP_ERASESECTOR
+  -------         ENDMOD        STC89C51_IAP
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:0108H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  -------         DO            
+  D:0007H         SYMBOL        value
+  -------         ENDDO         
+  C:0108H         LINE#         4
+  C:0108H         LINE#         5
+  C:0108H         LINE#         8
+  C:010BH         LINE#         9
+  C:0112H         LINE#         10
+  C:011BH         LINE#         11
+  C:0122H         LINE#         12
+  C:0124H         LINE#         14
+  -------         ENDPROC       MAIN
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/02/2019  16:25:16  PAGE 5
+
+
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        STC89C51_IT
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  B:0098H.0       PUBLIC        RI
+  C:00BAH         PUBLIC        TIM0_IRQHandler
+  C:000FH         PUBLIC        TIM1_IRQHandler
+  C:0011H         PUBLIC        TIM2_IRQHandler
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:0010H         PUBLIC        UART_IRQHandler
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  C:000AH         PUBLIC        EXIT0_IRQHandler
+  C:000EH         PUBLIC        EXIT1_IRQHandler
+  -------         PROC          EXIT0_IRQHANDLER
+  C:000AH         LINE#         11
+  C:000AH         LINE#         14
+  -------         ENDPROC       EXIT0_IRQHANDLER
+  -------         PROC          TIM0_IRQHANDLER
+  -------         DO            
+  D:0008H         SYMBOL        count
+  -------         ENDDO         
+  C:00BAH         LINE#         21
+  C:00D7H         LINE#         25
+  C:00E0H         LINE#         27
+  C:00E5H         LINE#         28
+  C:00E5H         LINE#         29
+  C:00E8H         LINE#         30
+  C:00EBH         LINE#         31
+  C:00EBH         LINE#         33
+  C:00EDH         LINE#         35
+  -------         ENDPROC       TIM0_IRQHANDLER
+  -------         PROC          EXIT1_IRQHANDLER
+  C:000EH         LINE#         42
+  C:000EH         LINE#         45
+  -------         ENDPROC       EXIT1_IRQHANDLER
+  -------         PROC          TIM1_IRQHANDLER
+  C:000FH         LINE#         51
+  C:000FH         LINE#         54
+  -------         ENDPROC       TIM1_IRQHANDLER
+  -------         PROC          UART_IRQHANDLER
+  C:0010H         LINE#         61
+  C:0010H         LINE#         63
+  C:0010H         LINE#         64
+  C:0010H         LINE#         66
+  C:0010H         LINE#         67
+  -------         ENDPROC       UART_IRQHANDLER
+  -------         PROC          TIM2_IRQHANDLER
+  C:0011H         LINE#         74
+  C:0011H         LINE#         77
+  -------         ENDPROC       TIM2_IRQHANDLER
+  -------         ENDMOD        STC89C51_IT
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/02/2019  16:25:16  PAGE 6
+
+
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _TIM_SETRELOAD
+    MODULE:  ..\Output\stc89c51_it.obj (STC89C51_IT)
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _TIM_SETRELOAD
+    MODULE:  ..\Output\stc89c51_it.obj (STC89C51_IT)
+    ADDRESS: 00DEH
+
+Program Size: data=10.0 xdata=0 code=346
+LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)

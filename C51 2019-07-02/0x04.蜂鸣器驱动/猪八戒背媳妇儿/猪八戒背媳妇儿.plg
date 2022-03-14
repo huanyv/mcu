@@ -1,0 +1,25 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\311\Desktop\0x04.·äÃùÆ÷Çý¶¯\Öí°Ë½ä±³Ï±¸¾¶ù\Öí°Ë½ä±³Ï±¸¾¶ù.uvproj
+Project File Date:  12/19/2018
+
+<h2>Output:</h2>
+Build target 'Ä¿±ê 1'
+compiling Öí°Ë½ä±³Ï±¸¾¶ù.c...
+linking...
+Program Size: data=13.0 xdata=0 code=286
+"Öí°Ë½ä±³Ï±¸¾¶ù" - 0 Error(s), 0 Warning(s).
+Build target 'Ä¿±ê 1'
+compiling Öí°Ë½ä±³Ï±¸¾¶ù.c...
+linking...
+Program Size: data=13.0 xdata=0 code=286
+creating hex file from "Öí°Ë½ä±³Ï±¸¾¶ù"...
+"Öí°Ë½ä±³Ï±¸¾¶ù" - 0 Error(s), 0 Warning(s).
+Build target 'Ä¿±ê 1'
+linking...
+Program Size: data=13.0 xdata=0 code=286
+creating hex file from "Öí°Ë½ä±³Ï±¸¾¶ù"...
+"Öí°Ë½ä±³Ï±¸¾¶ù" - 0 Error(s), 0 Warning(s).

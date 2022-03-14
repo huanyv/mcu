@@ -1,0 +1,137 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              03/22/2019 21:22:35 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<lcd1602.h>
+   3          
+   4          sbit k1=P3^1;
+   5          sbit k2=P3^0;
+   6          sbit k3=P3^2;
+   7          sbit k4=P3^3;
+   8          sbit LSA=P2^2;
+   9          sbit LSB=P2^3;
+  10          sbit LSC=P2^4;
+  11          
+  12          #define count 5000
+  13          #define thx (65536-count)>>8
+  14          #define tlx (65536-count)&0x00ff
+  15          
+  16          uchar i1;
+  17          uchar code duanxuan[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+  18          uint sec=0,min=0,ms=0;
+  19          
+  20          void delay(uint iii)
+  21          {
+  22   1        while(iii--);
+  23   1      }
+  24          void timer0_init()
+  25          {
+  26   1        TMOD=0X01;
+  27   1        EA=1;ET0=1;TR0=0;
+  28   1        TH0=thx;TL0=tlx;
+  29   1      }
+  30          void intr_init()
+  31          {
+  32   1        EX0=1;EX1=1;
+  33   1        IT0=1;IT1=1;
+  34   1      }
+  35          void display()
+  36          {
+  37   1        uint i;
+  38   1        for(i=0;i<7;i++)
+  39   1        {
+  40   2          switch(i)
+  41   2          {
+  42   3            case 1:LSC=0;LSB=0;LSA=0;
+  43   3            P0=duanxuan[ms%10];break;
+  44   3            case 2:LSC=0;LSB=0;LSA=1;
+  45   3            P0=duanxuan[ms/10];break;
+  46   3            case 3:LSC=0;LSB=1;LSA=0;
+  47   3            P0=duanxuan[sec%10]|0x80;break;
+  48   3            case 4:LSC=0;LSB=1;LSA=1;
+  49   3            P0=duanxuan[sec/10];break;
+  50   3            case 5:LSC=1;LSB=0;LSA=0;
+  51   3            P0=duanxuan[min%10]|0x80;break;
+  52   3            case 6:LSC=1;LSB=0;LSA=1;
+  53   3            P0=duanxuan[min/10];break;
+  54   3          }
+  55   2          delay(100);
+C51 COMPILER V9.57.0.0   MAIN                                                              03/22/2019 21:22:35 PAGE 2   
+
+  56   2          P0=0x00;
+  57   2        }
+  58   1      }
+  59                      //          01234567
+  60          int main()      //  time[]="00:00:00"
+  61          {
+  62   1      //  uint i,j;
+  63   1        timer0_init();
+  64   1        intr_init();
+  65   1        while(1)
+  66   1        {
+  67   2           display();
+  68   2        }
+  69   1        return 0;
+  70   1      }
+  71          void intr0() interrupt 0
+  72          {
+  73   1        delay(2000);
+  74   1        if(k3==0)
+  75   1        {
+  76   2          TR0=~TR0;
+  77   2        }
+  78   1      }
+  79          void intr1() interrupt 2
+  80          {
+  81   1        delay(1000);
+  82   1        if(k4==0&&TR0==0)
+  83   1        {
+  84   2          sec=0;min=0;ms=0;TR0=0;
+  85   2        }
+  86   1      }
+  87          void timer0() interrupt 1
+  88          {
+  89   1        TH0=thx;TL0=tlx;
+  90   1        if(++i1==2)
+  91   1        {
+  92   2          i1=0;
+  93   2          ms++;
+  94   2          if(ms==100)
+  95   2          {
+  96   3            ms=0;
+  97   3            sec++;
+  98   3            if(sec==60)
+  99   3            {
+ 100   4              sec=0;
+ 101   4              min++;
+ 102   4              if(min==100)
+ 103   4              {
+ 104   5                min=0;
+ 105   5              }
+ 106   4            }
+ 107   3          } 
+ 108   2        }
+ 109   1      }
+*** WARNING C294 IN LINE 69 OF main.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    439    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.57.0.0   MAIN                                                              03/22/2019 21:22:35 PAGE 3   
+
+   DATA SIZE        =      7    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

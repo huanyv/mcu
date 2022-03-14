@@ -1,0 +1,4 @@
+"lcd1602.obj",
+"main.obj" 
+TO "Εά±ν" 
+RAMSIZE(256) 

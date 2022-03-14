@@ -1,0 +1,106 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    03/21/2019  15:06:44  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj TO .\Objects\¼ÌµçÆ÷ PRINT (.\Listings\¼ÌµçÆ÷.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  .\Objects\¼ÌµçÆ÷ (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0027H     UNIT         ?PR?LED_CTRL?MAIN
+            CODE    0827H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0833H     000BH     UNIT         ?PR?_DELAY?MAIN
+            CODE    083EH     0005H     UNIT         ?PR?MAIN?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\¼ÌµçÆ÷ (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN
+  +--> ?PR?LED_CTRL?MAIN
+
+?PR?LED_CTRL?MAIN
+  +--> ?PR?_DELAY?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\¼ÌµçÆ÷ (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/21/2019  15:06:44  PAGE 2
+
+
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:0833H         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  C:083EH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:0800H         PUBLIC        led_ctrl
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        iii
+  C:0833H         LINE#         7
+  C:0833H         LINE#         8
+  C:0833H         LINE#         9
+  C:083DH         LINE#         10
+  -------         ENDPROC       _DELAY
+  -------         PROC          LED_CTRL
+  C:0800H         LINE#         52
+  C:0800H         LINE#         53
+  C:0800H         LINE#         54
+  C:0808H         LINE#         55
+  C:0808H         LINE#         56
+  C:080FH         LINE#         57
+  C:0826H         LINE#         58
+  -------         ENDPROC       LED_CTRL
+  -------         PROC          MAIN
+  C:083EH         LINE#         61
+  C:083EH         LINE#         62
+  C:083EH         LINE#         63
+  C:083EH         LINE#         64
+  C:083EH         LINE#         65
+  C:0841H         LINE#         66
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0037H BYTE ( 2%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=70
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

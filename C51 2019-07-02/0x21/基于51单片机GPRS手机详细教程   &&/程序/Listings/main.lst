@@ -1,0 +1,610 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>
+   3          #define uchar unsigned char
+   4          #define uint unsigned int
+   5          #define RxIn 90              //定义接收的数组长度为90
+   6          uchar code AT[]="AT";              //握手信号
+   7          uchar code ATE[]="ATE";              //关回显
+   8          uchar code AT_CNMI[]="AT+CNMI=2,1";//设置这组参数来了新信息直接显示到串口，不作存储
+   9          uchar code AT_CSCA[]="AT+CSCA=\"+8613800571500\"";//设置服务中心号码              AT+CSCA=\"+86130
+             -10360500\"
+  10          uchar code AT_CMGF[]="AT+CMGF=1";//设置短信的格式为text格式
+  11          uchar code AT_CMGR[]="AT+CMGR=";//读取短信指令
+  12          uchar code AT_CMGS[]="AT+CMGS=";//发送短信指令
+  13          uchar code AT_CMGD[]="AT+CMGD=";//发送短信指令
+  14          uchar AT_delete[12];
+  15          uchar AT_Read[12];              //用来存储发送读取短信指令
+  16          uchar AT_SendNumber[22];  //用来存储发送短信号码指令
+  17          uchar numberbuf[3];                            //用来保存短信条数
+  18          uchar idata SystemBuf[RxIn];  //储存出口接收数据
+  19          uchar CommandBuf[4];              //用来储存指令
+  20          uchar Rx=0;
+  21          bit receiveready=0;                               //接收短信标志位
+  22          bit sendready=0;                               //发送短信准备标志位
+  23          bit send=0;                                                           //发送短信标志位
+  24          sbit IGT=P2^7;//启动GSM的启动线连IGT
+  25          sbit sw1=P3^3; //打电话
+  26          sbit sw2=P3^4;              //发测试短信
+  27          sbit sw3=P3^5;              //发温度
+  28          sbit beep=P3^2;    //蜂鸣器
+  29          void Delay_ms(uint i);
+  30          void Start_GSM(void);
+  31          void UART_init (void);
+  32          void sendchar(uchar ch);
+  33          void sendstring(uchar *p);
+  34          void GSM_INIT(void);
+  35          void receive_ready(void);
+  36          void message_read(void);
+  37          void read_message(void);
+  38          void sendmessage(void);
+  39          
+  40          uchar code  AT7[]= {0x41,0x54,0x2B,0x43,0x4D,0x47,0x53,0x3D}; //AT+CMGS=  AT+CMGS=“+8613xxxxxxxxx”回�
+             -��>输入短消息。Crtl+Z结束并发送。
+  41          uchar code  AT12[]= {0x41,0x54,0x44,0x3E}; //ATD> ATD*****; （拨号,"*"为需要拨的号码,如呼叫13
+             -973292929,则为ATD13973292929;
+  42          uchar  code  neirong[11]="15158107675";                                          //13185018567
+  43          
+  44          sbit DQ=P3^7;                                                           //DS18B20数据传输线接单片�
+             -��的相应的引脚
+  45          unsigned char tempL=0;                                           //临时变量低位
+  46          unsigned char tempH=0;                                          //临时变量高位
+  47          float temperature;                                               //温度值
+  48          unsigned char k,ge,shi,bai;
+  49          uchar code  atshanchu[]= { "AT+CMGD=9"};
+  50          
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 2   
+
+  51          sbit lcdrs=P1^0;
+  52          sbit lcdrw=P1^1;
+  53          sbit lcden=P1^2;
+  54          void delaymm(uint z)
+  55          {
+  56   1          uint x,y;
+  57   1          for(x=z; x>0; x--)
+  58   1              for(y=110; y>0; y--);
+  59   1      }
+  60          void delay(unsigned int k)
+  61          {
+  62   1          unsigned int n;
+  63   1          n=0;
+  64   1          while(n < k)
+  65   1          {
+  66   2              n++;
+  67   2          }
+  68   1          return;
+  69   1      }
+  70          void write_cmd(uchar cmd)
+  71          {
+  72   1          lcden=0;
+  73   1          lcdrs=0;
+  74   1          lcdrw=0;
+  75   1          P0=cmd;
+  76   1          _nop_();
+  77   1          lcden=1;
+  78   1          delaymm(1);
+  79   1          lcden=0;
+  80   1          _nop_();
+  81   1      }
+  82          void write_dat(uchar dat)
+  83          {
+  84   1          lcden=0;
+  85   1          lcdrs=1;
+  86   1          P0=dat;
+  87   1          _nop_();
+  88   1          lcden=1;
+  89   1          delaymm(1);
+  90   1          lcden=0;
+  91   1          _nop_();
+  92   1      }
+  93          void lcdint()
+  94          {
+  95   1          lcden=0;
+  96   1          write_cmd(0x38);
+  97   1          write_cmd(0x0c);
+  98   1          write_cmd(0x06);
+  99   1          write_cmd(0x01);
+ 100   1          delaymm(5);
+ 101   1      }
+ 102          ReadOneChar(void)                /*函数功能:向DS18B20读一字节数据*/
+ 103          {
+ 104   1          unsigned char i=0;
+ 105   1          unsigned char dat=0;
+ 106   1          for (i=8; i>0; i--)
+ 107   1          {
+ 108   2              DQ=1;
+ 109   2              delay(1);
+ 110   2              DQ=0;
+ 111   2              dat>>=1;
+ 112   2              DQ=1;
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 3   
+
+ 113   2              if(DQ)
+ 114   2                  dat|=0x80;
+ 115   2              delay(4);
+ 116   2          }
+ 117   1          return(dat);
+ 118   1      }
+ 119          void WriteOneChar(unsigned char dat) /*函数功能:向DS18B20写一字节数据*/
+ 120          {
+ 121   1          unsigned char i=0;
+ 122   1          for(i=8; i>0; i--)
+ 123   1          {
+ 124   2              DQ=0;
+ 125   2              DQ=dat&0x01;
+ 126   2              delay(5);
+ 127   2              DQ=1;
+ 128   2              dat>>=1;
+ 129   2          }
+ 130   1          delay(4);
+ 131   1      }
+ 132          void Init_DS18B20(void)/*函数功能:DS18B20初始化子程序*/
+ 133          {
+ 134   1          unsigned char x=0;
+ 135   1          DQ=1;                                                    //DQ先置高
+ 136   1          delay(8);                          //延时
+ 137   1          DQ=0;                                         //发送复位脉冲
+ 138   1          delay(85);                                    //延时（>480ms)
+ 139   1          DQ=1;                                                    //拉高数据线
+ 140   1          delay(14);                                   //等待（15~60ms)
+ 141   1      }
+ 142          ReadTemperature(void) /*函数功能:向DS18B20读温度值*/
+ 143          {
+ 144   1          Init_DS18B20();                                            //初始化
+ 145   1          WriteOneChar(0xcc);                              //跳过读序列号的操作
+ 146   1          WriteOneChar(0x44);                             //启动温度转换
+ 147   1          delaymm(125);                                                           //转换需要一点时间，�
+             -��时
+ 148   1          Init_DS18B20();                                            //初始化
+ 149   1          WriteOneChar(0xcc);                              //跳过读序列号的操作
+ 150   1          WriteOneChar(0xbe);                             //读温度寄存器（头两个值分别为温度的�
+             -��位和高位）
+ 151   1          delaymm(125);
+ 152   1          tempL=ReadOneChar();                             //读出温度的低位LSB
+ 153   1          tempH=ReadOneChar();                             //读出温度的高位MSB
+ 154   1          //温度转换，把高低位做相应的运算转化为实际温度
+ 155   1          temperature=((tempH*256)+tempL)*0.0625;
+ 156   1          delay(200);
+ 157   1          return(temperature);
+ 158   1      }
+ 159          void senddata(uchar dat) /*发送数据函数*/
+ 160          {
+ 161   1          SBUF =dat;
+ 162   1          while(!TI);
+ 163   1          TI = 0;
+ 164   1      }
+ 165          void mingling(uchar zijie,uchar *p)              /*发送数组函数*/
+ 166          {   uchar m;
+ 167   1          for(m=0; m<zijie; m++)senddata(p[m]);
+ 168   1      }
+ 169          void Delay_ms(uint i)              /*毫秒延时*/
+ 170          {
+ 171   1          unsigned int j;
+ 172   1          for(; i>0; i--)
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 4   
+
+ 173   1          {
+ 174   2              for(j=0; j<125; j++)
+ 175   2              {
+ 176   3                  ;
+ 177   3              }
+ 178   2          }
+ 179   1      }
+ 180          /*启动TC35,在 15脚IGT加时长至少为100ms的低电平,该信号下降沿时间小于1ms。启动后
+             -，15 脚的信号保持高电平*/
+ 181          void Start_GSM(void)
+ 182          {
+ 183   1          IGT=0;
+ 184   1          Delay_ms(1000);
+ 185   1          IGT=1;
+ 186   1          Delay_ms(1000);
+ 187   1      }
+ 188          void UART_init (void) /*对串口进行初始化*/
+ 189          {
+ 190   1          TMOD=0x20;              //选择定时器1
+ 191   1          PCON=0x00;              ///波特率不加倍
+ 192   1          SCON=0x50;              //串行工作方式1允许串行接收
+ 193   1          TH1=0xFD;              //实验板上晶振位11.0592MHZ,选择波特率为9600
+ 194   1          TL1=0xFD;              //在相应计数器上赋值
+ 195   1          EA=1;                            //总中断开启
+ 196   1          ES=1;                            //串行中断开启
+ 197   1          TR1=1;                            //开启定时器1
+ 198   1      
+ 199   1      }
+ 200          void sendchar(uchar ch)/*单片机发送一字节数据*/
+ 201          {
+ 202   1          SBUF=ch;
+ 203   1          while(TI==0);
+ 204   1          TI=0;
+ 205   1      }
+ 206          void sendstring(uchar *p) /*通过串口发送字符串*/
+ 207          {
+ 208   1      
+ 209   1          while(*p)
+ 210   1          {
+ 211   2              sendchar(*p);
+ 212   2              p++;
+ 213   2          }
+ 214   1          sendchar(0x0D);
+ 215   1          sendchar(0x0A);
+ 216   1      }
+ 217          void receive(void) interrupt 4 using 1              /*通过中断，串口接收数据*/
+ 218          {
+ 219   1      
+ 220   1          if(RI)
+ 221   1          {
+ 222   2      
+ 223   2              if(Rx<RxIn)
+ 224   2              {
+ 225   3                  SystemBuf[Rx]=SBUF;
+ 226   3                  Rx++;
+ 227   3              }
+ 228   2      
+ 229   2              RI=0;
+ 230   2          }
+ 231   1      }
+ 232          void GSM_INIT(void)              /*初始化TC35模块*/
+ 233          {
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 5   
+
+ 234   1      LOOP:
+ 235   1          Delay_ms(1000);
+ 236   1          sendstring(AT);
+ 237   1          Delay_ms(1000);
+ 238   1          sendstring(ATE);
+ 239   1          Delay_ms(1000);
+ 240   1          sendstring(AT_CNMI);
+ 241   1          Delay_ms(1000);
+ 242   1          sendstring(AT_CSCA);
+ 243   1          Delay_ms(1000);
+ 244   1          for(Rx=0; Rx<RxIn; Rx++)
+ 245   1          {
+ 246   2              SystemBuf[Rx]=0x00;
+ 247   2          }
+ 248   1          Rx=0;
+ 249   1          sendstring(AT_CMGF);
+ 250   1          Delay_ms(1000);
+ 251   1          if((SystemBuf[2]=='O')&&(SystemBuf[3]=='K'))              //判断是否模块初始化成功,成功�
+             -�话模块会回复"OK"给单片机
+ 252   1          {   //如果单片机没有收到OK,就继续发送初始化指令/
+ 253   2              for(Rx=0; Rx<RxIn; Rx++)
+ 254   2              {
+ 255   3                  SystemBuf[Rx]=0x00;
+ 256   3              }
+ 257   2              Rx=0;
+ 258   2          }
+ 259   1          else
+ 260   1          {
+ 261   2      
+ 262   2              for(Rx=0; Rx<RxIn; Rx++)
+ 263   2              {
+ 264   3                  SystemBuf[Rx]=0x00;
+ 265   3              }
+ 266   2              Rx=0;
+ 267   2              goto LOOP;
+ 268   2          }
+ 269   1      }
+ 270          void receive_ready(void)  /*接收短信准备*/
+ 271          {
+ 272   1          uchar i;
+ 273   1          if((SystemBuf[5]==0x54)&&SystemBuf[6]==0x49)                            //如果有新短信来,模块
+             -会通过串口向单片机发送字符串,              TI
+ 274   1          {   //              此函数的功能是判断是否有新短信来,如果来的话就置位准备接
+             -受位标志为1
+ 275   2              receiveready=1;                                                                                   
+             -                                           //如果不是新短信的指令,就舍弃,并将接收数组清零
+ 276   2              /*              write_cmd(0x01);
+ 277   2                            write_cmd(0x80);
+ 278   2                            for(i=0;i<16;i++)
+ 279   2                            {
+ 280   2                            write_dat(SystemBuf[i]);
+ 281   2                            delaymm(1);
+ 282   2                            }
+ 283   2                            write_cmd(0xc0);
+ 284   2                            for(i=16;i<32;i++)
+ 285   2                            {
+ 286   2                            write_dat(SystemBuf[i]);
+ 287   2                            delaymm(1);
+ 288   2                            }                                           //返回的是&&+CMTI: "SM",10  10表示
+             -我当前的短信数，说明我之前有9条，加上现在的共10条
+ 289   2                            while(1);               //删除短信的话我不会把以前存在卡里的短信�
+             -��删掉              */
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 6   
+
+ 290   2          }
+ 291   1          else {
+ 292   2              for(i=0; i<Rx; i++)
+ 293   2              {
+ 294   3                  SystemBuf[i]=0x00;
+ 295   3              }
+ 296   2              Rx=0;
+ 297   2          }
+ 298   1      }
+ 299          void message_read(void) /*准备是否回复短信给目标号码*/
+ 300          {
+ 301   1      
+ 302   1          if((sendready==1)&&(SystemBuf[5]==0x47)&&(SystemBuf[6]==0x52))
+ 303   1              send=1;
+ 304   1      }
+ 305          void read_message(void) /*发送读取短信指令*/
+ 306          {
+ 307   1          uchar i;
+ 308   1          Delay_ms(1000);
+ 309   1          for(i=0; i<3; i++)
+ 310   1          {
+ 311   2              numberbuf[i]=SystemBuf[14+i]; //读走，10
+ 312   2          }
+ 313   1      
+ 314   1          for(i=0; i<8; i++)
+ 315   1          {
+ 316   2              AT_Read[i]=AT_CMGR[i];              //读取短信指令
+ 317   2          }
+ 318   1          for(i=8; i<11; i++)
+ 319   1          {
+ 320   2              AT_Read[i]=numberbuf[i-8];              //读走，10,是地址
+ 321   2          }
+ 322   1          for(Rx=0; Rx<RxIn; Rx++)
+ 323   1          {
+ 324   2              SystemBuf[Rx]=0x00;
+ 325   2          }
+ 326   1          Rx=0;
+ 327   1          sendstring(AT_Read);                                                                                  
+             -     //发送AT+CMGR=，10  10代表短信储存所在位置
+ 328   1      
+ 329   1      }
+ 330          void readcommend(void)                /*读取短信内容,判断相应指令是否正确*/
+ 331          {
+ 332   1          uchar i;
+ 333   1          for(i=0; i<4; i++)                                                                                    
+             -                                                                                                   //将短信内容中�
+             -��指令部分截取出来放到
+ 334   1          {   //CommandBuf数组中
+ 335   2              CommandBuf[i]=SystemBuf[64+i];
+ 336   2          }
+ 337   1          if((CommandBuf[0]=='b')&&(CommandBuf[1]=='a')&&(CommandBuf[2]=='n')&&(CommandBuf[3]=='g'))  //判断�
+             -�令是否为开发光管指令
+ 338   1          {
+ 339   2              write_cmd(0x01);   //测试接收
+ 340   2              write_cmd(0x80);
+ 341   2              write_dat('b');
+ 342   2              write_dat('a');
+ 343   2              write_dat('n');
+ 344   2              write_dat('g');
+ 345   2              sendmessage();
+ 346   2          }                                                                                    //如果发送的
+             -指令既不是bang就定义为错误操作,不干别的
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 7   
+
+ 347   1      }
+ 348          void delete_message(void)              /*删除短信指令*/
+ 349          {
+ 350   1          uchar i;
+ 351   1          Delay_ms(1000);
+ 352   1          Delay_ms(1000);
+ 353   1          Delay_ms(5000);
+ 354   1          for(i=0; i<8; i++)
+ 355   1          {
+ 356   2              AT_delete[i]=AT_CMGD[i];
+ 357   2          }
+ 358   1          for(i=8; i<11; i++)
+ 359   1          {
+ 360   2              AT_delete[i]=numberbuf[i-8];
+ 361   2          }
+ 362   1          for(Rx=0; Rx<RxIn; Rx++)
+ 363   1          {
+ 364   2              SystemBuf[Rx]=0x00;
+ 365   2          }
+ 366   1          Rx=0;
+ 367   1          sendstring(AT_delete);                                                                                
+             -       //发送AT+CMGR=,??   ??代表短信储存所在位置
+ 368   1      
+ 369   1      }
+ 370          void sendmessage(void)              /*发送回复短信指令*/
+ 371          {
+ 372   1          uchar i;
+ 373   1          for(i=0; i<8; i++)
+ 374   1          {
+ 375   2              AT_SendNumber[i]=AT_CMGS[i];
+ 376   2          }
+ 377   1          for(i=8; i<19; i++)
+ 378   1          {
+ 379   2              AT_SendNumber[i]=SystemBuf[18+i];              //位置26~36  将对方号码提取用来回复给
+             -对方
+ 380   2          }
+ 381   1          sendstring(AT_SendNumber);
+ 382   1          senddata(0x0d);
+ 383   1          delaymm(100);
+ 384   1          senddata('P');
+ 385   1          senddata('H');
+ 386   1          senddata('=');
+ 387   1          senddata('7');
+ 388   1          senddata('.');
+ 389   1          senddata('0');//内容
+ 390   1          senddata(0x20);
+ 391   1          senddata(0x1a);
+ 392   1          senddata(0x0d);
+ 393   1          Delay_ms(30);
+ 394   1      }
+ 395          void main()
+ 396          {
+ 397   1          uchar x;
+ 398   1          uchar i;
+ 399   1          lcdint();
+ 400   1          Start_GSM();                                                        //开启TC35
+ 401   1          Delay_ms(10000);                                          //延时大约10秒 ,等待模块联网/
+ 402   1          UART_init();                                                        //串口初始化/
+ 403   1          GSM_INIT();                                                        //对tc35模块进行初始化
+ 404   1          write_cmd(0x80);
+ 405   1          write_dat('r');
+ 406   1          write_dat('e');
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 8   
+
+ 407   1          write_dat('a');
+ 408   1          write_dat('d');
+ 409   1          write_dat('y');
+ 410   1          Delay_ms(1000);
+ 411   1          while(1)
+ 412   1          {
+ 413   2              if (!sw1)
+ 414   2              {
+ 415   3                  Delay_ms(5);
+ 416   3                  if(!sw1)
+ 417   3                  {
+ 418   4                      write_cmd(0x01);
+ 419   4                      write_cmd(0x80);
+ 420   4                      write_dat('r');
+ 421   4                      write_dat('i');
+ 422   4                      write_dat('n');
+ 423   4                      write_dat('g');
+ 424   4                      mingling(3,AT12);
+ 425   4                      for(x=0; x<11; x++)senddata(neirong[x]);
+ 426   4                      senddata(0x3b);
+ 427   4                      senddata(0x0D);
+ 428   4                      while(sw1==0);
+ 429   4                      senddata(0x0D);              //发0x0d停止打电话
+ 430   4                  }
+ 431   3              }
+ 432   2              if (!sw2)   //短信读取温度值
+ 433   2              {
+ 434   3                  Delay_ms(5);
+ 435   3                  if(!sw2)
+ 436   3                  {
+ 437   4                      while(sw2==0);
+ 438   4                      k=ReadTemperature();
+ 439   4                      delaymm(500);
+ 440   4                      k=ReadTemperature();
+ 441   4                      bai=(k%1000)/100;
+ 442   4                      shi=(k%100)/10;
+ 443   4                      ge=k%10;
+ 444   4                      write_cmd(0x01);
+ 445   4                      write_cmd(0x80);
+ 446   4                      write_dat(0x30+bai);
+ 447   4                      write_dat(0x30+shi);
+ 448   4                      write_dat(0x30+ge);
+ 449   4                      ES=0;
+ 450   4                      mingling(8,AT7);
+ 451   4                      for(i=0; i<11; i++)senddata(neirong[i]);
+ 452   4                      senddata(0x0d);
+ 453   4                      delaymm(100);
+ 454   4                      senddata(shi+0x30);
+ 455   4                      senddata(ge+0x30); //发送数据内容
+ 456   4                      senddata(0x20);
+ 457   4                      senddata(0x1a);
+ 458   4                      senddata(0x0d);
+ 459   4                      ES=1;
+ 460   4                      delaymm(15000);
+ 461   4                      ES=0;
+ 462   4                      mingling(9,atshanchu);
+ 463   4                      senddata(0x0D);
+ 464   4                      ES=1;
+ 465   4                      delaymm(2500);//删除短信，不过本来就没存到9
+ 466   4                  }
+ 467   3              }
+ 468   2              if (!sw3)  //发送测试短信
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 9   
+
+ 469   2              {
+ 470   3                  Delay_ms(500);
+ 471   3                  if(!sw3)
+ 472   3                  {
+ 473   4                      while(sw3==0);
+ 474   4                      write_cmd(0x01);
+ 475   4                      write_cmd(0x80);
+ 476   4                      write_dat('t');
+ 477   4                      write_dat('e');
+ 478   4                      write_dat('x');
+ 479   4                      write_dat('t');
+ 480   4                      ES=0;
+ 481   4                      mingling(8,AT7);
+ 482   4                      for(i=0; i<11; i++)senddata(neirong[i]);
+ 483   4                      senddata(0x0d);
+ 484   4                      delaymm(100);
+ 485   4                      senddata('C');
+ 486   4                      senddata('A');
+ 487   4                      senddata('I');
+ 488   4                      senddata(0x20);
+ 489   4                      senddata(0x1a);
+ 490   4                      senddata(0x0d);
+ 491   4                      ES=1;
+ 492   4                      delaymm(15000);
+ 493   4                      ES=0;
+ 494   4                      mingling(9,atshanchu);
+ 495   4                      senddata(0x0D);
+ 496   4                      ES=1;
+ 497   4                      delaymm(2500);
+ 498   4                  }
+ 499   3      
+ 500   3              }
+ 501   2              receive_ready();
+ 502   2              if(receiveready==1)
+ 503   2              {
+ 504   3                  read_message();
+ 505   3                  receiveready=0;
+ 506   3                  sendready=1;
+ 507   3              }
+ 508   2              Delay_ms(300);
+ 509   2              message_read();
+ 510   2              if(send==1)
+ 511   2              {
+ 512   3                  /*              write_cmd(0x01);
+ 513   3                                         write_cmd(0x80);
+ 514   3                                         for(i=64;i<80;i++)
+ 515   3                                         {
+ 516   3                                         write_dat(SystemBuf[i]);
+ 517   3                                         delaymm(1);
+ 518   3                                         }
+ 519   3                                         write_cmd(0xc0);
+ 520   3                                         for(i=80;i<91;i++)
+ 521   3                                         {
+ 522   3                                         write_dat(SystemBuf[i]);
+ 523   3                                         delaymm(1);
+ 524   3                                         }
+ 525   3                              while(1);//读出来看下,结果是
+ 526   3                           //&&+CMGR: "REC UN                0~15
+ 527   3                           //READ","+86151581                16~31
+ 528   3      
+ 529   3                           //07680",,"11/06/1                32~47
+ 530   3                           //1,14:01:09+32"&&                48~63
+C51 COMPILER V9.57.0.0   MAIN                                                              03/30/2019 17:43:35 PAGE 10  
+
+ 531   3      
+ 532   3                           //1234567891234567   64~79
+ 533   3                           //8912345678                      80~89              */
+ 534   3      
+ 535   3                  Delay_ms(2000);
+ 536   3                  readcommend();//检测密码，如果对就发送要发的东西
+ 537   3                  Delay_ms(1000);
+ 538   3                  delete_message();
+ 539   3                  for(Rx=0; Rx<RxIn; Rx++)                                                                      
+             -              //每一次操作完成后对接收数组清零//
+ 540   3                  {
+ 541   4                      SystemBuf[Rx]=0x00;
+ 542   4                  }
+ 543   3                  Rx=0;
+ 544   3                  send=0;
+ 545   3              }
+ 546   2          }
+ 547   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1523    ----
+   CONSTANT SIZE    =    114    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     64       5
+   IDATA SIZE       =     90    ----
+   BIT SIZE         =      3    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

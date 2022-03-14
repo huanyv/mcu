@@ -1,0 +1,53 @@
+#include"reg52.h"
+#include"lcd12864.h"
+
+void delay(unsigned int i) {//延时
+	while(i--);
+}
+void LCD_Read_Busy() {//读忙
+	unsigned char Busy_count = 0;
+	LCD_RS = 0;
+	LCD_RW = 1;
+	LCD_EN = 1;
+	_nop_();
+	Busy_count = (LCD_DATA&0X80)>>8;
+	if(Busy_count == 0x01) {
+		Busy_count = 1;
+	}
+	else {
+		Busy_count = 0;
+	}
+	LCD_EN = 0;
+	return Busy_count;
+}
+void LCD_WriteData(unsigned char dat) {//写指令
+	while(LCD_Read_Busy == 1);
+	LCD_RS = 1;
+	LCD_RW = 0;
+	_nop_();
+	LCD_EN = 1;
+	LCD_DATA = dat;
+	_nop_();
+	LCD_EN = 0;
+	_nop_();
+}
+void LCD_WriteCmd(unsigned char dat) {//写数据 
+	while(LCD_Read_Busy == 1);
+	LCD_RS = 1;
+	LCD_RW = 1;
+	_nop_();
+	LCD_EN = 1;
+	LCD_DATA = dat;
+	_nop_();
+	LCD_EN = 0;
+	_nop_();
+}
+
+
+
+
+
+
+
+
+

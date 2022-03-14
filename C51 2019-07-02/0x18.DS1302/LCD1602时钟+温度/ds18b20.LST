@@ -1,0 +1,99 @@
+C51 COMPILER V9.59.0.0   DS18B20                                                           05/12/2019 19:58:53 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DS18B20
+OBJECT MODULE PLACED IN ds18b20.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ds18b20.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<ds18b20.h>
+   2          
+   3          void delay_ds18b20(uint iii)
+   4          {
+   5   1        while(iii--);
+   6   1      }
+   7          
+   8          void ds18b20_init()
+   9          {   
+  10   1        uchar x=0;
+  11   1        DQ=0;
+  12   1        delay_ds18b20(80);
+  13   1        DQ=1;
+  14   1        delay_ds18b20(10);
+  15   1        x=DQ;
+  16   1        delay_ds18b20(5);
+  17   1      }
+  18          
+  19          uchar ds18b20_read()
+  20          {   
+  21   1        uchar i,dat=0;
+  22   1        for(i=0;i<8;i++)
+  23   1        {
+  24   2          dat=dat>>1;
+  25   2          DQ=0;
+  26   2          DQ=1;
+  27   2          if(DQ)
+  28   2          dat=dat|0x80;
+  29   2          delay_ds18b20(5);
+  30   2          DQ=1;
+  31   2          
+  32   2        }
+  33   1        return dat;      
+  34   1      }
+  35          
+  36          void ds18b20_write(uchar dat)
+  37          {   
+  38   1        uchar i;
+  39   1        for(i=0;i<8;i++)
+  40   1        {
+  41   2          DQ=0;
+  42   2          DQ=dat & 0x01;
+  43   2          delay_ds18b20(5);
+  44   2          DQ=1;
+  45   2          delay_ds18b20(1);
+  46   2          dat=dat>>1;
+  47   2        }
+  48   1        DQ=1;
+  49   1        delay_ds18b20(5); 
+  50   1      }
+  51          
+  52          int ds18b20_read_temp()
+  53          { 
+  54   1        uchar h=0,l=0;
+  55   1        int sum=0;
+C51 COMPILER V9.59.0.0   DS18B20                                                           05/12/2019 19:58:53 PAGE 2   
+
+  56   1      
+  57   1        ds18b20_init();
+  58   1        delay_ds18b20(10);
+  59   1        ds18b20_write(0xcc);
+  60   1        ds18b20_write(0x44);
+  61   1        delay_ds18b20(200);
+  62   1      
+  63   1        ds18b20_init();
+  64   1        delay_ds18b20(10);
+  65   1        ds18b20_write(0xcc);
+  66   1        ds18b20_write(0xbe);
+  67   1        l=ds18b20_read();
+  68   1        h=ds18b20_read();
+  69   1        sum=h;
+  70   1        sum=sum<<8;
+  71   1        sum=sum|l;
+  72   1      
+  73   1        return sum;     
+  74   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    193    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,148 @@
+C51 COMPILER V9.01   MAIN                                                                  11/14/2020 17:17:01 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Output\main.obj
+COMPILER INVOKED BY: F:\00000000\000exe\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND OBJECT(.\Output\main.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          typedef unsigned char uchar;
+   3          typedef unsigned int uint;
+   4          
+   5          #define segment P0
+   6          
+   7          #define count 50000
+   8          #define TH_0 (65536-count)/256
+   9          #define TL_0 (65536-count)%256
+  10          
+  11          sbit ew_led_r=P3^0;
+  12          sbit ew_led_y=P3^1;
+  13          sbit ew_led_g=P3^2;
+  14          sbit ns_led_r=P3^3;
+  15          sbit ns_led_y=P3^4;
+  16          sbit ns_led_g=P3^5;
+  17          
+  18          sbit bit_0=P2^0;
+  19          sbit bit_1=P2^1;
+  20          
+  21          uchar code duanxuan[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+  22          uint jjj;
+  23          uchar sec=60;
+  24          uchar flag=0;
+  25          
+  26          void delay(uint iii)
+  27          {
+  28   1              while(iii--);
+  29   1      }
+  30          void display()
+  31          {
+  32   1              bit_0=0;bit_1=1;
+  33   1              segment=duanxuan[sec%10];
+  34   1              delay(100);segment=0x00;
+  35   1              
+  36   1              bit_0=1;bit_1=0;
+  37   1              segment=duanxuan[sec/10];
+  38   1              delay(100);segment=0x00;
+  39   1      }
+  40          
+  41          void timer_init()
+  42          {
+  43   1              TMOD=0x01;
+  44   1              EA=1;ET0=1;TR0=1;
+  45   1              TH0=TH_0;TL0=TL_0;
+  46   1      }
+  47          void led_display()
+  48          {
+  49   1              if(flag==0)
+  50   1              {
+  51   2                      ew_led_r=0;
+  52   2                      ew_led_y=1;
+  53   2                      ew_led_g=1;
+  54   2                      
+  55   2                      ns_led_r=1;
+C51 COMPILER V9.01   MAIN                                                                  11/14/2020 17:17:01 PAGE 2   
+
+  56   2                      ns_led_y=1;
+  57   2                      ns_led_g=0;
+  58   2              }
+  59   1              if(flag==1)
+  60   1              {
+  61   2                      ew_led_r=1;
+  62   2                      ew_led_y=0;
+  63   2                      ew_led_g=1;
+  64   2                      
+  65   2                      ns_led_r=1;
+  66   2                      ns_led_y=0;
+  67   2                      ns_led_g=1;
+  68   2              }
+  69   1              if(flag==2)
+  70   1              {
+  71   2                      ew_led_r=1;
+  72   2                      ew_led_y=1;
+  73   2                      ew_led_g=0;
+  74   2                      
+  75   2                      ns_led_r=0;
+  76   2                      ns_led_y=1;
+  77   2                      ns_led_g=1;
+  78   2              }
+  79   1              if(flag==3)
+  80   1              {
+  81   2                      ew_led_r=1;
+  82   2                      ew_led_y=0;
+  83   2                      ew_led_g=1;
+  84   2                      
+  85   2                      ns_led_r=1;
+  86   2                      ns_led_y=0;
+  87   2                      ns_led_g=1;
+  88   2              }
+  89   1      }
+  90          
+  91          void main()
+  92          {
+  93   1              timer_init();
+  94   1              while(1)
+  95   1              {
+  96   2                      display();
+  97   2                      led_display();
+  98   2              }
+  99   1      }
+ 100          
+ 101          void timer0() interrupt 1
+ 102          {
+ 103   1              TH0=TH_0;TL0=TL_0;
+ 104   1              if(++jjj==20)
+ 105   1              {
+ 106   2                      jjj=0;
+ 107   2                      sec--;
+ 108   2                      if(sec==255)
+ 109   2                      {
+ 110   3                              flag++;
+ 111   3                              if(flag==1)sec=5;
+ 112   3                              else if(flag==2)sec=60;
+ 113   3                              else if(flag==3)sec=5;
+ 114   3      
+ 115   3                              else
+ 116   3                              {
+ 117   4                                      sec=60;flag=0;
+C51 COMPILER V9.01   MAIN                                                                  11/14/2020 17:17:01 PAGE 3   
+
+ 118   4                              }
+ 119   3                      }
+ 120   2              }
+ 121   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    226    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,88 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              04/26/2019 21:42:42 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<lcd1602.h>
+   3          #include<ds1302.h>
+   4          //          01234567
+   5          uchar time_lcd[]="00:00:00";
+   6          //          0123456789
+   7          uchar date_lcd[]="2018-01-01";                //11
+   8          uchar week_lcd[][6]={{"000"},{"Mon."},{"Tues."},{"Wed."},{"Thur."},{"Fri."},{"Sat."},{"Sun."}};
+   9          
+  10          ////             年   月   日   时   分   秒  星期
+  11          //uchar time[]={0x18,0x12,0x15,0x20,0x44,0x00,0x06};
+  12          //                0    1    2    3    4    5    6
+  13          
+  14          void time_and_date()
+  15          {
+  16   1        ds1302_read_time();
+  17   1      
+  18   1        time_lcd[0]=time[3]/16+'0';
+  19   1        time_lcd[1]=time[3]%16+'0';
+  20   1        time_lcd[3]=time[4]/16+'0';
+  21   1        time_lcd[4]=time[4]%16+'0';
+  22   1        time_lcd[6]=time[5]/16+'0';
+  23   1        time_lcd[7]=time[5]%16+'0';
+  24   1      
+  25   1        date_lcd[2]=time[0]/16+'0';
+  26   1        date_lcd[3]=time[0]%16+'0';
+  27   1        date_lcd[5]=time[1]/16+'0';
+  28   1        date_lcd[6]=time[1]%16+'0';
+  29   1        date_lcd[8]=time[2]/16+'0';
+  30   1        date_lcd[9]=time[2]%16+'0';
+  31   1      }
+  32          
+  33          int main()
+  34          {
+  35   1        uint i,j,k,g;
+  36   1        lcd1602init();
+  37   1        ds1302_init();
+  38   1      //  lcd1602_X_Y(2,1,'a');
+  39   1        while(1)
+  40   1        { 
+  41   2          j=4;k=0;g=11;
+  42   2           
+  43   2          time_and_date();
+  44   2      
+  45   2          for(i=0;time_lcd[i]!='\0';i++)
+  46   2          {
+  47   3            lcd1602_X_Y(2,j++,time_lcd[i]);
+  48   3            delay(100);
+  49   3          }
+  50   2          for(i=0;date_lcd[i]!='\0';i++)
+  51   2          {
+  52   3            lcd1602_X_Y(1,k++,date_lcd[i]);
+  53   3            delay(100);
+  54   3          }
+  55   2          for(i=0;week_lcd[time[6]][i]!='\0';i++)
+C51 COMPILER V9.57.0.0   MAIN                                                              04/26/2019 21:42:42 PAGE 2   
+
+  56   2          {
+  57   3            lcd1602_X_Y(1,g++,week_lcd[time[6]][i]);
+  58   3            delay(100);
+  59   3          }
+  60   2        }
+  61   1        return 0;
+  62   1      }
+*** WARNING C294 IN LINE 61 OF main.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    278    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     68       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

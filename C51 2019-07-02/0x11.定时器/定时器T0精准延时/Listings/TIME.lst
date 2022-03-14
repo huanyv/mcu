@@ -1,0 +1,64 @@
+C51 COMPILER V9.57.0.0   TIME                                                              04/09/2019 21:37:32 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE TIME
+OBJECT MODULE PLACED IN .\Objects\TIME.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE TIME\TIME.c OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\TIME) DEBUG PRINT(.\L
+                    -istings\TIME.lst) TABS(2) OBJECT(.\Objects\TIME.obj)
+
+line level    source
+
+   1          #include"TIME.h"
+   2          #include"reg52.h"
+   3          
+   4          unsigned int TIME_Count  = 0;
+   5          unsigned int _TIME_Flag = 0;
+   6          void TIME0_Init() {
+   7   1        TMOD = 0x02;
+   8   1        EA   = 1;
+   9   1        ET0  = 1;
+  10   1        TH0  = TL0 = 56;
+  11   1        TR0  = 0;
+  12   1      }
+  13          void TIME0_Delay_ms(unsigned int Delay_Time) {
+  14   1        TR0 = 1;
+  15   1        while(_TIME_Flag != Delay_Time);
+  16   1        _TIME_Flag = 0;
+  17   1        TR0        = 0;
+  18   1      }
+  19          void TIME0() interrupt 1
+  20          {
+  21   1        if(++TIME_Count == 5){
+  22   2          _TIME_Flag++;
+  23   2          
+  24   2          TIME_Count = 0;
+  25   2        }
+  26   1      }
+  27          
+  28          
+  29          
+  30          
+  31          
+  32          
+  33          
+  34          
+  35          
+  36          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     72    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,306 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              05/15/2019 22:06:03 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<ds1302.h>
+   3          #include<ds18b20.h>        //k4进入设置     k3调整时间
+   4          #include<lcd1602.h>
+   5          
+   6          sbit k1=P3^1;
+   7          sbit k2=P3^0;
+   8          sbit k3=P3^2;
+   9          sbit k4=P3^3;
+  10          
+  11          uchar temper[5];
+  12          uchar time_lcd[]="00:00:00";
+  13          uchar date_lcd[]="2000-00-00";
+  14          
+  15          uchar code readdate_ctrl[]={0x81,0x83,0x85,0x8b,0x87,0x89,0x8d};
+  16          uchar code writedate_ctrl[]={0x80,0x82,0x84,0x8a,0x86,0x88,0x8c};
+  17          
+  18          uchar code zi[1][8]={{0x10,0x06,0x09,0x08,0x08,0x09,0x06,0x00}};
+  19          
+  20          uchar code week_lcd[][6]={{"error"},{"Mon."},{"Tues."},{"Wed."},{"Thur."},{"Fri."},{"Sat."},{"Sun."}};
+  21          
+  22          #define count 50000
+  23          #define thx (65536-count)/256
+  24          #define tlx (65536-count)%256
+  25          
+  26          uchar flag=0;
+  27          
+  28          void read_temper(int dat)
+  29          {
+  30   1        float tp;
+  31   1        if(dat<0)
+  32   1        {
+  33   2          temper[0]='-';
+  34   2          dat=dat-1;
+  35   2          dat=~dat;
+  36   2          tp=dat;
+  37   2          dat=tp*0.0625*10+0.5; 
+  38   2        }
+  39   1        else
+  40   1        {
+  41   2          temper[0]=' ';    
+  42   2          tp=dat;
+  43   2          dat=tp*0.0625*10+0.5;
+  44   2        }
+  45   1      
+  46   1        temper[1]=dat/100%10+'0';
+  47   1        temper[2]=dat/10%10+'0';
+  48   1        temper[3]='.';
+  49   1        temper[4]=dat%10+'0';
+  50   1      } 
+  51          
+  52          void timer()
+  53          {
+  54   1        read_time();
+  55   1      
+C51 COMPILER V9.59.0.0   MAIN                                                              05/15/2019 22:06:03 PAGE 2   
+
+  56   1        time_lcd[0]=time[3]/16+'0';
+  57   1        time_lcd[1]=time[3]%16+'0';
+  58   1        time_lcd[3]=time[4]/16+'0';
+  59   1        time_lcd[4]=time[4]%16+'0';
+  60   1        time_lcd[6]=((time[5]&0x70)>>4)+'0';
+  61   1        time_lcd[7]=time[5]%16+'0';
+  62   1      
+  63   1        date_lcd[2]=time[0]/16+'0';
+  64   1        date_lcd[3]=time[0]%16+'0';
+  65   1        date_lcd[5]=time[1]/16+'0';
+  66   1        date_lcd[6]=time[1]%16+'0';
+  67   1        date_lcd[8]=time[2]/16+'0';
+  68   1        date_lcd[9]=time[2]%16+'0';
+  69   1      }
+  70          
+  71          void lcd_display()
+  72          {
+  73   1        uint i,j,k=0,g=10;
+  74   1      //******************************************* 
+  75   1          for(i=0;date_lcd[i]!='\0';i++)
+  76   1          {         
+  77   2            lcd1602_X_Y(1,j++,date_lcd[i]);
+  78   2          }j++;
+  79   1      //*******************************************
+  80   1          for(i=0;week_lcd[6][i]!='\0';i++)
+  81   1          {
+  82   2            lcd1602_X_Y(1,j++,week_lcd[time[6]][i]);
+  83   2          }
+  84   1      //*******************************************    
+  85   1          for(i=0;time_lcd[i]!='\0';i++)
+  86   1          {
+  87   2            lcd1602_X_Y(2,k++,time_lcd[i]);
+  88   2          }
+  89   1      //*******************************************   
+  90   1          for(i=0;i<5;i++)
+  91   1          {
+  92   2            lcd1602_X_Y(2,g++,temper[i]);
+  93   2          }
+  94   1      }
+  95          
+  96          
+  97          /*void time0init()
+  98          {
+  99            TMOD=0x01;
+ 100            TH0=thx;TL0=tlx;
+ 101            TR0=1;EA=1;ET0=1;
+ 102          }   */
+ 103          
+ 104          void stop()
+ 105          {
+ 106   1        EA=1;EX0=1;IT0=1;
+ 107   1        EX1=1;IT1=1;
+ 108   1      }
+ 109          
+ 110          void ctrltime()
+ 111          {
+ 112   1        uchar temp;
+ 113   1        if(flag==1)
+ 114   1        {
+ 115   2          lcd1602_write_0(0xc0+7);
+ 116   2          lcd1602_write_0(0x0f);      //光标到秒位置
+ 117   2      
+C51 COMPILER V9.59.0.0   MAIN                                                              05/15/2019 22:06:03 PAGE 3   
+
+ 118   2          ds1302_write(0x8e,0x00);     //时
+ 119   2          temp=ds1302_read(0x81);      //间
+ 120   2          ds1302_write(0x80,temp|0x80);  //暂
+ 121   2          ds1302_write(0x8e,0x80);     //停
+ 122   2        }
+ 123   1        if(flag==2)
+ 124   1        {
+ 125   2          lcd1602_write_0(0xc0+4);
+ 126   2          lcd1602_write_0(0x0f);      //光标到分位置
+ 127   2        }
+ 128   1        if(flag==3)
+ 129   1        {
+ 130   2          lcd1602_write_0(0xc0+1);
+ 131   2          lcd1602_write_0(0x0f);       //光标到时位置
+ 132   2        }
+ 133   1        if(flag==4)
+ 134   1        {
+ 135   2          lcd1602_write_0(0x80+11);
+ 136   2          lcd1602_write_0(0x0f);      //光标到星期位置
+ 137   2        }
+ 138   1        if(flag==5)
+ 139   1        {
+ 140   2          lcd1602_write_0(0x80+9);
+ 141   2          lcd1602_write_0(0x0f);      //光标到日位置
+ 142   2        }
+ 143   1        if(flag==6)
+ 144   1        {
+ 145   2          lcd1602_write_0(0x80+6);
+ 146   2          lcd1602_write_0(0x0f);      //光标到月位置
+ 147   2        }
+ 148   1        if(flag==7)
+ 149   1        {
+ 150   2          lcd1602_write_0(0x80+3);
+ 151   2          lcd1602_write_0(0x0f);      //光标到年位置
+ 152   2        }
+ 153   1        if(flag>7)
+ 154   1        {
+ 155   2          ds1302_write(0x8e,0x00);     //时
+ 156   2          temp=ds1302_read(0x81);        //间
+ 157   2          ds1302_write(0x80,temp&0x7f);  //启
+ 158   2          ds1302_write(0x8e,0x80);     //动
+ 159   2          flag=0;
+ 160   2          lcd1602_write_0(0x0c);
+ 161   2        }    
+ 162   1      }
+ 163          
+ 164          int main()
+ 165          {   
+ 166   1        lcd1602_init();    //LCD1602初始化
+ 167   1        lcd_zidingyi(zi,8,1);   //自定义   C   写入
+ 168   1        lcd1602_X_Y(2,15,0x00);   //   显示到  2行  15列
+ 169   1        stop();       //中断初始化
+ 170   1        ds1302_init();      //DS1302初始化
+ 171   1        while(1)
+ 172   1        {
+ 173   2          CE=1;       //板子问题  P35拉高
+ 174   2      
+ 175   2          read_temper(ds18b20_read_temp());   //温度读取
+ 176   2      
+ 177   2          timer();        //时间读取
+ 178   2                
+ 179   2          lcd_display();       //LCD显示
+C51 COMPILER V9.59.0.0   MAIN                                                              05/15/2019 22:06:03 PAGE 4   
+
+ 180   2      
+ 181   2          ctrltime();       //时间调整
+ 182   2        }  
+ 183   1      }
+ 184          
+ 185          void stop_1() interrupt 2
+ 186          {
+ 187   1        delay_lcd(2000);
+ 188   1        if(k4==0)
+ 189   1        {
+ 190   2          flag++;
+ 191   2        }
+ 192   1      }        
+ 193          
+ 194          void stop_2() interrupt 0
+ 195          {
+ 196   1        uchar temp_1=0;
+ 197   1        delay_lcd(2000);
+ 198   1        if(k3==0)
+ 199   1        {
+ 200   2          if(flag>0&&flag<8)
+ 201   2          {   
+ 202   3            temp_1=ds1302_read(readdate_ctrl[flag-1]);
+ 203   3            temp_1++;
+ 204   3            if((temp_1&0x0f)>9)
+ 205   3            {
+ 206   4              temp_1=temp_1+6;
+ 207   4            }
+ 208   3            if(flag==1||flag==2)       
+ 209   3            {
+ 210   4              if(temp_1==0x60)     //秒和分最大60
+ 211   4              {
+ 212   5                temp_1=0x00;
+ 213   5              }
+ 214   4            }
+ 215   3            if(flag==3)
+ 216   3            {
+ 217   4              if(temp_1==0x24)   //小时最大24
+ 218   4              {
+ 219   5                temp_1=0x00;
+ 220   5              }
+ 221   4            }
+ 222   3            if(flag==4)
+ 223   3            {
+ 224   4              if(temp_1==0x08)  //星期最大  7
+ 225   4              {
+ 226   5                temp_1=0x01;
+ 227   5              }
+ 228   4            }
+ 229   3            if(flag==5)
+ 230   3            {
+ 231   4              if(temp_1==0x32)   //日  最大31
+ 232   4              {
+ 233   5                temp_1=0x01;
+ 234   5              }
+ 235   4            }
+ 236   3            if(flag==6)
+ 237   3            {
+ 238   4              if(temp_1==0x13)    //月最大12
+ 239   4              {
+ 240   5                temp_1=0x01;
+ 241   5              }
+C51 COMPILER V9.59.0.0   MAIN                                                              05/15/2019 22:06:03 PAGE 5   
+
+ 242   4            }
+ 243   3            if(flag==7)
+ 244   3            {
+ 245   4              if(temp_1==0x31)  //以便 易调  年最大暂时设为  30
+ 246   4              {
+ 247   5                temp_1=0x01;
+ 248   5              }
+ 249   4            }
+ 250   3            ds1302_write(0x8e,0x00);
+ 251   3            ds1302_write(writedate_ctrl[flag-1],(temp_1));
+ 252   3            ds1302_write(0x8e,0x80);
+ 253   3          }
+ 254   2        }
+ 255   1      }
+ 256          
+ 257          
+ 258          
+ 259          
+ 260          
+ 261          /*
+ 262          void time0() interrupt 1
+ 263          {
+ 264            uint j;//i,g=10;
+ 265            TH0=thx;TL0=tlx;
+ 266            if(++j==100)
+ 267            { 
+ 268              j=0;
+ 269                
+ 270            }
+ 271          }    */
+ 272          
+ 273          
+ 274          
+ 275          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1051    ----
+   CONSTANT SIZE    =     70    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     26      14
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

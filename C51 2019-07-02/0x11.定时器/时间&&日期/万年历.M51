@@ -1,0 +1,406 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        12/03/2018  17:20:12  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\0000000\KEIL4\C51\BIN\BL51.EXE 万年历.obj TO 万年历 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  万年历.obj (万年繽)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C?UIDIV)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  万年历 (万年繽)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0020H     UNIT         ?DT?万年繽
+            IDATA   0028H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     07F2H                  *** GAP ***
+            CODE    0800H     00E4H     UNIT         ?PR?DATEWEIXUAN?万年繽
+            CODE    08E4H     00B3H     UNIT         ?PR?TIME0?万年繽
+            CODE    0997H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0A23H     008BH     UNIT         ?PR?TIMEWEIXUAN?万年繽
+            CODE    0AAEH     0074H     UNIT         ?PR?DATNUMBER?万年繽
+            CODE    0B22H     006EH     UNIT         ?PR?DATEKONGZHI?万年繽
+            CODE    0B90H     005BH     UNIT         ?PR?MAIN?万年繽
+            CODE    0BEBH     0055H     UNIT         ?C?LIB_CODE
+            CODE    0C40H     0043H     UNIT         ?PR?TIMEKONGZHI?万年繽
+            CODE    0C83H     0035H     UNIT         ?C_INITSEG
+            CODE    0CB8H     002CH     UNIT         ?PR?LEAPYEAR?万年繽
+            CODE    0CE4H     000FH     UNIT         ?PR?_YANSHI?万年繽
+
+
+
+OVERLAY MAP OF MODULE:   万年历 (万年繽)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?TIME0?万年繽
+  +--> ?PR?DATNUMBER?万年繽
+
+?PR?DATNUMBER?万年繽
+  +--> ?PR?LEAPYEAR?万年繽
+
+*** NEW ROOT ***************************************************
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/03/2018  17:20:12  PAGE 2
+
+
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?万年繽
+  +--> ?C_INITSEG
+
+?PR?MAIN?万年繽
+  +--> ?PR?_YANSHI?万年繽
+  +--> ?PR?TIMEKONGZHI?万年繽
+  +--> ?PR?TIMEWEIXUAN?万年繽
+  +--> ?PR?DATEKONGZHI?万年繽
+  +--> ?PR?DATEWEIXUAN?万年繽
+
+?PR?TIMEKONGZHI?万年繽
+  +--> ?PR?_YANSHI?万年繽
+
+?PR?TIMEWEIXUAN?万年繽
+  +--> ?PR?_YANSHI?万年繽
+
+?PR?DATEKONGZHI?万年繽
+  +--> ?PR?_YANSHI?万年繽
+  +--> ?PR?DATNUMBER?万年繽
+
+?PR?DATEWEIXUAN?万年繽
+  +--> ?PR?_YANSHI?万年繽
+
+
+
+SYMBOL TABLE OF MODULE:  万年历 (万年繽)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        万年繽
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A0H.2       PUBLIC        LA
+  B:00A0H.3       PUBLIC        LB
+  D:00A8H         PUBLIC        IE
+  B:00A0H.4       PUBLIC        LC
+  C:0CE8H         PUBLIC        _yanshi
+  D:0008H         PUBLIC        minute
+  D:00B8H         PUBLIC        IP
+  B:00B0H.1       PUBLIC        k1
+  B:00B0H.0       PUBLIC        k2
+  B:00B0H.2       PUBLIC        k3
+  B:00B0H.3       PUBLIC        k4
+  C:0B22H         PUBLIC        datekongzhi
+  C:0B90H         PUBLIC        main
+  C:0800H         PUBLIC        dateweixuan
+  D:0009H         PUBLIC        month
+  C:0C40H         PUBLIC        timekongzhi
+  D:000BH         PUBLIC        year
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/03/2018  17:20:12  PAGE 3
+
+
+  D:0088H         PUBLIC        TCON
+  C:0A23H         PUBLIC        timeweixuan
+  D:000DH         PUBLIC        dat
+  D:000FH         PUBLIC        duanxuandp
+  D:0019H         PUBLIC        hour
+  D:001AH         PUBLIC        switch1
+  C:0AAEH         PUBLIC        datnumber
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  C:0CB8H         PUBLIC        leapyear
+  C:08E4H         PUBLIC        time0
+  D:00C8H         PUBLIC        T2CON
+  D:001CH         PUBLIC        i
+  D:001DH         PUBLIC        duanxuan
+  D:0027H         PUBLIC        seconds
+  D:00D0H         PUBLIC        PSW
+  C:0CE4H         SYMBOL        L?0127
+  -------         PROC          L?0126
+  -------         ENDPROC       L?0126
+  C:0CE4H         SYMBOL        L?0127
+  -------         PROC          _YANSHI
+  D:0006H         SYMBOL        i
+  C:0CE8H         LINE#         31
+  C:0CE8H         LINE#         32
+  C:0CE8H         LINE#         33
+  C:0CF2H         LINE#         34
+  -------         ENDPROC       _YANSHI
+  -------         PROC          LEAPYEAR
+  C:0CB8H         LINE#         37
+  C:0CB8H         LINE#         38
+  C:0CB8H         LINE#         39
+  C:0CDBH         LINE#         40
+  C:0CE0H         LINE#         42
+  C:0CE3H         LINE#         43
+  -------         ENDPROC       LEAPYEAR
+  -------         PROC          DATNUMBER
+  C:0AAEH         LINE#         46
+  C:0AAEH         LINE#         47
+  C:0AAEH         LINE#         48
+  C:0AE6H         LINE#         49
+  C:0AEBH         LINE#         50
+  C:0B0BH         LINE#         51
+  C:0B10H         LINE#         53
+  C:0B10H         LINE#         54
+  C:0B19H         LINE#         55
+  C:0B1DH         LINE#         57
+  C:0B21H         LINE#         58
+  C:0B21H         LINE#         59
+  -------         ENDPROC       DATNUMBER
+  -------         PROC          DATEKONGZHI
+  C:0B22H         LINE#         62
+  C:0B22H         LINE#         63
+  C:0B22H         LINE#         64
+  C:0B25H         LINE#         65
+  C:0B25H         LINE#         66
+  C:0B28H         LINE#         67
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/03/2018  17:20:12  PAGE 4
+
+
+  C:0B2BH         LINE#         68
+  C:0B2BH         LINE#         69
+  C:0B33H         LINE#         70
+  C:0B4BH         LINE#         71
+  C:0B4EH         LINE#         72
+  C:0B4EH         LINE#         73
+  C:0B4EH         LINE#         74
+  C:0B51H         LINE#         75
+  C:0B51H         LINE#         76
+  C:0B54H         LINE#         77
+  C:0B57H         LINE#         78
+  C:0B57H         LINE#         79
+  C:0B5FH         LINE#         80
+  C:0B6AH         LINE#         81
+  C:0B6DH         LINE#         82
+  C:0B6DH         LINE#         83
+  C:0B6DH         LINE#         84
+  C:0B70H         LINE#         85
+  C:0B70H         LINE#         86
+  C:0B73H         LINE#         87
+  C:0B76H         LINE#         88
+  C:0B76H         LINE#         89
+  C:0B7EH         LINE#         90
+  C:0B8CH         LINE#         91
+  C:0B8FH         LINE#         92
+  C:0B8FH         LINE#         93
+  C:0B8FH         LINE#         94
+  -------         ENDPROC       DATEKONGZHI
+  -------         PROC          TIMEKONGZHI
+  C:0C40H         LINE#         96
+  C:0C40H         LINE#         97
+  C:0C40H         LINE#         98
+  C:0C43H         LINE#         99
+  C:0C43H         LINE#         100
+  C:0C46H         LINE#         101
+  C:0C49H         LINE#         102
+  C:0C49H         LINE#         103
+  C:0C4BH         LINE#         104
+  C:0C53H         LINE#         105
+  C:0C56H         LINE#         106
+  C:0C56H         LINE#         107
+  C:0C56H         LINE#         108
+  C:0C59H         LINE#         109
+  C:0C59H         LINE#         110
+  C:0C5CH         LINE#         111
+  C:0C5FH         LINE#         112
+  C:0C5FH         LINE#         113
+  C:0C61H         LINE#         114
+  C:0C69H         LINE#         115
+  C:0C6CH         LINE#         116
+  C:0C6CH         LINE#         117
+  C:0C6CH         LINE#         118
+  C:0C6FH         LINE#         119
+  C:0C6FH         LINE#         120
+  C:0C72H         LINE#         121
+  C:0C75H         LINE#         122
+  C:0C75H         LINE#         123
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/03/2018  17:20:12  PAGE 5
+
+
+  C:0C77H         LINE#         124
+  C:0C7FH         LINE#         125
+  C:0C82H         LINE#         126
+  C:0C82H         LINE#         127
+  C:0C82H         LINE#         128
+  -------         ENDPROC       TIMEKONGZHI
+  -------         PROC          DATEWEIXUAN
+  -------         DO            
+  D:0002H         SYMBOL        i
+  -------         ENDDO         
+  C:0800H         LINE#         131
+  C:0800H         LINE#         132
+  C:0800H         LINE#         134
+  C:0803H         LINE#         135
+  C:0803H         LINE#         136
+  C:0831H         LINE#         137
+  C:0831H         LINE#         138
+  C:0837H         LINE#         139
+  C:083DH         LINE#         140
+  C:0843H         LINE#         141
+  C:0849H         LINE#         142
+  C:084FH         LINE#         143
+  C:0855H         LINE#         144
+  C:085BH         LINE#         145
+  C:0865H         LINE#         146
+  C:086BH         LINE#         147
+  C:087AH         LINE#         148
+  C:0880H         LINE#         149
+  C:0896H         LINE#         150
+  C:089CH         LINE#         151
+  C:08B3H         LINE#         152
+  C:08B9H         LINE#         153
+  C:08CBH         LINE#         154
+  C:08CBH         LINE#         155
+  C:08D2H         LINE#         156
+  C:08D5H         LINE#         157
+  C:08E3H         LINE#         158
+  -------         ENDPROC       DATEWEIXUAN
+  -------         PROC          TIMEWEIXUAN
+  -------         DO            
+  D:0002H         SYMBOL        i
+  -------         ENDDO         
+  C:0A23H         LINE#         161
+  C:0A23H         LINE#         162
+  C:0A23H         LINE#         164
+  C:0A26H         LINE#         165
+  C:0A26H         LINE#         166
+  C:0A3DH         LINE#         167
+  C:0A3DH         LINE#         168
+  C:0A43H         LINE#         169
+  C:0A4DH         LINE#         170
+  C:0A53H         LINE#         171
+  C:0A57H         LINE#         172
+  C:0A5DH         LINE#         173
+  C:0A67H         LINE#         174
+  C:0A6DH         LINE#         175
+  C:0A71H         LINE#         176
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/03/2018  17:20:12  PAGE 6
+
+
+  C:0A77H         LINE#         177
+  C:0A83H         LINE#         178
+  C:0A89H         LINE#         179
+  C:0A95H         LINE#         180
+  C:0A95H         LINE#         181
+  C:0A9CH         LINE#         182
+  C:0A9FH         LINE#         183
+  C:0AADH         LINE#         184
+  -------         ENDPROC       TIMEWEIXUAN
+  -------         PROC          MAIN
+  C:0B90H         LINE#         187
+  C:0B90H         LINE#         188
+  C:0B90H         LINE#         189
+  C:0B93H         LINE#         190
+  C:0B95H         LINE#         191
+  C:0B98H         LINE#         192
+  C:0B9EH         LINE#         193
+  C:0B9EH         LINE#         194
+  C:0B9EH         LINE#         195
+  C:0BA7H         LINE#         196
+  C:0BA7H         LINE#         197
+  C:0BAAH         LINE#         198
+  C:0BADH         LINE#         199
+  C:0BADH         LINE#         200
+  C:0BB3H         LINE#         201
+  C:0BB6H         LINE#         202
+  C:0BB6H         LINE#         203
+  C:0BB6H         LINE#         204
+  C:0BC1H         LINE#         205
+  C:0BC1H         LINE#         206
+  C:0BC4H         LINE#         207
+  C:0BC7H         LINE#         208
+  C:0BC7H         LINE#         209
+  C:0BCCH         LINE#         210
+  C:0BCFH         LINE#         211
+  C:0BCFH         LINE#         212
+  C:0BCFH         LINE#         213
+  C:0BD5H         LINE#         214
+  C:0BD5H         LINE#         215
+  C:0BD8H         LINE#         216
+  C:0BDBH         LINE#         217
+  C:0BDBH         LINE#         218
+  C:0BE3H         LINE#         219
+  C:0BE3H         LINE#         220
+  C:0BE6H         LINE#         221
+  C:0BE9H         LINE#         222
+  C:0BE9H         LINE#         223
+  -------         ENDPROC       MAIN
+  -------         PROC          TIME0
+  C:08E4H         LINE#         228
+  C:08F7H         LINE#         230
+  C:08FDH         LINE#         231
+  C:0908H         LINE#         232
+  C:0908H         LINE#         233
+  C:090AH         LINE#         234
+  C:0911H         LINE#         235
+  C:0915H         LINE#         237
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/03/2018  17:20:12  PAGE 7
+
+
+  C:0915H         LINE#         238
+  C:0918H         LINE#         239
+  C:091FH         LINE#         240
+  C:0923H         LINE#         242
+  C:0923H         LINE#         243
+  C:0926H         LINE#         244
+  C:092DH         LINE#         245
+  C:0931H         LINE#         247
+  C:0931H         LINE#         248
+  C:0934H         LINE#         249
+  C:0940H         LINE#         250
+  C:094AH         LINE#         252
+  C:094AH         LINE#         253
+  C:0950H         LINE#         254
+  C:095BH         LINE#         255
+  C:0965H         LINE#         257
+  C:0965H         LINE#         258
+  C:096BH         LINE#         259
+  C:0976H         LINE#         260
+  C:0980H         LINE#         262
+  C:0980H         LINE#         263
+  C:0986H         LINE#         264
+  C:0986H         LINE#         265
+  C:0986H         LINE#         266
+  C:0986H         LINE#         267
+  C:0986H         LINE#         268
+  C:0986H         LINE#         269
+  C:0986H         LINE#         270
+  C:0986H         LINE#         271
+  -------         ENDPROC       TIME0
+  -------         ENDMOD        万年繽
+
+  -------         MODULE        ?C?UIDIV
+  C:0BEBH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0414H BYTE (50%) *
+******************************************************************************
+
+Program Size: data=41.0 xdata=0 code=1273
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

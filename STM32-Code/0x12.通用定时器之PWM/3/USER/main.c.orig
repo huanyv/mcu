@@ -1,0 +1,42 @@
+#include"pwm.h"
+#include"delay.h"
+#include"sys.h"
+#include"int.h"
+void KEY_CTRL(void) {
+	static uint16_t  value = 10;
+	static uint8_t   song = 0;
+	if((GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_9) == 0)&&(song == 0)) {
+		delay_ms(10);
+		if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_9) == 0) {
+			song = 1;
+			value = value+30;
+			TIM_SetCompare2(TIM3,value);
+			if(value>100)value = 10;
+		}
+	}
+	if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_9) == 1) {
+		song = 0;
+	}
+}
+
+int main(void) {
+    TIM3_PWM_Init(99,71);
+//	INT_Init();		
+
+	while(1) {
+	//	KEY_CTRL();
+
+		GPIOC->ODR ^= GPIO_Pin_13;
+		delay_ms(500);
+		
+	}
+}
+
+
+
+
+
+
+
+
+

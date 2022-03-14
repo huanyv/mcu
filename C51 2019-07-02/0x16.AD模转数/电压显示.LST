@@ -1,0 +1,106 @@
+C51 COMPILER V9.00   电压显示                                                              12/15/2018 14:27:01 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE 电压显示
+OBJECT MODULE PLACED IN 电压显示.OBJ
+COMPILER INVOKED BY: C:\0000000\keil4\C51\BIN\C51.EXE 电压显示.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<lcd1602.h>
+   3          #include<xpt2046.h>
+   4          
+   5          uchar volts[]="0.000V";
+   6          uchar code flag[]="VOTLS:";
+   7          
+   8          #define count 50000
+   9          #define THx (65536-count)/256
+  10          #define TLx (65536-count)%256
+  11          
+  12          uint j,seconds=0,temp=0; 
+  13          bit flag_1;
+  14          
+  15          void xpt2046_1()
+  16          {
+  17   1              uint volt;
+  18   1              float tp;
+  19   1              if(flag_1)
+  20   1              {         
+  21   2                      flag_1=0;
+  22   2                      temp=xpt2046(0x94);     
+  23   2      //              temp=xpt2046(0xd4);              热敏
+  24   2      //              temp=xpt2046(0xa4);                       光敏
+  25   2      //              temp=xpt2046(0xe4);                                自定
+  26   2              }                       
+  27   1              
+  28   1              tp=5.0*(float)temp/4096.0;
+  29   1              volt=tp*1000+0.5;
+  30   1      
+  31   1              volts[0]=volt/1000+'0';
+  32   1              volts[2]=volt/100%10+'0';
+  33   1              volts[3]=volt/10%10+'0';
+  34   1              volts[4]=volt%10+'0';
+  35   1      }
+  36          
+  37          void time0init()
+  38          {
+  39   1              TMOD=0x01;
+  40   1              TH0=THx;TL0=TLx;
+  41   1              EA=1;ET0=1;
+  42   1              TR0=1;
+  43   1      }
+  44          
+  45          int main()
+  46          {
+  47   1              uchar i=0,k=5;
+  48   1              time0init();
+  49   1              LCD_init();
+  50   1              for(i=0;i<6;i++)
+  51   1              {
+  52   2                      LCD_X_Y(1,k++,flag[i]);
+  53   2                      delay(10);
+  54   2              }
+  55   1              while(1)
+C51 COMPILER V9.00   电压显示                                                              12/15/2018 14:27:01 PAGE 2   
+
+  56   1              {
+  57   2                      xpt2046_1();
+  58   2                      k=5;
+  59   2                      for(i=0;i<6;i++)
+  60   2                      {
+  61   3                              LCD_X_Y(2,k++,volts[i]);
+  62   3                              delay(100);
+  63   3                      }
+  64   2              }
+  65   1      }
+  66          
+  67          void timr0() interrupt 1
+  68          {
+  69   1              TH0=THx;TL0=TLx;
+  70   1              if(++j==20)
+  71   1              {       
+  72   2                      flag_1=1;
+  73   2                      j=0;
+  74   2                      seconds++;
+  75   2                      
+  76   2                      if(seconds==60)
+  77   2                      {
+  78   3                              seconds=0;
+  79   3                      }
+  80   2              }
+  81   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    314    ----
+   CONSTANT SIZE    =      7    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     13       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

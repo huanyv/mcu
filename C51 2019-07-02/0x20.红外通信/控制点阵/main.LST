@@ -1,0 +1,204 @@
+C51 COMPILER V9.00   MAIN                                                                  12/23/2018 16:10:31 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\0000000\keil4\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<intrins.h>
+   3          
+   4          typedef unsigned char uchar;
+   5          typedef unsigned int uint;
+   6          
+   7          sbit LSA=P2^2;
+   8          sbit LSB=P2^3;
+   9          sbit LSC=P2^4;
+  10          sbit RCLK=P3^5;
+  11          sbit SRCLK=P3^6;
+  12          sbit SER=P3^4;                                                                                  //ÐÄ     {0x30,0x48,0x44,0x22,0x44,0x48,0x30,0x00}
+  13          
+  14          sbit OUT=P3^2; 
+  15          
+  16          uchar temp[6],time,i1=10;
+  17          
+  18          uchar code ledduan[11][8]={ {0x00,0x00,0x7C,0x82,0x82,0x82,0x7C,0x00}, //0
+  19                                                                  {0x00,0x00,0x00,0x7E,0x00,0x00,0x00,0x00}, //1
+  20                                                                  {0x00,0x00,0x4F,0x49,0x49,0x79,0x00,0x00}, //2
+  21                                                                  {0x00,0x00,0x49,0x49,0x49,0x7F,0x00,0x00}, //3
+  22                                                                  {0x00,0x00,0x78,0x08,0x3E,0x08,0x08,0x00}, //4
+  23                                                                  {0x00,0x00,0x79,0x49,0x49,0x4F,0x00,0x00}, //5
+  24                                                                  {0x00,0x00,0x7F,0x49,0x49,0x4F,0x00,0x00}, //6
+  25                                                                  {0x00,0x00,0x40,0x40,0x40,0x7E,0x00,0x00}, //7
+  26                                                                  {0x00,0x00,0x7F,0x49,0x49,0x7F,0x00,0x00}, //8
+  27                                                                  {0x00,0x00,0x79,0x49,0x49,0x7F,0x00,0x00}, //9
+  28                                                                  {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};//¿Õ
+  29          
+  30          uchar code ledwei[]={0x7f,0xbf,0xdf,0xef,0xf7,0xfb,0xfd,0xfe};
+  31          uchar code smgduan[17]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+  32                                                          0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0X76};
+  33          void delay(uint iii)
+  34          {
+  35   1              while(iii--);
+  36   1      }
+  37          
+  38          void yanshi(uint x)
+  39          {
+  40   1              uint i,j;
+  41   1              for(i=0;i<x;i++)
+  42   1              for(j=0;j<60;j++);
+  43   1      }
+  44          
+  45          
+  46          void H595(uchar duan)
+  47          {
+  48   1              uint i;
+  49   1              SRCLK=0;
+  50   1              RCLK=0;
+  51   1              for(i=0;i<8;i++)
+  52   1              {
+  53   2                      SER=duan>>7;               //1001 1001
+  54   2                      duan=duan<<1;
+  55   2                      SRCLK=1;
+C51 COMPILER V9.00   MAIN                                                                  12/23/2018 16:10:31 PAGE 2   
+
+  56   2                      _nop_();
+  57   2                      _nop_();
+  58   2                      SRCLK=0;
+  59   2              }
+  60   1              RCLK=1;
+  61   1              _nop_();
+  62   1              _nop_();
+  63   1              RCLK=0;
+  64   1      }
+  65          
+  66          /*
+  67          void display()
+  68          {
+  69                  uchar i;
+  70                  for(i=0;i<3;i++)
+  71                  {
+  72                          switch(i)
+  73                          {
+  74                                  case 0:LSC=0;LSB=0;LSA=0;
+  75                                  P0=smgduan[16];break;
+  76                                  case 1:LSC=0;LSB=0;LSA=1;
+  77                                  P0=smgduan[temp[2]%16];break;
+  78                                  case 2:LSC=0;LSB=1;LSA=0;
+  79                                  P0=smgduan[temp[2]/16];break;
+  80                          }
+  81                          delay(100);
+  82                          P0=0x00;
+  83                  }                                                         
+  84          }                                                                */
+  85          
+  86          
+  87          void infrared()
+  88          {
+  89   1              uchar i,j;
+  90   1              uint t;time=0;
+  91   1              delay(700);
+  92   1              if(OUT==0)
+  93   1              {
+  94   2                      t=1000;
+  95   2                      while((OUT==0)&&(t>0))
+  96   2                      {
+  97   3                              delay(1);
+  98   3                              t--;
+  99   3                      }
+ 100   2                      if(OUT==1)
+ 101   2                      {
+ 102   3                              t=500;
+ 103   3                              while((OUT==1)&&(t>0))
+ 104   3                              {
+ 105   4                                      delay(1);
+ 106   4                                      t--;
+ 107   4                              }
+ 108   3                              for(i=0;i<4;i++)
+ 109   3                                      for(j=0;j<8;j++)
+ 110   3                                      {
+ 111   4                                              t=60;
+ 112   4                                              while((OUT==0)&&(t>0))
+ 113   4                                              {
+ 114   5                                                      delay(1);
+ 115   5                                                      t--;
+ 116   5                                              }
+ 117   4                                              t=500;
+C51 COMPILER V9.00   MAIN                                                                  12/23/2018 16:10:31 PAGE 3   
+
+ 118   4                                              while((t>0)&&(OUT==1))
+ 119   4                                              {
+ 120   5                                                      delay(10);
+ 121   5                                                      time++;
+ 122   5                                                      t--;
+ 123   5                                                      if(time>30)
+ 124   5                                                      {
+ 125   6                                                              return;
+ 126   6                                                      }                                               
+ 127   5                                              }
+ 128   4                                              temp[i]=temp[i]>>1;
+ 129   4                                              if(time>8)
+ 130   4                                              {
+ 131   5                                                      temp[i]=temp[i]|0x80;
+ 132   5                                              }
+ 133   4                                              time=0;
+ 134   4                                      }
+ 135   3                      }
+ 136   2                      if(temp[2]!=~temp[3])
+ 137   2                      {
+ 138   3                              return;
+ 139   3                      }                 
+ 140   2              }
+ 141   1      }
+ 142          
+ 143          int main()
+ 144          {
+ 145   1              uint i;
+ 146   1              OUT=1;
+ 147   1              while(1)
+ 148   1              {
+ 149   2      //              display();
+ 150   2                      infrared();
+ 151   2                      switch(temp[2])
+ 152   2                      {
+ 153   3                              case 0x16:i1=0;break;
+ 154   3                              case 0x0c:i1=1;break;
+ 155   3                              case 0x18:i1=2;break;
+ 156   3                              case 0x5e:i1=3;break;
+ 157   3                              case 0x08:i1=4;break;
+ 158   3                              case 0x1c:i1=5;break;
+ 159   3                              case 0x5a:i1=6;break;
+ 160   3                              case 0x42:i1=7;break;
+ 161   3                              case 0x52:i1=8;break;
+ 162   3                              case 0x4a:i1=9;break;
+ 163   3                              case 0x45:i1=10;break;
+ 164   3                      }       
+ 165   2                      P0=0x7f;
+ 166   2                      for(i=0;i<8;i++)
+ 167   2                      {
+ 168   3                              P0=ledwei[i];
+ 169   3                              H595(ledduan[i1][i]);
+ 170   3                              yanshi(2);
+ 171   3                              H595(0x00);
+ 172   3                      }
+ 173   2              }
+ 174   1              return 0;
+ 175   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    463    ----
+C51 COMPILER V9.00   MAIN                                                                  12/23/2018 16:10:31 PAGE 4   
+
+   CONSTANT SIZE    =    113    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,163 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              06/27/2019 22:28:06 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "sys.h"
+   3          #include "key.h"
+   4          #include "timer.h"
+   5          #include "infrared.h"
+   6          #include "18b20.h"
+   7          #include "lcd1602.h"
+   8          
+   9          extern bit TEMP_CAP;
+  10          extern bit FLAG;    //   手动自动切换标志位
+  11          extern bit FLAG1;   //   启停标志位
+  12          extern uint speed;
+  13          
+  14          int temp;
+  15          
+  16          void display(void)
+  17          {
+  18   1        float tp;
+  19   1        if( TEMP_CAP == 1)
+  20   1        {
+  21   2          TEMP_CAP = 0;
+  22   2          temp = readc();
+  23   2          tp=temp;
+  24   2          temp=tp*0.0625*10+0.5;
+  25   2        }
+  26   1        
+  27   1        LCD_write_0(0x80);
+  28   1        LCD_write_1('T');
+  29   1        LCD_write_1('E');
+  30   1        LCD_write_1('M');
+  31   1        LCD_write_1('P');
+  32   1        LCD_write_1(':');
+  33   1        LCD_write_1(temp/100%10+'0');
+  34   1        LCD_write_1(temp/10%10+'0');
+  35   1        LCD_write_1('.');
+  36   1        LCD_write_1(temp%10+'0');
+  37   1        LCD_write_1('C');
+  38   1        
+  39   1        if( FLAG == 0 )
+  40   1        {
+  41   2          LCD_write_0(0x80+12);
+  42   2          LCD_write_1(' ');
+  43   2          LCD_write_1(' ');
+  44   2          LCD_write_1(' ');
+  45   2          LCD_write_1(' '); 
+  46   2          LCD_write_0(0x80+12);
+  47   2          LCD_write_1('H');
+  48   2          LCD_write_1('A');
+  49   2          LCD_write_1('N');
+  50   2          LCD_write_1('D');   
+  51   2        }
+  52   1        else
+  53   1        {
+  54   2          LCD_write_0(0x80+12);
+C51 COMPILER V9.60.0.0   MAIN                                                              06/27/2019 22:28:06 PAGE 2   
+
+  55   2          LCD_write_1(' ');
+  56   2          LCD_write_1(' ');
+  57   2          LCD_write_1(' ');
+  58   2          LCD_write_1(' '); 
+  59   2          LCD_write_0(0x80+12);
+  60   2          LCD_write_1('A');
+  61   2          LCD_write_1('U');
+  62   2          LCD_write_1('T');
+  63   2          LCD_write_1('O');   
+  64   2        }
+  65   1        
+  66   1        if( FLAG1 == 0 )
+  67   1        {
+  68   2          LCD_write_0(0xC0+11);
+  69   2          LCD_write_1(' ');
+  70   2          LCD_write_1(' ');
+  71   2          LCD_write_1(' ');
+  72   2          LCD_write_1(' ');   
+  73   2          LCD_write_1(' '); 
+  74   2          LCD_write_0(0xC0+11);
+  75   2          LCD_write_1(' ');   
+  76   2          LCD_write_1('S');
+  77   2          LCD_write_1('T');
+  78   2          LCD_write_1('O');
+  79   2          LCD_write_1('P');   
+  80   2        }
+  81   1        else
+  82   1        {
+  83   2          LCD_write_0(0xC0+11);
+  84   2          LCD_write_1(' ');
+  85   2          LCD_write_1(' ');
+  86   2          LCD_write_1(' ');
+  87   2          LCD_write_1(' ');   
+  88   2          LCD_write_1(' ');
+  89   2          LCD_write_0(0xC0+11);
+  90   2          LCD_write_1('S');
+  91   2          LCD_write_1('T');
+  92   2          LCD_write_1('A');
+  93   2          LCD_write_1('R');   
+  94   2          LCD_write_1('T'); 
+  95   2        }
+  96   1        
+  97   1        
+  98   1      }
+  99          
+ 100          
+ 101          void main(void)
+ 102          {
+ 103   1        TIM_Init();
+ 104   1        IrInit();
+ 105   1        DS18B20_Init();
+ 106   1        LCD_init();
+ 107   1        while(1)
+ 108   1        {   
+ 109   2          if( FLAG == 0 )
+ 110   2          {
+ 111   3            KEY_Ctrl();
+ 112   3            Intrared_SPEED_Ctrl(); // 手动
+ 113   3          }
+ 114   2          else
+ 115   2          {
+ 116   3            if(temp<=250) // 自动
+C51 COMPILER V9.60.0.0   MAIN                                                              06/27/2019 22:28:06 PAGE 3   
+
+ 117   3            {
+ 118   4              speed = 2;
+ 119   4            }
+ 120   3            else if( (temp>250)&&(temp<=300) )
+ 121   3            {
+ 122   4              speed = 5;
+ 123   4            }
+ 124   3            else if(temp>300)
+ 125   3            {
+ 126   4              speed = 10;
+ 127   4            }   
+ 128   3          }
+ 129   2          
+ 130   2          Intrared_MODE_Ctrl();   
+ 131   2          display();
+ 132   2          
+ 133   2        } 
+ 134   1      }
+ 135          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    496    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

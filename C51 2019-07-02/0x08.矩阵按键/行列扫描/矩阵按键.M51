@@ -1,0 +1,152 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/17/2018  17:19:43  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\0000000\KEIL4\C51\BIN\BL51.EXE ¾ØÕó°´¼ü.obj TO ¾ØÕó°´¼ü RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ¾ØÕó°´¼ü.obj (¾ØÕ__´¼ü)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  ¾ØÕó°´¼ü (¾ØÕ__´¼ü)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0002H     UNIT         ?DT?¾ØÕ__´¼ü
+            IDATA   000AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0084H     UNIT         ?PR?SAOMIAO?¾ØÕ__´¼ü
+            CODE    0884H     0020H     UNIT         ?PR?_YANSHI?¾ØÕ__´¼ü
+            CODE    08A4H     0013H     UNIT         ?PR?MAIN?¾ØÕ__´¼ü
+            CODE    08B7H     0010H     UNIT         ?CO?¾ØÕ__´¼ü
+            CODE    08C7H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   ¾ØÕó°´¼ü (¾ØÕ__´¼ü)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?¾ØÕ__´¼ü
+
+?PR?MAIN?¾ØÕ__´¼ü
+  +--> ?PR?SAOMIAO?¾ØÕ__´¼ü
+  +--> ?CO?¾ØÕ__´¼ü
+
+?PR?SAOMIAO?¾ØÕ__´¼ü
+  +--> ?PR?_YANSHI?¾ØÕ__´¼ü
+
+
+
+SYMBOL TABLE OF MODULE:  ¾ØÕó°´¼ü (¾ØÕ__´¼ü)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ¾ØÕ__´¼ü
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/17/2018  17:19:43  PAGE 2
+
+
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A0H.2       PUBLIC        LA
+  B:00A0H.3       PUBLIC        LB
+  D:00A8H         PUBLIC        IE
+  B:00A0H.4       PUBLIC        LC
+  C:0884H         PUBLIC        _yanshi
+  D:0008H         PUBLIC        weizhi
+  D:00B8H         PUBLIC        IP
+  C:08A4H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        T2CON
+  C:08B7H         PUBLIC        duanxuan
+  C:0800H         PUBLIC        saomiao
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _YANSHI
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0884H         LINE#         18
+  C:0884H         LINE#         19
+  C:0884H         LINE#         21
+  C:088EH         LINE#         22
+  C:08A3H         LINE#         23
+  -------         ENDPROC       _YANSHI
+  -------         PROC          SAOMIAO
+  -------         DO            
+  D:0082H         SYMBOL        a
+  -------         ENDDO         
+  C:0800H         LINE#         25
+  C:0800H         LINE#         26
+  C:0800H         LINE#         27
+  C:0803H         LINE#         28
+  C:0806H         LINE#         29
+  C:080CH         LINE#         30
+  C:080CH         LINE#         31
+  C:0813H         LINE#         32
+  C:0825H         LINE#         33
+  C:0825H         LINE#         34
+  C:082DH         LINE#         35
+  C:0835H         LINE#         36
+  C:083DH         LINE#         37
+  C:0843H         LINE#         38
+  C:0843H         LINE#         39
+  C:0846H         LINE#         40
+  C:0855H         LINE#         41
+  C:0855H         LINE#         42
+  C:0855H         LINE#         43
+  C:0859H         LINE#         44
+  C:085DH         LINE#         45
+  C:0868H         LINE#         46
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/17/2018  17:19:43  PAGE 3
+
+
+  C:0868H         LINE#         47
+  C:0879H         LINE#         48
+  C:0879H         LINE#         49
+  C:0880H         LINE#         50
+  C:0881H         LINE#         51
+  C:0883H         LINE#         52
+  C:0883H         LINE#         53
+  -------         ENDPROC       SAOMIAO
+  -------         PROC          MAIN
+  C:08A4H         LINE#         54
+  C:08A4H         LINE#         55
+  C:08A4H         LINE#         56
+  C:08A6H         LINE#         57
+  C:08A8H         LINE#         58
+  C:08AAH         LINE#         59
+  C:08AAH         LINE#         60
+  C:08AAH         LINE#         61
+  C:08ADH         LINE#         62
+  C:08B5H         LINE#         63
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        ¾ØÕ__´¼ü
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00C7H BYTE ( 9%) *
+******************************************************************************
+
+Program Size: data=11.0 xdata=0 code=214
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

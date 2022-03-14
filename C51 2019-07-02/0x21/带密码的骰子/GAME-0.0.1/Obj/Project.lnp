@@ -1,0 +1,5 @@
+"..\Obj\main.obj",
+"..\Obj\key.obj",
+"..\Obj\game.obj" 
+TO "..\Obj\Project" 
+PRINT(".\Listings\Project.m51") RAMSIZE(256) 

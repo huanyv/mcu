@@ -1,0 +1,104 @@
+C51 COMPILER V9.00   LCD1602                                                               12/23/2018 16:51:43 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN lcd1602.OBJ
+COMPILER INVOKED BY: C:\0000000\keil4\C51\BIN\C51.EXE lcd1602.c COMPACT BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<lcd1602.h>
+   2          #include<intrins.h>
+   3          
+   4          void delay_lcd(uint iii)
+   5          {
+   6   1              while(iii--);
+   7   1      }
+   8          
+   9          void lcd1602_write_0(uchar dat)
+  10          {
+  11   1              LCD_DB=dat;
+  12   1              LCD_RS=0;
+  13   1              LCD_RW=0;
+  14   1              LCD_EN=1;
+  15   1              LCD_EN=0;
+  16   1              delay_lcd(10);
+  17   1      }
+  18          
+  19          void lcd1602_write_1(uchar dat)
+  20          {
+  21   1              LCD_DB=dat;
+  22   1              LCD_RS=1;
+  23   1              LCD_RW=0;
+  24   1              LCD_EN=1;
+  25   1              LCD_EN=0;
+  26   1              delay_lcd(10);
+  27   1      }
+  28          
+  29          void lcd_zidingyi(uchar (*s)[],uchar i_1,uchar i_2)
+  30          {
+  31   1              uchar j_1,j_2;
+  32   1              for(j_1=1;j_1<=i_2;j_1++)
+  33   1              {
+  34   2                      if(j_1==1)
+  35   2                              lcd1602_write_0(0x40);
+  36   2                      if(j_1==2)
+  37   2                              lcd1602_write_0(0x48);
+  38   2                      if(j_1==3)
+  39   2                              lcd1602_write_0(0x50);
+  40   2                      if(j_1==4)
+  41   2                              lcd1602_write_0(0x58);
+  42   2                      if(j_1==5)
+  43   2                              lcd1602_write_0(0x60);
+  44   2                      if(j_1==6)
+  45   2                              lcd1602_write_0(0x68);
+  46   2                      if(j_1==7)
+  47   2                              lcd1602_write_0(0x70);
+  48   2                      if(j_1==8)
+  49   2                              lcd1602_write_0(0x78);
+  50   2                              for(j_2=0;j_2<i_1;j_2++)
+  51   2                              {
+  52   3                                       lcd1602_write_1(s[j_1-1][j_2]);
+  53   3                              }
+  54   2              }
+  55   1      }
+C51 COMPILER V9.00   LCD1602                                                               12/23/2018 16:51:43 PAGE 2   
+
+  56          
+  57          void lcd1602_X_Y(uchar x,uchar y,uchar dat)
+  58          {
+  59   1              uchar add;
+  60   1              if(x==1)
+  61   1              {
+  62   2                      add=0x80+y;
+  63   2              }
+  64   1              else
+  65   1                      add=0xc0+y;
+  66   1              lcd1602_write_0(add);
+  67   1          lcd1602_write_1(dat);
+  68   1      }
+  69          
+  70          void lcd1602_init()
+  71          {
+  72   1              lcd1602_write_0(0x38);
+  73   1              delay_lcd(1500);
+  74   1              lcd1602_write_0(0x38);
+  75   1              lcd1602_write_0(0x06);
+  76   1              lcd1602_write_0(0x0c);
+  77   1              lcd1602_write_0(0x01);
+  78   1              delay_lcd(2000);        
+  79   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    276    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----       6
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

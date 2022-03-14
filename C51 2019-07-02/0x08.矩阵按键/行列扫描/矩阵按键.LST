@@ -1,0 +1,90 @@
+C51 COMPILER V9.00   ¾ØÕ__´¼ü                                                              11/17/2018 17:19:11 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE ¾ØÕ__´¼ü
+OBJECT MODULE PLACED IN ¾ØÕó°´¼ü.OBJ
+COMPILER INVOKED BY: C:\0000000\keil4\C51\BIN\C51.EXE ¾ØÕó°´¼ü.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          sbit LA=P2^2;
+   7          sbit LB=P2^3;
+   8          sbit LC=P2^4;
+   9          
+  10          #define duli P1
+  11          #define shuma P0
+  12          
+  13          uchar code duanxuan[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,
+  14                                                   0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71};
+  15          
+  16          uint weizhi;
+  17          
+  18          void yanshi(uint x)
+  19          {
+  20   1              uint i,j;
+  21   1              for(i=0;i<x;i++)
+  22   1              for(j=0;j<60;j++);
+  23   1      }
+  24          
+  25          void saomiao()
+  26          {
+  27   1               uint a=0;
+  28   1               duli=0x0f;
+  29   1               if(duli!=0x0f)
+  30   1               {
+  31   2                      yanshi(20);
+  32   2                      switch(duli)
+  33   2                      {
+  34   3                              case 0x07:weizhi=1;break;
+  35   3                              case 0x0b:weizhi=2;break;
+  36   3                              case 0x0d:weizhi=3;break;
+  37   3                              case 0x0e:weizhi=4;break;       
+  38   3                      }
+  39   2                      duli=0xf0;
+  40   2                      switch(duli)
+  41   2                      {
+  42   3                              case 0x70:break;
+  43   3                              case 0xb0:weizhi=weizhi+4;break;
+  44   3                              case 0xd0:weizhi=weizhi+8;break;
+  45   3                              case 0xe0:weizhi=weizhi+12;break;
+  46   3                      }
+  47   2                      while((a<50)&&(duli!=0xf0))
+  48   2                      {
+  49   3                              yanshi(20);
+  50   3                              a++;
+  51   3                      }
+  52   2               }
+  53   1      }
+  54          int main()
+  55          {
+C51 COMPILER V9.00   ¾ØÕ__´¼ü                                                              11/17/2018 17:19:11 PAGE 2   
+
+  56   1              LA=0;
+  57   1              LB=0;
+  58   1              LC=0;
+  59   1              while(1)
+  60   1              {
+  61   2                      saomiao();
+  62   2                      shuma=duanxuan[weizhi-1];
+  63   2              }
+  64   1              return 0;
+  65   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    183    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

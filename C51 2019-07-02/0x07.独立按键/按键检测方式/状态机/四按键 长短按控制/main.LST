@@ -1,0 +1,182 @@
+C51 COMPILER V9.01   MAIN                                                                  03/10/2019 14:55:47 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include"stc89c5xrc.h"
+   2          typedef unsigned char uchar;
+   3          typedef unsigned int uint;
+   4          
+   5          sbit led1=P2^3;
+   6          sbit led2=P2^2;
+   7          sbit led3=P2^1;
+   8          sbit led4=P2^0;
+   9          sbit led5=P2^7;
+  10          sbit led6=P2^6;
+  11          sbit led7=P2^5;
+  12          sbit led8=P2^4;
+  13          
+  14          
+  15          //uchar read_key(){
+  16          //      static uint key_time=0;
+  17          //      static uchar key_state=0;
+  18          //      uchar key_count=0;
+  19          //      uchar key_return=0;
+  20          //      key_count=P3&0x0f;
+  21          //      switch(key_state){
+  22          //              case 0:
+  23          //                      if(key_count!=0x0f){
+  24          //                              key_time=0;
+  25          //                              key_state=1;
+  26          //                      }break;
+  27          //              case 1:
+  28          //                      if(key_count!=0x0f){
+  29          //                              key_time++;
+  30          //                              if(key_time>60000){
+  31          //                                      key_state=2;
+  32          //                                      switch(key_count){
+  33          //                                              case 0x0d:key_return=1;break;
+  34          //                                              case 0x0e:key_return=2;break;
+  35          //                                              case 0x0b:key_return=3;break;
+  36          //                                              case 0x07:key_return=4;break;
+  37          //                                      }
+  38          //                              }
+  39          //                      }
+  40          //                      else{
+  41          //                              key_state=0;
+  42          //                      }break;
+  43          //              case 2:
+  44          //                      if(key_count==0x0f){
+  45          //                              key_return=0;
+  46          //                              key_state=0;
+  47          //                      }break;
+  48          //      }
+  49          //      return key_return;
+  50          //}
+  51          uchar read_key(){
+  52   1              static uint key_time=0;//长短按时间判断
+  53   1              static uchar key_state=0;//状态
+  54   1              uchar key_count=0;//读键值 变量
+  55   1              static uchar key_count2=0;//判断按键变量
+C51 COMPILER V9.01   MAIN                                                                  03/10/2019 14:55:47 PAGE 2   
+
+  56   1              uchar key_return=0;//返回键值
+  57   1              key_count=P3&0x0f;//读键值
+  58   1              switch(key_state){
+  59   2                      case 0:
+  60   2                              if(key_count!=0x0f){
+  61   3                                      key_time=0;
+  62   3                                      key_count2=0;
+  63   3                                      key_state=1;
+  64   3                              }break;
+  65   2                      case 1:
+  66   2                              if(key_count!=0x0f){
+  67   3                                      key_time++;
+  68   3                                      if(key_time>500){
+  69   4                                              key_count2=key_count;
+  70   4                                              key_state=2;
+  71   4                                      }
+  72   3                              }
+  73   2                              else{
+  74   3                                      key_state=0;
+  75   3                              }break;
+  76   2                      case 2:
+  77   2                              if(key_count==0x0f){
+  78   3                                      switch(key_count2){
+  79   4                                              case 0x0d:key_return=1;break;
+  80   4                                              case 0x0e:key_return=2;break;
+  81   4                                              case 0x0b:key_return=3;break;
+  82   4                                              case 0x07:key_return=4;break;
+  83   4                                      }
+  84   3                                      key_state=0;
+  85   3                              }
+  86   2                              if(key_count!=0x0f){
+  87   3                                      key_time++;
+  88   3                                      if(key_time>20000){
+  89   4                                              switch(key_count){
+  90   5                                                      case 0x0d:key_return=11;break;
+  91   5                                                      case 0x0e:key_return=22;break;
+  92   5                                                      case 0x0b:key_return=33;break;
+  93   5                                                      case 0x07:key_return=44;break;
+  94   5                                              }
+  95   4                                              key_state=3;
+  96   4                                      }
+  97   3                              }break;
+  98   2                              case 3:
+  99   2                                      if(key_count==0x0f){
+ 100   3                                              key_state=0;
+ 101   3                                      }break;
+ 102   2              }
+ 103   1              return key_return;
+ 104   1      }
+ 105          
+ 106          void main(void){
+ 107   1              uchar temp=0;
+ 108   1              while(1){
+ 109   2                      temp=read_key();
+ 110   2                      if(temp==1){
+ 111   3                              led1=~led1;
+ 112   3                      }
+ 113   2                      if(temp==2){
+ 114   3                              led2=~led2;
+ 115   3                      }
+ 116   2                      if(temp==3){
+ 117   3                              led3=~led3;
+C51 COMPILER V9.01   MAIN                                                                  03/10/2019 14:55:47 PAGE 3   
+
+ 118   3                      }
+ 119   2                      if(temp==4){
+ 120   3                              led4=~led4;
+ 121   3                      }
+ 122   2                      if(temp==11){
+ 123   3                              led5=~led5;
+ 124   3                      }
+ 125   2                      if(temp==22){
+ 126   3                              led6=~led6;
+ 127   3                      }
+ 128   2                      if(temp==33){
+ 129   3                              led7=~led7;
+ 130   3                      }
+ 131   2                      if(temp==44){
+ 132   3                              led8=~led8;
+ 133   3                      }
+ 134   2              }
+ 135   1      }
+ 136          
+ 137          
+ 138          
+ 139          
+ 140          
+ 141          
+ 142          
+ 143          
+ 144          
+ 145          
+ 146          
+ 147          
+ 148          
+ 149          
+ 150          
+ 151          
+ 152          
+ 153          
+ 154          
+ 155          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    230    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,203 @@
+C51 COMPILER V9.57.0.0   SNAKE                                                             03/23/2019 21:31:44 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE SNAKE
+OBJECT MODULE PLACED IN snake.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE snake.C OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          //proteus仿真论坛:proteus.5d6d.com
+   2          #include <reg51.h>
+   3          #define uchar unsigned char
+   4          #define SNAKE 20                 //最大长度
+   5          #define TIME 50                 //显示延时时间
+   6          #define SPEED 71               //速度控制
+   7          //#define  keyenable 1
+   8          sbit keyenable=P3^6;      //方向使能
+   9          /*sbit keyx=P0^1;         //左右
+  10          sbit keyy=P0^2;         //上下  */
+  11          //sbit up=P0^0;
+  12          sbit up=P3^3;       //down
+  13          sbit down=P3^1;
+  14          sbit right=P3^2;
+  15          sbit left=P3^4;
+  16          uchar x[SNAKE+1];
+  17          uchar y[SNAKE+1];
+  18          uchar time,n,i,e;              //延时时间，当前蛇长，通用循环变量，当前速度
+  19          char addx,addy;                //位移偏移量
+  20          /********************
+  21          延时程序
+  22          *********************/
+  23          void delay(char MS)
+  24          {
+  25   1          char us,usn;
+  26   1          while(MS!=0)
+  27   1          {
+  28   2              usn = 0;
+  29   2              while(usn!=0)
+  30   2              {
+  31   3                  us=0xff;
+  32   3                  while (us!=0) {
+  33   4                      us--;
+  34   4                  };
+  35   3                  usn--;
+  36   3              }
+  37   2              MS--;
+  38   2          }
+  39   1      }
+  40          /*******************************************
+  41          判断碰撞
+  42          *******************************************/
+  43          bit knock()
+  44          {   bit k;
+  45   1          k=0;
+  46   1          if(x[1]>7||y[1]>7)k=1;                             //撞墙
+  47   1          for(i=2; i<n; i++)if((x[1]==x[i])&(y[1]==y[i]))k=1; //撞自己
+  48   1          return k;
+  49   1      }
+  50          /*****************
+  51          上下左右键位处理
+  52          *****************/
+  53          void turnkey()// interrupt 0 using 2
+  54          {   //up=1;
+  55   1          if(keyenable)
+C51 COMPILER V9.57.0.0   SNAKE                                                             03/23/2019 21:31:44 PAGE 2   
+
+  56   1          {
+  57   2              if(left) {
+  58   3                  addy=0;
+  59   3                  if(addx!=1)addx=-1;
+  60   3                  else addx=1;
+  61   3              }
+  62   2              if(right) {
+  63   3                  addy=0;
+  64   3                  if(addx!=-1)addx=1;
+  65   3                  else addx=-1;
+  66   3              }
+  67   2              if(up) {
+  68   3                  addx=0;
+  69   3                  if(addy!=-1)addy=1;
+  70   3                  else addy=-1;
+  71   3              }
+  72   2              if(down) {
+  73   3                  addx=0;
+  74   3                  if(addy!=1)addy=-1;
+  75   3                  else addy=1;
+  76   3              }
+  77   2              /*if(keyy)
+  78   2              {addy=0;                                   //左右
+  79   2              if(keyx)if(addx==-1)addx=-1; else addx=1;  //左
+  80   2              else
+  81   2              if(addx==1)addx=1; else addx=-1;           //右
+  82   2              }
+  83   2              else
+  84   2              {addx=0;                                   //上下
+  85   2              if(keyx)if(addy==1)addy=1; else addy=-1;   //下
+  86   2              else
+  87   2              if(addy==-1)addy=-1; else addy=1;          //上
+  88   2              } */
+  89   2          }
+  90   1      }
+  91          /*****************
+  92          乘方程序
+  93          *****************/
+  94          uchar mux(uchar temp)
+  95          {
+  96   1          if(temp==7)return 128;
+  97   1          if(temp==6)return 64;
+  98   1          if(temp==5)return 32;
+  99   1          if(temp==4)return 16;
+ 100   1          if(temp==3)return 8;
+ 101   1          if(temp==2)return 4;
+ 102   1          if(temp==1)return 2;
+ 103   1          if(temp==0)return 1;
+ 104   1          return 0;
+ 105   1      }
+ 106          /*****************
+ 107          显示时钟 显示程序
+ 108          *****************/
+ 109          void timer0(uchar k)
+ 110          {   while(k--)
+ 111   1          {   for(i=0; i<SNAKE+1; i++)
+ 112   2              {   P2=mux(x[i]);
+ 113   3                  P1=255-mux(y[i]);
+ 114   3                  turnkey();                     //上下左右键位处理
+ 115   3                  delay(TIME);                   //显示延迟
+ 116   3                  P2=0x00;
+ 117   3                  P1=0xff;
+C51 COMPILER V9.57.0.0   SNAKE                                                             03/23/2019 21:31:44 PAGE 3   
+
+ 118   3              }
+ 119   2          }
+ 120   1      }
+ 121          /*****************
+ 122          主程序
+ 123          *****************/
+ 124          void main(void)
+ 125          {   e=SPEED;
+ 126   1          P0=0x00;
+ 127   1          P1=0xff;
+ 128   1          P2=0x00;
+ 129   1          P3=0x00;
+ 130   1          while(1)
+ 131   1          {   //if(keyenable==1){P1=0x00;P2=0xff;}else{P1=0xff;P2=0x00;}
+ 132   2              for(i=3; i<SNAKE+1; i++)x[i]=100;
+ 133   2              for(i=3; i<SNAKE+1; i++)y[i]=100; //初始化
+ 134   2              x[0]=4;
+ 135   2              y[0]=4;                                                //果子
+ 136   2              n=3;                                                          //蛇长 n=-1
+ 137   2              x[1]=1;
+ 138   2              y[1]=0;                                                //蛇头
+ 139   2              x[2]=0;
+ 140   2              y[2]=0;                                                //蛇尾1
+ 141   2              addx=0;
+ 142   2              addy=0;                                                //位移偏移
+ 143   2      //k=1;
+ 144   2              while(1) {
+ 145   3                  if(keyenable)break;
+ 146   3                  timer0(1);
+ 147   3              }
+ 148   2              while(1)
+ 149   2              {   timer0(e);
+ 150   3                  if(knock()) {
+ 151   4                      e=SPEED;    //判断碰撞
+ 152   4                      break;
+ 153   4                  }
+ 154   3                  if((x[0]==x[1]+addx)&(y[0]==y[1]+addy))         //是否吃东西
+ 155   3                  {   n++;
+ 156   4                      if(n==SNAKE+1)
+ 157   4                      {   n=3;
+ 158   5                          e=e-10;
+ 159   5                          for(i=3; i<SNAKE+1; i++)x[i]=100;
+ 160   5                          for(i=3; i<SNAKE+1; i++)y[i]=100;
+ 161   5                      }
+ 162   4                      x[0]=x[n-2];
+ 163   4                      y[0]=y[n-2];
+ 164   4                  }
+ 165   3                  for(i=n-1; i>1; i--) {
+ 166   4                      x[i]=x[i-1];
+ 167   4                      y[i]=y[i-1];
+ 168   4                  }
+ 169   3                  //x[n-1]=x[2];y[n-1]=y[2];
+ 170   3                  x[1]=x[2]+addx;
+ 171   3                  y[1]=y[2]+addy;                     //移动
+ 172   3              }
+ 173   2          }
+ 174   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    573    ----
+   CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.57.0.0   SNAKE                                                             03/23/2019 21:31:44 PAGE 4   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     48    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

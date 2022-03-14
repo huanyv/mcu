@@ -1,0 +1,105 @@
+C51 COMPILER V9.00   定时器T0__秒表                                                        11/22/2018 11:02:49 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE 定时器T0__秒表
+OBJECT MODULE PLACED IN 定时器T0  秒表.OBJ
+COMPILER INVOKED BY: C:\0000000\keil4\C51\BIN\C51.EXE 定时器T0  秒表.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          sbit LA=P2^2;
+   7          sbit LB=P2^3;
+   8          sbit LC=P2^4;
+   9          sbit k1=P3^1;
+  10          
+  11          uchar duanxuan[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+  12          uchar saomiao[]={0x3f,0x3f};
+  13          
+  14          uint seconds=0,i=0;
+  15          
+  16          
+  17          void yanshi(uint i)
+  18          {
+  19   1              while(i--);
+  20   1      }
+  21          
+  22          void kongzhi()
+  23          {
+  24   1              if(k1==0)
+  25   1              {
+  26   2                      yanshi(2000);
+  27   2                      seconds++;
+  28   2                      if(seconds==59)seconds=0; 
+  29   2                      while(!k1);
+  30   2              }
+  31   1      }
+  32          
+  33          void weixuan()
+  34          {
+  35   1              uint i;
+  36   1              for(i=0;i<2;i++)
+  37   1              {
+  38   2                      switch(i)
+  39   2                      {
+  40   3                              case 0:LC=0;LB=0;LA=0;
+  41   3                              P0=duanxuan[seconds%10];break;
+  42   3                              case 1:LC=0;LB=0;LA=1;
+  43   3                              P0=duanxuan[seconds/10];break;
+  44   3                      }
+  45   2                      yanshi(1000);
+  46   2                      P0=0x00;
+  47   2              }
+  48   1      }
+  49          
+  50          int main()
+  51          {
+  52   1              IE=0x82;
+  53   1              TR0=1;
+  54   1              TMOD=0x01;
+  55   1              TL0=0x18;TH0=0xFC;
+C51 COMPILER V9.00   定时器T0__秒表                                                        11/22/2018 11:02:49 PAGE 2   
+
+  56   1              while(1)
+  57   1              {
+  58   2                      weixuan();
+  59   2                      kongzhi();
+  60   2              }               
+  61   1              return 0;
+  62   1      }
+  63          
+  64          void time0() interrupt 1
+  65          {
+  66   1              TL0=0x18;TH0=0xFC;
+  67   1              if(++i==1000)
+  68   1              {
+  69   2                      i=0;
+  70   2                      if(seconds<59)
+  71   2                              seconds++;
+  72   2                      else
+  73   2                              seconds=0;
+  74   2              }
+  75   1      }
+  76          
+  77          
+  78          
+  79          
+  80          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    222    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     16    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

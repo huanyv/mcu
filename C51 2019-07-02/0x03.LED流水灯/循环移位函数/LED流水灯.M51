@@ -1,0 +1,109 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/27/2019  15:43:01  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE LED流水灯.obj TO LED流水灯 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  LED流水灯.obj (LED流水灯)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  LED流水灯 (LED流水灯)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0041H     UNIT         ?PR?MAIN?LED流水灯
+            CODE    0044H     0026H     UNIT         ?PR?_YANSHI?LED流水灯
+            CODE    006AH     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   LED流水灯 (LED流水灯)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?LED流水灯
+
+?PR?MAIN?LED流水灯
+  +--> ?PR?_YANSHI?LED流水灯
+
+
+
+SYMBOL TABLE OF MODULE:  LED流水灯 (LED流水灯)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        LED流水灯
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:004AH         PUBLIC        _yanshi
+  D:00B8H         PUBLIC        IP
+  C:0003H         PUBLIC        main
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/27/2019  15:43:01  PAGE 2
+
+
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  C:0046H         SYMBOL        L?0024
+  -------         PROC          L?0023
+  -------         ENDPROC       L?0023
+  C:0046H         SYMBOL        L?0024
+  -------         PROC          _YANSHI
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:004AH         LINE#         5
+  C:004AH         LINE#         6
+  C:004AH         LINE#         8
+  C:0054H         LINE#         9
+  C:0069H         LINE#         10
+  -------         ENDPROC       _YANSHI
+  -------         PROC          MAIN
+  -------         DO            
+  D:0082H         SYMBOL        i
+  -------         ENDDO         
+  C:0003H         LINE#         11
+  C:0003H         LINE#         12
+  C:0003H         LINE#         15
+  C:0006H         LINE#         16
+  C:0009H         LINE#         17
+  C:0009H         LINE#         18
+  C:0009H         LINE#         19
+  C:000CH         LINE#         20
+  C:000CH         LINE#         21
+  C:0017H         LINE#         22
+  C:001AH         LINE#         23
+  C:0023H         LINE#         24
+  C:0033H         LINE#         25
+  C:0033H         LINE#         26
+  C:003EH         LINE#         27
+  C:0041H         LINE#         28
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        LED流水灯
+
+Program Size: data=9.0 xdata=0 code=118
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

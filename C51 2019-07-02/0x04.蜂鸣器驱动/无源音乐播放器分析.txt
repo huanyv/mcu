@@ -1,0 +1,72 @@
+ //QQ:1302231515  无源音乐播放器代码分析
+ //有兴趣的朋友，加我一起自学51单片机.
+#include <REGX52.H>
+#define uchar unsigned char
+#define uint unsigned int
+sbit Beep=P1^5; //定义蜂鸣器输出端口
+uchar code  GQ[]={
+// 世上只有妈妈好 
+// 数据表 （音符，音高，节拍）
+6,2,3, 5,2,1, 3,2,2, 5,2,2, 1,3,2, 6,2,1, 5,2,1,
+6,2,4, 3,2,2, 5,2,1, 6,2,1, 5,2,2, 3,2,2, 1,2,1,
+6,1,1, 5,2,1, 3,2,1, 2,2,4, 2,2,3, 3,2,1, 5,2,2,
+5,2,1, 6,2,1, 3,2,2, 2,2,2, 1,2,4, 5,2,3, 3,2,1,
+2,2,1, 1,2,1, 6,1,1, 1,2,1, 5,1,6, 0,0,0
+};
+/*音符频率计算： T = 65536 - 1/Fr/2/MC
+T： 要算得的定时器初值
+Fr: 各音阶对应的频率
+MC： 一个机器周期所需的时间 ，11.0592MHz的晶振对应的机器周期为1.085μs
+EX：低音Do对应的频率为262,则T = 65536 - 1/2/1.085/262*(10^6)=63777,对应十六进制数为0xF921，分别写进TH0,和TL0
+*/
+// 音阶频率表 高八位（计时器初值）
+uchar code  FREQH[]={
+0xF2,0xF3,0xF5,0xF5,0xF6,0xF7,0xF8,
+0xF9,0xF9,0xFA,0xFA,0xFB,0xFB,0xFC,
+0xFC,0xFC,0xFD,0xFD,0xFD,0xFD,0xFE,
+0xFE,0xFE,0xFE,0xFE,0xFE,0xFE,0xFF,} ;
+// 音阶频率表 低八位(计时器初值)
+uchar code  FREQL[]={
+0x42,0xC1,0x17,0xB6,0xD0,0xD1,0xB6,
+0x21,0xE1,0x8C,0xD8,0x68,0xE9,0x5B,
+0x8F,0xEE,0x44,0x6B,0xB4,0xF4,0x2D,
+0x47,0x77,0xA2,0xB6,0xDA,0xFA,0x16,};
+
+uchar timer0h,timer0l,timerJP;
+void delay(uint time)  //节拍  现在延迟250MS 一拍子 一小句大概500MS
+{
+	unsigned long x; 
+  for (;time>0;time--)
+	for (x=0;x<5000;x++);
+	TR0=0; //节拍延迟完事，先给我停掉中断。准备下一个音符
+}
+void main()
+{
+   uchar i,k;
+	     i=0;
+   while(1)
+		 {
+			k=GQ[i]+7*GQ[i+1]-1;  //查询合并 GQ[i]为查音调+ 7*GQ[i+1]是查（低中高音）-1是因为查询是从0开始查的会多一位
+			timer0h=FREQH[k];
+			timer0l=FREQL[k];
+			timerJP=GQ[i+2];	    //节拍赋值 节拍是第三位所以I+2
+			TMOD|=0X01;      //中断T0的一些初始化设置
+            TH0=timer0h;
+            TL0=timer0l;			  
+			EA=1;
+            ET0=1;
+            TR0=1;
+			  
+            i=i+3; //每一音符用3个数字代表的   	
+            delay(timerJP); //延迟等中断，反复的进入中断，响起这个声音，然后直到这个延迟结束
+			if (GQ[i]==0) return; //遇到0停止
+		 }
+}
+void time0() interrupt 1
+{  
+  TR0=0;       //先关了中断，干一点事情在开开
+  Beep=~Beep; //在中断里面让喇叭反转响
+  TH0=timer0h; //重装初值
+  TL0=timer0l;
+  TR0=1;       //启动中断
+}

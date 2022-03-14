@@ -1,0 +1,186 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              04/18/2019 21:09:45 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\DS18B20) DEBUG OBJECTEXTEND PRI
+                    -NT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<ds18b20.h>
+   3          
+   4          
+   5          sbit LA=P2^2;
+   6          sbit LB=P2^3;
+   7          sbit LC=P2^4;
+   8          
+   9          #define dula P0
+  10          #define count 50000
+  11          #define THx (65536-count)/256
+  12          #define TLx (65536-count)%256
+  13          
+  14          bit flag = 0;
+  15          uchar code table[17] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,
+  16                                  0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0x40};
+  17          uchar distab[7];
+  18          void datapros() {
+  19   1        //  static 
+  20   1          int temp = readc();
+  21   1          float tp;
+  22   1        //if(flag == 1)
+  23   1         // temp = readc();
+  24   1      
+  25   1          if(temp< 0)
+  26   1          {
+  27   2              distab[0] = 0x40;
+  28   2              temp=temp-1;
+  29   2              temp=~temp;
+  30   2              tp=temp;
+  31   2              temp=tp*0.0625*100+0.5;
+  32   2          }
+  33   1          else
+  34   1          {
+  35   2              distab[0] = 0x00;
+  36   2              tp=temp;
+  37   2              temp=tp*0.0625*100+0.5;
+  38   2          }
+  39   1          if(temp >= 10000)
+  40   1            distab[1] = table[temp/10000];
+  41   1          else
+  42   1            distab[1] = 0x00;
+  43   1          
+  44   1          if(temp >= 1000)
+  45   1            distab[2] = table[temp/1000%10];
+  46   1          else
+  47   1            distab[2] = 0x00;
+  48   1          
+  49   1          distab[3] = table[temp/100%10];
+  50   1          distab[4] = table[temp/10%10];
+  51   1          distab[5] = table[temp%10];
+  52   1          distab[6] = 0x39;
+  53   1      
+  54   1      }
+C51 COMPILER V9.57.0.0   MAIN                                                              04/18/2019 21:09:45 PAGE 2   
+
+  55          void display() {
+  56   1          unsigned int i = 0;
+  57   1          for(i = 0; i < 8; i++ ) {
+  58   2              switch(i) {
+  59   3              case 0:
+  60   3                  LC = 0;
+  61   3                  LB = 0;
+  62   3                  LA = 0;
+  63   3                  dula = distab[6];
+  64   3                  break;
+  65   3              case 1:
+  66   3                  LC = 0;
+  67   3                  LB = 0;
+  68   3                  LA = 1;
+  69   3                  dula = distab[5];
+  70   3                  break;
+  71   3              case 2:
+  72   3                  LC = 0;
+  73   3                  LB = 1;
+  74   3                  LA = 0;
+  75   3                  dula = distab[4];
+  76   3                  break;
+  77   3              case 3:
+  78   3                  LC = 0;
+  79   3                  LB = 1;
+  80   3                  LA = 1;
+  81   3                  dula = distab[3] | 0x80;//Ð¡Êýµã
+  82   3                  break;
+  83   3              case 4:
+  84   3                  LC = 1;
+  85   3                  LB = 0;
+  86   3                  LA = 0;
+  87   3                  dula = distab[2];
+  88   3                  break;
+  89   3              case 5:
+  90   3                  LC = 1;
+  91   3                  LB = 0;
+  92   3                  LA = 1;
+  93   3                  dula = distab[1];
+  94   3                  break;
+  95   3              case 6:
+  96   3                  LC = 1;
+  97   3                  LB = 1;
+  98   3                  LA = 0;
+  99   3                  dula = distab[0];
+ 100   3                  break;
+ 101   3              case 7:
+ 102   3                  LC = 1;
+ 103   3                  LB = 1;
+ 104   3                  LA = 1;
+ 105   3                  dula = 0x00;
+ 106   3                  break;
+ 107   3              }
+ 108   2              delay(100);
+ 109   2              dula = 0x00;
+ 110   2          }
+ 111   1      }
+ 112          void TIME_Init() {
+ 113   1        TMOD = 0X01;
+ 114   1        ET0 = 1;
+ 115   1        EA = 1;
+ 116   1        TH0 = (65536-50000)/256;
+C51 COMPILER V9.57.0.0   MAIN                                                              04/18/2019 21:09:45 PAGE 3   
+
+ 117   1        TL0 = (65536-50000)%256;
+ 118   1        TR0 = 1;
+ 119   1      }
+ 120          void main() {
+ 121   1        TIME_Init();
+ 122   1          while(1) {
+ 123   2              display();
+ 124   2              datapros();
+ 125   2          }
+ 126   1      }
+ 127          
+ 128          void TIME0() interrupt 1
+ 129          {
+ 130   1        static int i = 0;
+ 131   1        TH0 = (65536-50000)/256;
+ 132   1        TL0 = (65536-50000)%256;
+ 133   1        if(++i == 100) {
+ 134   2          i = 0;
+ 135   2          flag = ~flag;
+ 136   2        }
+ 137   1      }
+ 138          
+ 139          
+ 140          
+ 141          
+ 142          
+ 143          
+ 144          
+ 145          
+ 146          
+ 147          
+ 148          
+ 149          
+ 150          
+ 151          
+ 152          
+ 153          
+ 154          
+ 155          
+ 156          
+ 157          
+ 158          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    498    ----
+   CONSTANT SIZE    =     17    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

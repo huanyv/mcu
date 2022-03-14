@@ -1,0 +1,3 @@
+"外部中断INT0   2.obj" 
+TO "外部中断INT0   2" 
+RAMSIZE(256) 

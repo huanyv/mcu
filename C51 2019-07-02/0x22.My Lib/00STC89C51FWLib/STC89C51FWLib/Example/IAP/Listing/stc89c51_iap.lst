@@ -1,0 +1,93 @@
+C51 COMPILER V9.57.0.0   STC89C51_IAP                                                      05/02/2019 16:25:15 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE STC89C51_IAP
+OBJECT MODULE PLACED IN ..\Output\stc89c51_iap.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\Library\src\stc89c51_iap.c OPTIMIZE(9,SPEED) BROWSE INCDIR(..\Library
+                    -\inc;..\Library\src;..\Library\StartUp) DEBUG OBJECTEXTEND PRINT(..\Listing\stc89c51_iap.lst) TABS(2) OBJECT(..\Output\s
+                    -tc89c51_iap.obj)
+
+line level    source
+
+   1          #include "stc89c51_iap.h"
+   2          
+   3          
+   4          /*
+   5           * brief: 在所有操作前，需要先配置等待时间并开启IAP  
+   6           */
+   7          void IAP_Init(void)
+   8          {
+   9   1          IAP_Cmd(ENABLE);
+  10   1        IAP_CONTR |= IAP_WaitPeriod;
+  11   1      }
+  12          
+  13          
+  14          /*
+  15           * parame: 地址范围 0x2000 -- 0x2FFF
+  16           * return: 返回读到的数据 
+  17           */
+  18          uchar IAP_ReadData(uint16 Address)
+  19          {
+  20   1          EA = 0;   /* 防止中断打断对内部EEPROMD的操作 */
+  21   1          IAP_ADDRH = (Address >> 8);
+  22   1          IAP_ADDRL = Address;
+  23   1        IAP_CMD = IAP_CMD_Read;
+  24   1          IAP_TRIG = (IAP_CMD_ENABLE >> 8);
+  25   1        IAP_TRIG = IAP_CMD_ENABLE;
+  26   1        EA = 1;
+  27   1      
+  28   1        return (IAP_DATA);
+  29   1      }
+  30          
+  31          
+  32          /*
+  33           * brief : 字节编程前，该字节必须为空，即需要先擦除，否则读取数据错误
+  34           * parame: 地址范围 0x2000 -- 0x2FFF 
+  35           */
+  36          void IAP_WriteData(uint16 Address, uchar ByteData)
+  37          {
+  38   1          EA = 0;     /* 防止中断打断对内部EEPROMD的操作 */
+  39   1          IAP_DATA = ByteData;
+  40   1          IAP_ADDRH = (Address >> 8);
+  41   1          IAP_ADDRL = Address;
+  42   1        IAP_CMD = IAP_CMD_Write;
+  43   1          IAP_TRIG = (IAP_CMD_ENABLE >> 8);
+  44   1        IAP_TRIG = IAP_CMD_ENABLE;
+  45   1        EA = 1;
+  46   1      }
+  47          
+  48          
+  49          /*
+  50           * brief : 扇区里面任意一个字节的地址都是扇区地址,单片机会自动擦除对应的扇区
+  51           * parame: 地址范围 0x2000 -- 0x2FFF 
+  52           */
+  53          void IAP_EraseSector(uint16 Address)
+C51 COMPILER V9.57.0.0   STC89C51_IAP                                                      05/02/2019 16:25:15 PAGE 2   
+
+  54          {
+  55   1          EA = 0;    /* 防止中断打断对内部EEPROMD的操作 */
+  56   1          IAP_ADDRH = (Address >> 8);
+  57   1          IAP_ADDRL = Address;
+  58   1        IAP_CMD = IAP_CMD_Erase;
+  59   1          IAP_TRIG = (IAP_CMD_ENABLE >> 8);
+  60   1        IAP_TRIG = IAP_CMD_ENABLE;
+  61   1        EA = 1;
+  62   1      }
+  63          
+  64          
+  65          /*-------------------------------------- End Of File -----------------------------------------------------
+             --*/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     68    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

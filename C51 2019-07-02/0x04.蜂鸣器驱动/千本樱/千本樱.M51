@@ -1,0 +1,198 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        12/30/2018  20:31:07  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\0000000\KEIL4\C51\BIN\BL51.EXE 千本樱（改）.obj TO 千本樱 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  千本樱（改）.obj (千本樱（改）)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  千本樱 (千本樱（改）)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?千本樱（改）
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0006H     UNIT         ?PR?_DELAYMS?千本樱（改）
+                    0009H     0002H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     02F2H     UNIT         ?CO?千本樱（改）
+            CODE    0300H     010DH     UNIT         ?PR?MAIN?千本樱（改）
+            CODE    040DH     008CH     UNIT         ?C_C51STARTUP
+            CODE    0499H     0016H     UNIT         ?PR?_DELAY?千本樱（改）
+            CODE    04AFH     0009H     UNIT         ?PR?INT0?千本樱（改）
+            CODE    04B8H     0004H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   千本樱 (千本樱（改）)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?千本樱（改）
+  +--> ?C_INITSEG
+
+?PR?MAIN?千本樱（改）
+  +--> ?PR?_DELAY?千本樱（改）
+  +--> ?CO?千本樱（改）
+  +--> ?PR?_DELAYMS?千本樱（改）
+
+
+
+SYMBOL TABLE OF MODULE:  千本樱 (千本樱（改）)
+
+  VALUE           TYPE          NAME
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/30/2018  20:31:07  PAGE 2
+
+
+  ----------------------------------
+
+  -------         MODULE        千本樱（改）
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:049DH         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  B:00B0H.1       PUBLIC        k1
+  C:0300H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:000EH         PUBLIC        music_tab
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  D:00C8H         PUBLIC        T2CON
+  D:0008H         PUBLIC        n
+  C:00EEH         PUBLIC        music_tab1
+  C:0194H         PUBLIC        music_tab2
+  C:0243H         PUBLIC        music_tab3
+  C:0006H         PUBLIC        _delayms
+  D:00D0H         PUBLIC        PSW
+  C:04AFH         PUBLIC        int0
+  B:0090H.5       PUBLIC        Beep
+  -------         PROC          INT0
+  C:04AFH         LINE#         188
+  C:04AFH         LINE#         189
+  C:04B2H         LINE#         190
+  C:04B5H         LINE#         191
+  C:04B7H         LINE#         192
+  -------         ENDPROC       INT0
+  C:0499H         SYMBOL        L?0051
+  -------         PROC          L?0050
+  -------         ENDPROC       L?0050
+  C:0499H         SYMBOL        L?0051
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        m
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:049DH         LINE#         194
+  C:049DH         LINE#         195
+  C:049DH         LINE#         196
+  C:04A5H         LINE#         197
+  C:04AEH         LINE#         198
+  -------         ENDPROC       _DELAY
+  -------         PROC          L?0052
+  -------         ENDPROC       L?0052
+  -------         PROC          _DELAYMS
+  D:0007H         SYMBOL        a
+  C:0006H         LINE#         200
+  C:0006H         LINE#         201
+  C:0006H         LINE#         202
+  C:0008H         LINE#         203
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/30/2018  20:31:07  PAGE 3
+
+
+  -------         ENDPROC       _DELAYMS
+  -------         PROC          MAIN
+  -------         DO            
+  D:0003H         SYMBOL        p
+  D:0005H         SYMBOL        m
+  D:0004H         SYMBOL        i
+  C:0323H         SYMBOL        play
+  C:0321H         SYMBOL        a
+  C:035AH         SYMBOL        b
+  C:0393H         SYMBOL        c
+  C:03CFH         SYMBOL        d
+  C:0423H         SYMBOL        stop
+  -------         ENDDO         
+  C:0300H         LINE#         220
+  C:0300H         LINE#         221
+  C:0300H         LINE#         223
+  C:0302H         LINE#         224
+  C:0305H         LINE#         225
+  C:0308H         LINE#         226
+  C:030EH         LINE#         227
+  C:0311H         LINE#         228
+  C:0311H         LINE#         229
+  C:0311H         LINE#         230
+  C:0314H         LINE#         231
+  C:0314H         LINE#         232
+  C:0319H         LINE#         233
+  C:031CH         LINE#         234
+  C:031CH         LINE#         235
+  C:031CH         LINE#         236
+  C:031CH         LINE#         237
+  C:0321H         LINE#         240
+  C:0327H         LINE#         246
+  C:032EH         LINE#         247
+  C:033BH         LINE#         248
+  C:034BH         LINE#         249
+  C:034DH         LINE#         250
+  C:0356H         LINE#         251
+  C:0358H         LINE#         252
+  C:035AH         LINE#         253
+  C:0360H         LINE#         254
+  C:0367H         LINE#         255
+  C:0374H         LINE#         256
+  C:0384H         LINE#         257
+  C:0386H         LINE#         258
+  C:038FH         LINE#         259
+  C:0391H         LINE#         260
+  C:0393H         LINE#         261
+  C:0399H         LINE#         262
+  C:03A3H         LINE#         263
+  C:03B0H         LINE#         264
+  C:03C0H         LINE#         265
+  C:03C2H         LINE#         266
+  C:03CBH         LINE#         267
+  C:03CDH         LINE#         268
+  C:03CFH         LINE#         269
+  C:03D5H         LINE#         270
+  C:03DFH         LINE#         271
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/30/2018  20:31:07  PAGE 4
+
+
+  C:03ECH         LINE#         272
+  C:03FCH         LINE#         273
+  C:03FEH         LINE#         274
+  C:0407H         LINE#         275
+  C:0409H         LINE#         276
+  C:040BH         LINE#         277
+  C:040BH         LINE#         278
+  C:040BH         LINE#         279
+  C:040BH         LINE#         280
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        千本樱（改）
+
+Program Size: data=10.0 xdata=0 code=1210
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

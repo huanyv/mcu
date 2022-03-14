@@ -1,0 +1,107 @@
+C51 COMPILER V9.57.0.0   LCD1602                                                           04/24/2019 16:49:29 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN .\Objects\lcd1602.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE LCD1602\lcd1602.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\LCD1602;.\HC-SR04) D
+                    -EBUG OBJECTEXTEND PRINT(.\Listings\lcd1602.lst) TABS(2) OBJECT(.\Objects\lcd1602.obj)
+
+line level    source
+
+   1          #include<lcd1602.h>
+   2          #include "hcsr04.h"
+   3          void delay_1(uint x)
+   4          {
+   5   1        uint i,j;
+   6   1        for(i=0;i<x;i++)
+   7   1          for(j=0;j<10;j++);
+   8   1      }
+   9          
+  10          void LCD_write_0(uchar dat)//写入指令
+  11          {
+  12   1        LCD_DB=dat;
+  13   1        LCD_RS=0;
+  14   1        LCD_RW=0;
+  15   1        LCD_E=1;
+  16   1        LCD_E=0;
+  17   1        delay_1(1);
+  18   1      }
+  19          
+  20          void LCD_write_1(uchar dat)//定入数据  
+  21          {
+  22   1        LCD_DB=dat;
+  23   1        LCD_RS=1;
+  24   1        LCD_RW=0;
+  25   1        LCD_E=1;
+  26   1        LCD_E=0;
+  27   1        delay_1(1);
+  28   1      }
+  29          
+  30          
+  31          void LCD_init()//初始化
+  32          {
+  33   1        LCD_write_0(0x38);
+  34   1        delay_1(150);
+  35   1        LCD_write_0(0x38);
+  36   1        LCD_write_0(0x0c);
+  37   1        LCD_write_0(0x06);
+  38   1        LCD_write_0(0x01);
+  39   1        delay_1(200);
+  40   1      }
+  41          
+  42          //void LCD_X_Y(uchar x,uchar y,uchar date)//自定义显示  位置
+  43          //{
+  44          //  uchar addr;
+  45          //  if(x==1)
+  46          //  {
+  47          //    addr=0x80+y;
+  48          //  }
+  49          //  else
+  50          //    addr=0xc0+y;
+  51          //  LCD_write_0(addr);
+  52          //  LCD_write_1(date);
+  53          //}
+  54          
+C51 COMPILER V9.57.0.0   LCD1602                                                           04/24/2019 16:49:29 PAGE 2   
+
+  55          //void zidingyi(uchar (*s)[8],uchar len,uchar count)//自定义显示  字符   
+  56          //{                     //*s为自定义字符的 二维数组   len每个字符的数组 的长度   count：要自定义的个数
+  57          //  uchar i,j;                
+  58          //  for(j=1;j<=count;j++)
+  59          //  {
+  60          //    if(j==1)
+  61          //      LCD_write_0(0x40);
+  62          //    if(j==2)
+  63          //      LCD_write_0(0x48);
+  64          //    if(j==3)
+  65          //      LCD_write_0(0x50);
+  66          //    if(j==4)
+  67          //      LCD_write_0(0x58);
+  68          //    if(j==5)
+  69          //      LCD_write_0(0x60);
+  70          //    if(j==6)
+  71          //      LCD_write_0(0x68);
+  72          //    if(j==7)
+  73          //      LCD_write_0(0x70);
+  74          //    if(j==8)
+  75          //      LCD_write_0(0x78);
+  76          //    for(i=0;i<len;i++)
+  77          //    {
+  78          //      LCD_write_1(s[j-1][i]);
+  79          //    }
+  80          //  }
+  81          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    105    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,127 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    06/25/2019  18:53:47  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE main.obj TO PWM RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  main.obj (MAIN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  PWM (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0002H     UNIT         ?DT?MAIN
+            IDATA   000AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0007H     UNIT         ?C_INITSEG
+                    000AH     0001H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    009AH     0035H     UNIT         ?PR?MAIN?MAIN
+            CODE    00CFH     0026H     UNIT         ?PR?TIMER0?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   PWM (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+
+
+SYMBOL TABLE OF MODULE:  PWM (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  06/25/2019  18:53:47  PAGE 2
+
+
+  D:0009H         PUBLIC        speed
+  D:00B8H         PUBLIC        IP
+  B:00B0H.1       PUBLIC        k1
+  B:00B0H.0       PUBLIC        k2
+  B:0090H.0       PUBLIC        ON
+  B:00B0H.2       PUBLIC        k3
+  C:009AH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  C:00CFH         PUBLIC        timer0
+  B:0088H.4       PUBLIC        TR0
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:009AH         LINE#         15
+  C:009AH         LINE#         16
+  C:009AH         LINE#         17
+  C:009DH         LINE#         18
+  C:00A3H         LINE#         19
+  C:00A6H         LINE#         20
+  C:00A9H         LINE#         21
+  C:00A9H         LINE#         22
+  C:00A9H         LINE#         24
+  C:00ACH         LINE#         25
+  C:00AFH         LINE#         27
+  C:00B2H         LINE#         29
+  C:00B5H         LINE#         30
+  C:00B5H         LINE#         31
+  C:00B5H         LINE#         32
+  C:00B8H         LINE#         33
+  C:00BBH         LINE#         35
+  C:00BEH         LINE#         37
+  C:00C1H         LINE#         38
+  C:00C1H         LINE#         39
+  C:00C1H         LINE#         41
+  C:00C4H         LINE#         42
+  C:00C7H         LINE#         44
+  C:00CAH         LINE#         46
+  -------         ENDPROC       MAIN
+  -------         PROC          TIMER0
+  -------         DO            
+  D:0008H         SYMBOL        i
+  -------         ENDDO         
+  C:00CFH         LINE#         53
+  C:00D3H         LINE#         56
+  C:00D5H         LINE#         57
+  C:00E0H         LINE#         58
+  C:00E3H         LINE#         59
+  C:00EAH         LINE#         60
+  C:00EEH         LINE#         62
+  C:00F0H         LINE#         63
+  -------         ENDPROC       TIMER0
+  -------         ENDMOD        MAIN
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  06/25/2019  18:53:47  PAGE 3
+
+
+
+Program Size: data=11.0 xdata=0 code=244
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

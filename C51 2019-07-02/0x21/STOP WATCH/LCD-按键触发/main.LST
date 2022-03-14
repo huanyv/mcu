@@ -1,0 +1,120 @@
+C51 COMPILER V9.00   MAIN                                                                  12/31/2018 19:47:59 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\0000000\keil4\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<lcd1602.h>
+   3          
+   4          sbit k1=P3^1;
+   5          sbit k2=P3^0;
+   6          sbit k3=P3^2;
+   7          sbit k4=P3^3;
+   8          
+   9          #define count 5000
+  10          #define thx (65536-count)>>8
+  11          #define tlx     (65536-count)&0x00ff
+  12          
+  13          uchar time[]="00:00:00",i1;
+  14          uint sec=0,min=0,ms=0;
+  15          
+  16          void delay(uint iii)
+  17          {
+  18   1              while(iii--);
+  19   1      }
+  20          void timer0_init()
+  21          {
+  22   1              TMOD=0X01;
+  23   1              EA=1;ET0=1;TR0=0;
+  24   1              TH0=thx;TL0=tlx;
+  25   1      }
+  26          void keyctrl()
+  27          {
+  28   1              if(k1==0)
+  29   1              {
+  30   2                 delay(2000);
+  31   2                 if(k1==0)
+  32   2                 {
+  33   3                              TR0=~TR0;
+  34   3                 }
+  35   2                 while(k1==0);
+  36   2              }
+  37   1              if(k2==0)
+  38   1              {
+  39   2                      delay(2000);
+  40   2                      if(k2==0&&TR0==0)
+  41   2                      {
+  42   3                              sec=0;min=0;ms=0;TR0=0;
+  43   3                      }
+  44   2                      while(k2==0);
+  45   2              }
+  46   1      }
+  47          void run_time_set_up()
+  48          {
+  49   1              time[0]=min/10+'0';
+  50   1              time[1]=min%10+'0';
+  51   1              time[3]=sec/10+'0';
+  52   1              time[4]=sec%10+'0';
+  53   1              time[6]=ms/10+'0';
+  54   1              time[7]=ms%10+'0';
+  55   1      }                               
+C51 COMPILER V9.00   MAIN                                                                  12/31/2018 19:47:59 PAGE 2   
+
+  56          int main()              
+  57          {
+  58   1              uint i,j;
+  59   1              timer0_init();
+  60   1              LCD_init();
+  61   1              while(1)
+  62   1              {
+  63   2                      j=4;
+  64   2                      run_time_set_up();
+  65   2                      keyctrl();
+  66   2                      for(i=0;time[i]!='\0';i++)
+  67   2                      {
+  68   3                              LCD_X_Y(1,j++,time[i]);
+  69   3                      }
+  70   2              }
+  71   1              return 0;
+  72   1      }
+  73          void timer0() interrupt 1
+  74          {
+  75   1              TH0=thx;TL0=tlx;
+  76   1              if(++i1==2)
+  77   1              {
+  78   2                      i1=0;
+  79   2                      ms++;
+  80   2                      if(ms==100)
+  81   2                      {
+  82   3                              ms=0;
+  83   3                              sec++;
+  84   3                              if(sec==60)
+  85   3                              {
+  86   4                                      sec=0;
+  87   4                                      min++;
+  88   4                                      if(min==100)
+  89   4                                      {
+  90   5                                              min=0;
+  91   5                                      }
+  92   4                              }
+  93   3                      }       
+  94   2              }
+  95   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    313    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     16       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

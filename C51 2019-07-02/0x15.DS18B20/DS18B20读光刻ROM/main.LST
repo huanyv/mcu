@@ -1,0 +1,153 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              05/29/2019 14:43:37 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include "ds18b20.h"
+   3          #include "lcd1602.h"
+   4          
+   5          sbit LA=P2^2;
+   6          sbit LB=P2^3;
+   7          sbit LC=P2^4;
+   8          
+   9          #define count 50000
+  10          #define THx (65536-count)/256
+  11          #define TLx (65536-count)%256
+  12          
+  13          uchar lcd1602[8],flag_1,flag_2,sec=0;
+  14          uchar temperature[]="Temperature:";        //LCD标题
+  15          
+  16          uchar CRC[8];
+  17          
+  18          void datapros()
+  19          {
+  20   1          int temp = 0;
+  21   1          float tp;
+  22   1      
+  23   1          temp = readc();
+  24   1      
+  25   1          if(temp< 0)
+  26   1          {
+  27   2              lcd1602[0]='-';
+  28   2              temp=temp-1;
+  29   2              temp=~temp;
+  30   2              tp=temp;
+  31   2              temp=tp*0.0625*100+0.5;
+  32   2          }
+  33   1          else
+  34   1          {
+  35   2              lcd1602[0]='+';
+  36   2              tp=temp;
+  37   2              temp=tp*0.0625*100+0.5;
+  38   2          }
+  39   1          lcd1602[1]=temp/10000+48;
+  40   1          lcd1602[2]=temp/1000%10+48;
+  41   1          lcd1602[3]=temp/100%10+48;
+  42   1          lcd1602[4]='.';
+  43   1          lcd1602[5]=temp/10%10+48;
+  44   1          lcd1602[6]=temp%10+48;
+  45   1      }
+  46          
+  47          void time0init()
+  48          {
+  49   1          TMOD=0x01;
+  50   1          TH0=THx;
+  51   1          TL0=TLx;
+  52   1          EA=1;
+  53   1          ET0=1;
+  54   1          TR0=1;
+  55   1      }
+C51 COMPILER V9.59.0.0   MAIN                                                              05/29/2019 14:43:37 PAGE 2   
+
+  56          
+  57          
+  58          
+  59          void Read_ROM(void) {
+  60   1        uint i;
+  61   1        uchar code chartab[] = "0123456789ABCDEF";
+  62   1        for(i = 0;i<8; i++) {
+  63   2            CRC[i]=0;
+  64   2          }
+  65   1          DS18B20_init();
+  66   1          DS18B20_write(0x33);
+  67   1          for(i = 0;i<8; i++) {
+  68   2            CRC[i]=DS18B20_read();
+  69   2          }
+  70   1          LCD_write_0(0x80);
+  71   1          LCD_write_1(chartab[CRC[0]/16]);
+  72   1          LCD_write_1(chartab[CRC[0]%16]);
+  73   1          LCD_write_1(chartab[CRC[1]/16]);
+  74   1          LCD_write_1(chartab[CRC[1]%16]);
+  75   1          LCD_write_1(chartab[CRC[2]/16]);
+  76   1          LCD_write_1(chartab[CRC[2]%16]);
+  77   1          LCD_write_1(chartab[CRC[3]/16]);
+  78   1          LCD_write_1(chartab[CRC[3]%16]);
+  79   1          LCD_write_1(chartab[CRC[4]/16]);
+  80   1          LCD_write_1(chartab[CRC[4]%16]);
+  81   1          LCD_write_1(chartab[CRC[5]/16]);
+  82   1          LCD_write_1(chartab[CRC[5]%16]);
+  83   1          LCD_write_1(chartab[CRC[6]/16]);
+  84   1          LCD_write_1(chartab[CRC[6]%16]);
+  85   1          LCD_write_1(chartab[CRC[7]/16]);
+  86   1          LCD_write_1(chartab[CRC[7]%16]);
+  87   1      }
+  88          
+  89          int main()
+  90          {
+  91   1          uint i,j,k=0;
+  92   1          uchar table1[]= {0x10,0x06,0x09,0x08,0x08,0x09,0x06,0x00};        //自定义温度符号
+  93   1          time0init(); // 初始化定时器
+  94   1          LCD_init(); // 初始化LCD
+  95   1          zidingyi(table1,8); // 待显自定字符
+  96   1          LCD_X_Y(2,11,0x00); // 显示 第一个字符到  2行11列
+  97   1          
+  98   1          Read_ROM(); // 读光刻ROM
+  99   1          while(1)
+ 100   1          {
+ 101   2              j=4;
+ 102   2              if(flag_2==1)
+ 103   2              {
+ 104   3                  datapros();
+ 105   3                  flag_2=0;
+ 106   3              }
+ 107   2              
+ 108   2              
+ 109   2              for(i=0; lcd1602[i]!='\0'; i++)
+ 110   2              {
+ 111   3                  LCD_X_Y(2,j++,lcd1602[i]);         //
+ 112   3                  delay(100);
+ 113   3                  if(j==12)j=4;
+ 114   3              }
+ 115   2          }
+ 116   1      }
+ 117          void time0() interrupt 1
+C51 COMPILER V9.59.0.0   MAIN                                                              05/29/2019 14:43:37 PAGE 3   
+
+ 118          {
+ 119   1          if(++flag_1==20)
+ 120   1          {
+ 121   2              flag_1=0;
+ 122   2              flag_2=1;
+ 123   2              sec++;
+ 124   2              if(sec==60)sec=0;
+ 125   2          }
+ 126   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    637    ----
+   CONSTANT SIZE    =     25    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     32      20
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

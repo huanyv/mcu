@@ -1,0 +1,249 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/17/2018  18:06:15  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\0000000\KEIL4\C51\BIN\BL51.EXE ¶ÀÁ¢°´¼ü4.obj TO ¶ÀÁ¢°´¼ü4 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ¶ÀÁ¢°´¼ü4.obj (¶ÀÁ¢_´¼ü4)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  ¶ÀÁ¢°´¼ü4 (¶ÀÁ¢_´¼ü4)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0077H     UNIT         ?PR?ANJIAN_LIUSHUI?¶ÀÁ¢_´¼ü4
+            CODE    0877H     0026H     UNIT         ?PR?_YANSHI?¶ÀÁ¢_´¼ü4
+            CODE    089DH     0022H     UNIT         ?PR?ANJIAN_SHANSHUO?¶ÀÁ¢_´¼ü4
+            CODE    08BFH     0020H     UNIT         ?PR?GUANBI?¶ÀÁ¢_´¼ü4
+            CODE    08DFH     001CH     UNIT         ?PR?ANJIAN_LIANG?¶ÀÁ¢_´¼ü4
+            CODE    08FBH     000EH     UNIT         ?PR?MAIN?¶ÀÁ¢_´¼ü4
+            CODE    0909H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   ¶ÀÁ¢°´¼ü4 (¶ÀÁ¢_´¼ü4)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?¶ÀÁ¢_´¼ü4
+
+?PR?MAIN?¶ÀÁ¢_´¼ü4
+  +--> ?PR?ANJIAN_LIANG?¶ÀÁ¢_´¼ü4
+  +--> ?PR?ANJIAN_SHANSHUO?¶ÀÁ¢_´¼ü4
+  +--> ?PR?ANJIAN_LIUSHUI?¶ÀÁ¢_´¼ü4
+  +--> ?PR?GUANBI?¶ÀÁ¢_´¼ü4
+
+?PR?ANJIAN_LIANG?¶ÀÁ¢_´¼ü4
+  +--> ?PR?_YANSHI?¶ÀÁ¢_´¼ü4
+
+?PR?ANJIAN_SHANSHUO?¶ÀÁ¢_´¼ü4
+  +--> ?PR?_YANSHI?¶ÀÁ¢_´¼ü4
+
+?PR?ANJIAN_LIUSHUI?¶ÀÁ¢_´¼ü4
+  +--> ?PR?_YANSHI?¶ÀÁ¢_´¼ü4
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/17/2018  18:06:15  PAGE 2
+
+
+
+?PR?GUANBI?¶ÀÁ¢_´¼ü4
+  +--> ?PR?_YANSHI?¶ÀÁ¢_´¼ü4
+
+
+
+SYMBOL TABLE OF MODULE:  ¶ÀÁ¢°´¼ü4 (¶ÀÁ¢_´¼ü4)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ¶ÀÁ¢_´¼ü4
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:087DH         PUBLIC        _yanshi
+  D:00B8H         PUBLIC        IP
+  B:00B0H.1       PUBLIC        k1
+  B:00B0H.0       PUBLIC        k2
+  B:00B0H.2       PUBLIC        k3
+  B:00B0H.3       PUBLIC        k4
+  C:08FBH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:089DH         PUBLIC        anjian_shanshuo
+  C:0800H         PUBLIC        anjian_liushui
+  C:08DFH         PUBLIC        anjian_liang
+  B:00A0H.0       PUBLIC        led1
+  D:00C8H         PUBLIC        T2CON
+  C:08BFH         PUBLIC        guanbi
+  D:00D0H         PUBLIC        PSW
+  C:0879H         SYMBOL        L?0064
+  -------         PROC          L?0063
+  -------         ENDPROC       L?0063
+  C:0879H         SYMBOL        L?0064
+  -------         PROC          _YANSHI
+  D:0006H         SYMBOL        i
+  -------         DO            
+  D:0004H         SYMBOL        x
+  D:0002H         SYMBOL        y
+  -------         ENDDO         
+  C:087DH         LINE#         17
+  C:087DH         LINE#         18
+  C:087DH         LINE#         20
+  C:0887H         LINE#         21
+  C:089CH         LINE#         22
+  -------         ENDPROC       _YANSHI
+  -------         PROC          GUANBI
+  C:08BFH         LINE#         24
+  C:08BFH         LINE#         25
+  C:08BFH         LINE#         26
+  C:08C2H         LINE#         27
+  C:08C2H         LINE#         28
+  C:08C9H         LINE#         29
+  C:08CCH         LINE#         30
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/17/2018  18:06:15  PAGE 3
+
+
+  C:08CCH         LINE#         31
+  C:08CCH         LINE#         32
+  C:08CCH         LINE#         33
+  C:08CFH         LINE#         34
+  C:08D8H         LINE#         35
+  C:08D8H         LINE#         36
+  C:08DBH         LINE#         37
+  C:08DBH         LINE#         38
+  C:08DBH         LINE#         39
+  C:08DBH         LINE#         40
+  C:08DEH         LINE#         41
+  C:08DEH         LINE#         42
+  -------         ENDPROC       GUANBI
+  -------         PROC          ANJIAN_LIUSHUI
+  -------         DO            
+  D:0082H         SYMBOL        i
+  -------         ENDDO         
+  C:0800H         LINE#         44
+  C:0800H         LINE#         45
+  C:0800H         LINE#         46
+  C:0800H         LINE#         47
+  C:0803H         LINE#         48
+  C:0803H         LINE#         49
+  C:080AH         LINE#         50
+  C:080DH         LINE#         51
+  C:080DH         LINE#         52
+  C:0810H         LINE#         53
+  C:0813H         LINE#         54
+  C:0813H         LINE#         55
+  C:0813H         LINE#         56
+  C:0818H         LINE#         57
+  C:0818H         LINE#         58
+  C:0823H         LINE#         59
+  C:0826H         LINE#         60
+  C:082FH         LINE#         61
+  C:082FH         LINE#         62
+  C:0834H         LINE#         63
+  C:0834H         LINE#         64
+  C:083DH         LINE#         65
+  C:0842H         LINE#         66
+  C:0842H         LINE#         67
+  C:084DH         LINE#         68
+  C:0850H         LINE#         69
+  C:0859H         LINE#         70
+  C:0859H         LINE#         71
+  C:085EH         LINE#         72
+  C:085EH         LINE#         73
+  C:0867H         LINE#         74
+  C:0870H         LINE#         75
+  C:0870H         LINE#         76
+  C:0873H         LINE#         77
+  C:0873H         LINE#         78
+  C:0873H         LINE#         79
+  C:0873H         LINE#         80
+  C:0876H         LINE#         81
+  C:0876H         LINE#         82
+  -------         ENDPROC       ANJIAN_LIUSHUI
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/17/2018  18:06:15  PAGE 4
+
+
+  -------         PROC          ANJIAN_SHANSHUO
+  C:089DH         LINE#         84
+  C:089DH         LINE#         85
+  C:089DH         LINE#         87
+  C:08A0H         LINE#         88
+  C:08A0H         LINE#         89
+  C:08A7H         LINE#         90
+  C:08AAH         LINE#         91
+  C:08AAH         LINE#         92
+  C:08AAH         LINE#         93
+  C:08AAH         LINE#         94
+  C:08ACH         LINE#         95
+  C:08AFH         LINE#         96
+  C:08B8H         LINE#         97
+  C:08B8H         LINE#         98
+  C:08BBH         LINE#         99
+  C:08BBH         LINE#         100
+  C:08BBH         LINE#         101
+  C:08BEH         LINE#         102
+  C:08BEH         LINE#         103
+  C:08BEH         LINE#         104
+  -------         ENDPROC       ANJIAN_SHANSHUO
+  -------         PROC          ANJIAN_LIANG
+  C:08DFH         LINE#         106
+  C:08DFH         LINE#         107
+  C:08DFH         LINE#         109
+  C:08E2H         LINE#         110
+  C:08E2H         LINE#         111
+  C:08E9H         LINE#         112
+  C:08E9H         LINE#         113
+  C:08E9H         LINE#         114
+  C:08E9H         LINE#         115
+  C:08E9H         LINE#         116
+  C:08EBH         LINE#         117
+  C:08F4H         LINE#         118
+  C:08F4H         LINE#         119
+  C:08F7H         LINE#         120
+  C:08F7H         LINE#         121
+  C:08F7H         LINE#         122
+  C:08F7H         LINE#         123
+  C:08FAH         LINE#         124
+  C:08FAH         LINE#         125
+  -------         ENDPROC       ANJIAN_LIANG
+  -------         PROC          MAIN
+  C:08FBH         LINE#         127
+  C:08FBH         LINE#         128
+  C:08FBH         LINE#         129
+  C:08FBH         LINE#         130
+  C:08FBH         LINE#         131
+  C:08FEH         LINE#         132
+  C:0901H         LINE#         133
+  C:0904H         LINE#         134
+  C:0907H         LINE#         135
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        ¶ÀÁ¢_´¼ü4
+
+******************************************************************************
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/17/2018  18:06:15  PAGE 5
+
+
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0109H BYTE (12%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=280
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

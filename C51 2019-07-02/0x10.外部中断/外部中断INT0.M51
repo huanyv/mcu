@@ -1,0 +1,112 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/19/2018  18:07:20  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\0000000\KEIL4\C51\BIN\BL51.EXE 外部中断INT0.obj TO 外部中断INT0 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  外部中断INT0.obj (蚠部_卸螴NT0)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  外部中断INT0 (蚠部_卸螴NT0)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+                    0006H     07FAH                  *** GAP ***
+            CODE    0800H     0030H     UNIT         ?PR?ZHONGDUAN?蚠部_卸螴NT0
+            CODE    0830H     0020H     UNIT         ?PR?_DELAY?蚠部_卸螴NT0
+            CODE    0850H     000CH     UNIT         ?C_C51STARTUP
+            CODE    085CH     0008H     UNIT         ?PR?MAIN?蚠部_卸螴NT0
+
+
+
+OVERLAY MAP OF MODULE:   外部中断INT0 (蚠部_卸螴NT0)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?ZHONGDUAN?蚠部_卸螴NT0
+  +--> ?PR?_DELAY?蚠部_卸螴NT0
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?蚠部_卸螴NT0
+
+
+
+SYMBOL TABLE OF MODULE:  外部中断INT0 (蚠部_卸螴NT0)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        蚠部_卸螴NT0
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/19/2018  18:07:20  PAGE 2
+
+
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:0830H         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  B:00B0H.2       PUBLIC        k3
+  C:085CH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:0800H         PUBLIC        zhongduan
+  B:00A0H.0       PUBLIC        led1
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0830H         LINE#         9
+  C:0830H         LINE#         10
+  C:0830H         LINE#         12
+  C:083AH         LINE#         13
+  C:084FH         LINE#         14
+  -------         ENDPROC       _DELAY
+  -------         PROC          MAIN
+  C:085CH         LINE#         16
+  C:085CH         LINE#         17
+  C:085CH         LINE#         18
+  C:085FH         LINE#         19
+  C:0862H         LINE#         20
+  -------         ENDPROC       MAIN
+  -------         PROC          ZHONGDUAN
+  C:0800H         LINE#         24
+  C:0813H         LINE#         26
+  C:081AH         LINE#         27
+  C:081DH         LINE#         28
+  C:081DH         LINE#         29
+  C:081FH         LINE#         30
+  C:081FH         LINE#         31
+  -------         ENDPROC       ZHONGDUAN
+  -------         ENDMOD        蚠部_卸螴NT0
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 005BH BYTE ( 4%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=106
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

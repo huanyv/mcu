@@ -1,0 +1,115 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              04/24/2019 16:49:29 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\LCD1602;.\HC-SR04) DEBUG OBJECT
+                    -EXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "lcd1602.h"
+   3          #include "hcsr04.h"
+   4          
+   5          uint distance = 0;
+   6          bit read_flag = 1;
+   7          
+   8          void TIM_Init(void)
+   9          {
+  10   1          TMOD |= 0X11;
+  11   1          TH0 = 0X00;
+  12   1          TL0 = 0X00;
+  13   1          TH1 = (65536-50000)/256;
+  14   1          TL1 = (65536-50000)%256;
+  15   1          ET1 = 1;
+  16   1          TR1 = 1;
+  17   1      
+  18   1          EA  = 1;
+  19   1      }
+  20          void display(void) {
+  21   1          LCD_write_0(0x80+4);
+  22   1          LCD_write_1('D');
+  23   1          LCD_write_1('I');
+  24   1          LCD_write_1('S');
+  25   1          LCD_write_1('T');
+  26   1          LCD_write_1('A');
+  27   1          LCD_write_1('N');
+  28   1          LCD_write_1('C');
+  29   1          LCD_write_1('E');
+  30   1          LCD_write_1(':');
+  31   1          if(distance<4500) {
+  32   2              LCD_write_0(0xc0+4);
+  33   2              if(distance>=1000)
+  34   2                  LCD_write_1(distance/1000+'0');
+  35   2              else
+  36   2                  LCD_write_1(' ');
+  37   2              if(distance>=100)
+  38   2                  LCD_write_1(distance/100%10+'0');
+  39   2              else
+  40   2                  LCD_write_1(' ');
+  41   2              LCD_write_1(distance/10%10+'0');
+  42   2              LCD_write_1('.');
+  43   2              LCD_write_1(distance%10+'0');
+  44   2              LCD_write_1('C');
+  45   2              LCD_write_1('M');
+  46   2          }
+  47   1          else {
+  48   2              LCD_write_0(0xc0+4);
+  49   2              LCD_write_1(' ');
+  50   2              LCD_write_1('E');//ERROR
+  51   2              LCD_write_1('R');
+  52   2              LCD_write_1('R');
+  53   2              LCD_write_1('O');
+  54   2              LCD_write_1('R');
+C51 COMPILER V9.57.0.0   MAIN                                                              04/24/2019 16:49:29 PAGE 2   
+
+  55   2              LCD_write_1(' ');
+  56   2          }
+  57   1      }
+  58          void main(void) {
+  59   1          TIM_Init();
+  60   1          LCD_Init();
+  61   1          while(1) {
+  62   2              display();
+  63   2              if(read_flag == 1) {
+  64   3                  read_flag = 0;
+  65   3                  distance = HC_SR04EchoDistance();
+  66   3              }
+  67   2          }
+  68   1      }
+  69          
+  70          void TIM1_Int() interrupt 3
+  71          {
+  72   1          static uint i = 0;
+  73   1          TH1 = (65536-50000)/256;
+  74   1          TL1 = (65536-50000)%256;
+  75   1          if(++i == 15) {
+  76   2              i=0;
+  77   2              read_flag = 1;
+  78   2          }
+  79   1      }
+  80          
+  81          
+  82          
+  83          
+  84          
+  85          
+  86          
+  87          
+  88          
+  89          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    315    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

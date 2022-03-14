@@ -1,0 +1,96 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/12/2018  16:31:12  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\0000000\KEIL4\C51\BIN\BL51.EXE ·äÃùÆ÷Çý¶¯.obj TO ·äÃùÆ÷Çý¶¯ RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ·äÃùÆ÷Çý¶¯.obj (·_Ã_Æ÷Çý¶_)
+  C:\0000000\KEIL4\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  ·äÃùÆ÷Çý¶¯ (·_Ã_Æ÷Çý¶_)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     000CH     UNIT         ?C_C51STARTUP
+            CODE    080CH     0009H     UNIT         ?PR?MAIN?·_Ã_Æ÷Çý¶_
+            CODE    0815H     0007H     UNIT         ?PR?_YANSHI?·_Ã_Æ÷Çý¶_
+
+
+
+OVERLAY MAP OF MODULE:   ·äÃùÆ÷Çý¶¯ (·_Ã_Æ÷Çý¶_)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?·_Ã_Æ÷Çý¶_
+
+?PR?MAIN?·_Ã_Æ÷Çý¶_
+  +--> ?PR?_YANSHI?·_Ã_Æ÷Çý¶_
+
+
+
+SYMBOL TABLE OF MODULE:  ·äÃùÆ÷Çý¶¯ (·_Ã_Æ÷Çý¶_)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ·_Ã_Æ÷Çý¶_
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:0815H         PUBLIC        _yanshi
+  D:00B8H         PUBLIC        IP
+  B:0090H.5       PUBLIC        feng
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/12/2018  16:31:12  PAGE 2
+
+
+  C:080CH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _YANSHI
+  D:0007H         SYMBOL        i
+  C:0815H         LINE#         4
+  C:0815H         LINE#         5
+  C:0815H         LINE#         6
+  C:0818H         LINE#         7
+  C:0818H         LINE#         8
+  C:0819H         LINE#         9
+  C:081BH         LINE#         10
+  -------         ENDPROC       _YANSHI
+  -------         PROC          MAIN
+  C:080CH         LINE#         11
+  C:080CH         LINE#         12
+  C:080CH         LINE#         13
+  C:080CH         LINE#         14
+  C:080CH         LINE#         15
+  C:080EH         LINE#         16
+  C:0813H         LINE#         17
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        ·_Ã_Æ÷Çý¶_
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0010H BYTE ( 0%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=31
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

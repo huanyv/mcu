@@ -1,0 +1,361 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              05/03/2019 16:15:56 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\Obj\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Hardware\DISPLAY;..\Hardware\K
+                    -EY) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(..\Obj\main.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include"key.h"
+   3          
+   4          #define count  50000
+   5          #define TH_0  (65536-count)/256
+   6          #define TL_0  (65536-count)%256
+   7          
+   8          #define YELLOW_TIME    5//黄灯亮的时间
+   9          #define TIME_SMALL    20//最大时间
+  10          #define TIME_BIG      60//最小时间
+  11          #define TIME      10//初始时间
+  12          
+  13          
+  14          sbit ew_led_r = P3^0;
+  15          sbit ew_led_y = P3^1;
+  16          sbit ew_led_g = P3^2;
+  17                  
+  18          sbit ns_led_r = P3^3;
+  19          sbit ns_led_y = P3^4;
+  20          sbit ns_led_g = P3^5;
+  21          
+  22          sbit bit_0 = P2^0;
+  23          sbit bit_1 = P2^1;
+  24          
+  25          uchar code duanxuan[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+  26          
+  27          
+  28          
+  29          uchar sec  = TIME;
+  30          uchar temp = TIME;
+  31          uchar flag = 1;
+  32          
+  33          bit FLASHING = 0;
+  34          
+  35          void delay(uint iii)
+  36          {
+  37   1        while(iii--);
+  38   1      }
+  39          void display()
+  40          {
+  41   1        if(flag==1||flag==2)  //状态1和状态2，东西比南北少2秒
+  42   1        {
+  43   2          bit_0=0;bit_1=1;
+  44   2        
+  45   2          P0=duanxuan[sec%10];
+  46   2          delay(100);P0=0x00;
+  47   2          if(sec>YELLOW_TIME)
+  48   2          {
+  49   3            P1=duanxuan[(sec-YELLOW_TIME)%10];
+  50   3            delay(200);P1=0x00;
+  51   3          }
+  52   2          else
+  53   2          {
+  54   3            P1=duanxuan[sec%10];
+C51 COMPILER V9.59.0.0   MAIN                                                              05/03/2019 16:15:56 PAGE 2   
+
+  55   3            delay(200);P1=0x00;
+  56   3          }
+  57   2        
+  58   2          bit_0=1;bit_1=0;
+  59   2          
+  60   2          P0=duanxuan[sec/10];
+  61   2          delay(100);P0=0x00;
+  62   2          if(sec>YELLOW_TIME)
+  63   2          {
+  64   3            P1=duanxuan[(sec-YELLOW_TIME)/10];
+  65   3              delay(200);P1=0x00;
+  66   3          }
+  67   2          else
+  68   2          {
+  69   3            P1=duanxuan[sec/10];
+  70   3            delay(200);P1=0x00;
+  71   3          } 
+  72   2        }
+  73   1        else if(flag==3||flag==4)//状态3和状态4，南北比东西少2秒
+  74   1        {
+  75   2          bit_0=0;bit_1=1;
+  76   2        
+  77   2          P1=duanxuan[sec%10];
+  78   2          delay(100);P1=0x00;
+  79   2          if(sec>YELLOW_TIME)
+  80   2          {
+  81   3            P0=duanxuan[(sec-YELLOW_TIME)%10];
+  82   3            delay(200);P0=0x00;
+  83   3          }
+  84   2          else
+  85   2          {
+  86   3            P0=duanxuan[sec%10];
+  87   3            delay(200);P0=0x00;
+  88   3          }
+  89   2        
+  90   2          bit_0=1;bit_1=0;
+  91   2          
+  92   2          P1=duanxuan[sec/10];
+  93   2          delay(100);P1=0x00;
+  94   2          if(sec>YELLOW_TIME)
+  95   2          {
+  96   3            P0=duanxuan[(sec-YELLOW_TIME)/10];
+  97   3              delay(200);P0=0x00;
+  98   3          }
+  99   2          else
+ 100   2          {
+ 101   3            P0=duanxuan[sec/10];
+ 102   3            delay(200);P0=0x00;
+ 103   3          }   
+ 104   2        }
+ 105   1        else if(flag==6||flag==7||flag==8)   //路口通行管理
+ 106   1        {
+ 107   2          bit_0=0;bit_1=1;
+ 108   2      
+ 109   2          P0=0x3f;
+ 110   2          delay(100);P0=0x00;
+ 111   2          P1=0x3f;
+ 112   2          delay(100);P1=0x00;
+ 113   2      
+ 114   2          bit_0=1;bit_1=0;
+ 115   2      
+ 116   2          P0=0x3f;
+C51 COMPILER V9.59.0.0   MAIN                                                              05/03/2019 16:15:56 PAGE 3   
+
+ 117   2          delay(100);P0=0x00;
+ 118   2          P1=0x3f;
+ 119   2          delay(100);P1=0x00;
+ 120   2        }
+ 121   1      }
+ 122          
+ 123          void led_display()
+ 124          {
+ 125   1        if(flag==1) //s1
+ 126   1        {
+ 127   2          ew_led_r=0; 
+ 128   2          ew_led_g=1;
+ 129   2          ew_led_y=1;
+ 130   2      
+ 131   2          ns_led_r=1;
+ 132   2          
+ 133   2          if((sec-5)>3)
+ 134   2            ns_led_g=0;
+ 135   2          else
+ 136   2          {
+ 137   3              if(FLASHING == 1)
+ 138   3              ns_led_g =0;   
+ 139   3              if(FLASHING == 0) 
+ 140   3              ns_led_g =1;
+ 141   3          }     
+ 142   2              
+ 143   2                
+ 144   2      
+ 145   2          ns_led_y=1;
+ 146   2        }
+ 147   1        else if(flag==2) //s2
+ 148   1        {
+ 149   2          ew_led_r=0; 
+ 150   2          ew_led_g=1;
+ 151   2          ew_led_y=1;
+ 152   2      
+ 153   2          ns_led_r=1;
+ 154   2          ns_led_g=1;
+ 155   2          ns_led_y=0;
+ 156   2          
+ 157   2        }
+ 158   1        else if(flag==3) //s3
+ 159   1        {
+ 160   2          ew_led_r=1; 
+ 161   2          
+ 162   2          if((sec-5)>3)
+ 163   2            ew_led_g=0;
+ 164   2          else
+ 165   2          {
+ 166   3              if(FLASHING == 1)
+ 167   3              ew_led_g =0;   
+ 168   3              if(FLASHING == 0) 
+ 169   3              ew_led_g =1;
+ 170   3          } 
+ 171   2          
+ 172   2          ew_led_y=1;
+ 173   2      
+ 174   2          ns_led_r=0;
+ 175   2          ns_led_g=1;
+ 176   2          ns_led_y=1;
+ 177   2        }
+ 178   1        else if(flag==4)  //s4
+C51 COMPILER V9.59.0.0   MAIN                                                              05/03/2019 16:15:56 PAGE 4   
+
+ 179   1        {
+ 180   2          ew_led_r=1; 
+ 181   2          ew_led_g=1;
+ 182   2          ew_led_y=0;
+ 183   2        
+ 184   2      
+ 185   2          ns_led_r=0;
+ 186   2          ns_led_g=1;
+ 187   2          ns_led_y=1;
+ 188   2        }
+ 189   1        else if(flag==5)   //回到s1
+ 190   1        {
+ 191   2          flag=1;//一共四个状态
+ 192   2        }
+ 193   1        else if(flag==6)
+ 194   1        {
+ 195   2          ew_led_r=1; 
+ 196   2          ew_led_g=1;
+ 197   2          ew_led_y=0;
+ 198   2      
+ 199   2          ns_led_r=1;
+ 200   2          ns_led_g=1;
+ 201   2          ns_led_y=0;
+ 202   2        }
+ 203   1        else if(flag==7)
+ 204   1        {
+ 205   2          ew_led_r=1; 
+ 206   2          ew_led_g=0;
+ 207   2          ew_led_y=1;
+ 208   2      
+ 209   2          ns_led_r=0;
+ 210   2          ns_led_g=1;
+ 211   2          ns_led_y=1;
+ 212   2        }
+ 213   1        else
+ 214   1        {
+ 215   2          ew_led_r=0; 
+ 216   2          ew_led_g=1;
+ 217   2          ew_led_y=1;
+ 218   2      
+ 219   2          ns_led_r=1;
+ 220   2          ns_led_g=0;
+ 221   2          ns_led_y=1;
+ 222   2        }
+ 223   1      }
+ 224          void key()
+ 225          {
+ 226   1        uchar k = 0;
+ 227   1        static uchar i=0;
+ 228   1        k = Read_Key();
+ 229   1        if(k==4){
+ 230   2            i++;TR0=0;  
+ 231   2        }
+ 232   1        if(k==3&&TR0==0&&sec<TIME_BIG&&(flag==1||flag==2||flag==3||flag==4))
+ 233   1        {
+ 234   2            sec=sec+YELLOW_TIME;
+ 235   2            temp=sec;
+ 236   2        }
+ 237   1        if(k==2&&TR0==0&&sec>TIME_SMALL&&(flag==1||flag==2||flag==3||flag==4))
+ 238   1        {
+ 239   2            sec=sec-YELLOW_TIME;
+ 240   2            temp=sec;
+C51 COMPILER V9.59.0.0   MAIN                                                              05/03/2019 16:15:56 PAGE 5   
+
+ 241   2        }
+ 242   1        if(k==1&&(flag==1||flag==2||flag==3||flag==4))
+ 243   1        {
+ 244   2            TR0=~TR0;
+ 245   2        }
+ 246   1        if(i==1){
+ 247   2          flag=6;
+ 248   2        }
+ 249   1        if(i==2){
+ 250   2          flag=7;
+ 251   2        }
+ 252   1        if(i==3){
+ 253   2          flag=8;
+ 254   2        }
+ 255   1        if(i==4){
+ 256   2          flag=1;
+ 257   2          TR0=1; 
+ 258   2          i=0;
+ 259   2        }
+ 260   1      }
+ 261          
+ 262          void YELLOW_TIMEr_init()
+ 263          {
+ 264   1        TMOD=0x11;
+ 265   1        EA=1;
+ 266   1        ET0=1;TR0=1;
+ 267   1        ET1=1;TR1=1;
+ 268   1        TH0=TH_0;TL0=TL_0;
+ 269   1        TH1=TH_0;TL1=TL_0;
+ 270   1      }
+ 271          void main()
+ 272          {
+ 273   1        YELLOW_TIMEr_init();
+ 274   1        while(1)
+ 275   1        {
+ 276   2          display();
+ 277   2          led_display();
+ 278   2          key();
+ 279   2        }
+ 280   1      }
+ 281          
+ 282          void YELLOW_TIMEr0() interrupt 1
+ 283          {
+ 284   1        static uchar jjj=0;
+ 285   1        TH0=TH_0;TL0=TL_0;
+ 286   1        if(++jjj==20)
+ 287   1        {
+ 288   2          jjj=0;
+ 289   2          sec--;
+ 290   2          if(sec==0)
+ 291   2          {
+ 292   3            sec=temp;
+ 293   3            flag++;//s3
+ 294   3          
+ 295   3          }   
+ 296   2          if(sec-YELLOW_TIME==0)
+ 297   2          {
+ 298   3            flag++;//s2    s4
+ 299   3          }
+ 300   2        }
+ 301   1      }
+ 302          
+C51 COMPILER V9.59.0.0   MAIN                                                              05/03/2019 16:15:56 PAGE 6   
+
+ 303          void YELLOW_TIMEr1() interrupt 3
+ 304          {
+ 305   1        static uchar jjj = 0;
+ 306   1        TH1=TH_0;TL1=TL_0;
+ 307   1        if(++jjj==10){
+ 308   2          jjj = 0;
+ 309   2          FLASHING = ~FLASHING;
+ 310   2        }
+ 311   1      }
+ 312          
+ 313          
+ 314          
+ 315          
+ 316          
+ 317          
+ 318          
+ 319          
+ 320          
+ 321          
+ 322          
+ 323          
+ 324          
+ 325          
+ 326          
+ 327          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    957    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,124 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\311\Desktop\一些文档\C51\0x20.红外通信\不用中断 - 副本\main.uvproj
+Project File Date:  12/23/2018
+
+<h2>Output:</h2>
+Build target '目标 1'
+compiling main.c...
+MAIN.C(9): error C231: 'RCLK': redefinition
+目标未创建
+Build target '目标 1'
+compiling main.c...
+MAIN.C(37): warning C206: '_nop_': missing function-prototype
+MAIN.C(37): error C264: intrinsic '_nop_': declaration/activation error
+MAIN.C(133): error C141: syntax error near 'case'
+MAIN.C(143): error C202: 'i': undefined identifier
+MAIN.C(145): error C202: 'i': undefined identifier
+MAIN.C(146): error C202: 'i': undefined identifier
+目标未创建
+Build target '目标 1'
+compiling main.c...
+MAIN.C(134): error C141: syntax error near 'case'
+MAIN.C(144): error C202: 'i': undefined identifier
+MAIN.C(146): error C202: 'i': undefined identifier
+MAIN.C(147): error C202: 'i': undefined identifier
+目标未创建
+Build target '目标 1'
+compiling main.c...
+MAIN.C(135): error C141: syntax error near 'case'
+MAIN.C(147): error C202: 'ledwei': undefined identifier
+目标未创建
+Build target '目标 1'
+compiling main.c...
+MAIN.C(136): error C141: syntax error near 'case'
+目标未创建
+Build target '目标 1'
+compiling main.c...
+MAIN.C(150): warning C206: 'yanshi': missing function-prototype
+MAIN.C(150): error C267: 'yanshi': requires ANSI-style prototype
+目标未创建
+Build target '目标 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DISPLAY?MAIN
+Program Size: data=20.0 xdata=0 code=685
+creating hex file from "main"...
+"main" - 0 Error(s), 1 Warning(s).
+Build target '目标 1'
+compiling main.c...
+MAIN.C(10): error C231: 'RCLK': redefinition
+目标未创建
+Build target '目标 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DISPLAY?MAIN
+Program Size: data=20.0 xdata=0 code=685
+creating hex file from "main"...
+"main" - 0 Error(s), 1 Warning(s).
+Build target '目标 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DISPLAY?MAIN
+Program Size: data=20.0 xdata=0 code=685
+creating hex file from "main"...
+"main" - 0 Error(s), 1 Warning(s).
+Build target '目标 1'
+compiling main.c...
+MAIN.C(28): error C141: syntax error near '{'
+MAIN.C(162): error C141: syntax error near '}', expected ';'
+目标未创建
+Build target '目标 1'
+compiling main.c...
+MAIN.C(28): error C141: syntax error near '{'
+目标未创建
+Build target '目标 1'
+compiling main.c...
+MAIN.C(28): error C141: syntax error near '{'
+目标未创建
+Build target '目标 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DISPLAY?MAIN
+Program Size: data=20.0 xdata=0 code=701
+creating hex file from "main"...
+"main" - 0 Error(s), 1 Warning(s).
+Build target '目标 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DISPLAY?MAIN
+Program Size: data=20.0 xdata=0 code=833
+creating hex file from "main"...
+"main" - 0 Error(s), 1 Warning(s).
+Build target '目标 1'
+compiling main.c...
+linking...
+Program Size: data=20.0 xdata=0 code=761
+creating hex file from "main"...
+"main" - 0 Error(s), 0 Warning(s).
+Build target '目标 1'
+compiling main.c...
+linking...
+Program Size: data=20.0 xdata=0 code=761
+creating hex file from "main"...
+"main" - 0 Error(s), 0 Warning(s).
+Build target '目标 1'
+compiling main.c...
+linking...
+Program Size: data=20.0 xdata=0 code=761
+creating hex file from "main"...
+"main" - 0 Error(s), 0 Warning(s).
+Build target '目标 1'
+compiling main.c...
+linking...
+Program Size: data=20.0 xdata=0 code=761
+creating hex file from "main"...
+"main" - 0 Error(s), 0 Warning(s).

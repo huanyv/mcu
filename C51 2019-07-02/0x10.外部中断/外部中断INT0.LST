@@ -1,0 +1,54 @@
+C51 COMPILER V9.00   蚠部_卸螴NT0                                                          11/19/2018 18:07:20 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE 蚠部_卸螴NT0
+OBJECT MODULE PLACED IN 外部中断INT0.OBJ
+COMPILER INVOKED BY: C:\0000000\keil4\C51\BIN\C51.EXE 外部中断INT0.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          sbit k3=P3^2;
+   7          sbit led1=P2^0;
+   8          
+   9          void delay(uint x)
+  10          {
+  11   1              uint i,j;
+  12   1              for(i=0;i<x;i++)
+  13   1                      for(j=0;j<60;j++);
+  14   1      }
+  15          
+  16          int main()
+  17          {
+  18   1              IE=0x81;
+  19   1              TCON=0X01;
+  20   1              while(1);
+  21   1              return 0;
+  22   1      }
+  23          
+  24          void zhongduan() interrupt 0
+  25          {
+  26   1              delay(40);
+  27   1              if(k3==0)
+  28   1              {
+  29   2                      led1=~led1;     
+  30   2              }
+  31   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     88    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

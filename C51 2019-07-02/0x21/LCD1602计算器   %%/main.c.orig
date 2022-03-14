@@ -1,0 +1,100 @@
+#include<reg52.h>
+#include<lcd1602.h>
+#include "stdlib.h"
+#include "ctype.h"
+
+#define duli P1
+
+
+int n=0;
+char record[20];
+float product();
+float change();
+float muli()
+{
+	float summ;
+	summ=product();
+	while(record[n]=='-'||record[n]=='+')
+	{
+		switch(record[n])
+		{
+		case '+':n++;summ+=product();break;
+		case '-':n++;summ-=product();break;
+		}
+	}
+	return summ;
+}
+float product()
+{
+	float sump;
+	sump=change();
+	while(record[n]=='*'||record[n]=='/')
+	{
+		switch(record[n])
+		{
+		case '*':n++;sump*=change();break;
+		case '/':n++;sump/=change();break;
+		}
+	}
+	return sump;
+}
+float change()
+{
+	float sumc;
+	char rec[20],i=0;
+	if(record[n]=='(')
+	{
+		n++;
+		sumc=muli();
+	}
+	if(record[n]==')')
+		n++;
+	while(isdigit(record[n])||record[n]=='.')
+	{
+		while(isdigit(record[n])||record[n]=='.')
+			rec[i++]=record[n++];
+		rec[i]='\0';
+		sumc=atof(rec);
+	}
+	return sumc; 
+}
+
+void saomiao()
+{
+		uint a=0;
+	 duli=0x0f;
+	 if(duli!=0x0f)
+	 {
+	 	yanshi(20);
+		switch(duli)
+		{
+			case 0x07:weizhi=1;break;
+			case 0x0b:weizhi=2;break;
+			case 0x0d:weizhi=3;break;
+			case 0x0e:weizhi=4;break;	
+		}
+		duli=0xf0;
+		switch(duli)
+		{
+			case 0x70:break;
+			case 0xb0:weizhi=weizhi+4;break;
+			case 0xd0:weizhi=weizhi+8;break;
+			case 0xe0:weizhi=weizhi+12;break;
+		}
+		while((a<50)&&(duli!=0xf0))
+		{
+			yanshi(20);
+			a++;
+		}
+	 }
+}
+
+int main()
+{
+	
+	while(1)
+	{
+		
+	}
+	return 0;
+}

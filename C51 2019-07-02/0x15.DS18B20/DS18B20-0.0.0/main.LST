@@ -1,0 +1,114 @@
+C51 COMPILER V9.01   MAIN                                                                  03/14/2019 20:13:17 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<ds18b20.h>
+   3          #include<lcd1602.h>
+   4          
+   5          sbit LA=P2^2;
+   6          sbit LB=P2^3;
+   7          sbit LC=P2^4;
+   8          
+   9          #define count 50000
+  10          #define THx (65536-count)/256
+  11          #define TLx (65536-count)%256
+  12          
+  13          uchar lcd1602[8],flag_1,flag_2,sec=0;
+  14          uchar temperature[]="Temperature:";                        //LCD标题
+  15          
+  16          void datapros(int temp)          
+  17          {
+  18   1              float tp;  
+  19   1              if(temp< 0)     
+  20   1              {
+  21   2                      lcd1602[0]='-';
+  22   2                      temp=temp-1;
+  23   2                      temp=~temp;
+  24   2                      tp=temp;
+  25   2                      temp=tp*0.0625*100+0.5;
+  26   2              }
+  27   1              else
+  28   1              {                       
+  29   2                      lcd1602[0]='+';
+  30   2                      tp=temp;
+  31   2                      temp=tp*0.0625*100+0.5; 
+  32   2              }
+  33   1              lcd1602[1]=temp/10000+48;
+  34   1              lcd1602[2]=temp/1000%10+48;
+  35   1              lcd1602[3]=temp/100%10+48;
+  36   1              lcd1602[4]='.';
+  37   1              lcd1602[5]=temp/10%10+48;
+  38   1              lcd1602[6]=temp%10+48;  
+  39   1      } 
+  40          
+  41          void time0init()
+  42          {
+  43   1              TMOD=0x01;
+  44   1              TH0=THx;TL0=TLx;
+  45   1              EA=1;ET0=1;TR0=1;
+  46   1      } 
+  47          
+  48          int main()
+  49          {       
+  50   1              uint i,j,k=2; 
+  51   1              uchar table1[]={0x10,0x06,0x09,0x08,0x08,0x09,0x06,0x00};                       //自定义   度 C  符号 
+  52   1              time0init();
+  53   1              LCD_init();
+  54   1              zidingyi(table1,8);        
+  55   1              LCD_X_Y(2,11,0x00);                                                                     //显示 第一个字符到  2行11列
+C51 COMPILER V9.01   MAIN                                                                  03/14/2019 20:13:17 PAGE 2   
+
+  56   1              for(i=0;temperature[i]!='\0';i++)
+  57   1              {
+  58   2                      LCD_X_Y(1,k++,temperature[i]);           
+  59   2                      delay(100);
+  60   2              }
+  61   1      
+  62   1              while(1)
+  63   1              {
+  64   2                      j=4;    
+  65   2                      if(flag_2==1)
+  66   2                      {
+  67   3                               
+  68   3                              datapros(readc());
+  69   3                              flag_2=0;
+  70   3                      } 
+  71   2                      for(i=0;lcd1602[i]!='\0';i++)
+  72   2                      {
+  73   3                              LCD_X_Y(2,j++,lcd1602[i]);                               //
+  74   3                              delay(100);
+  75   3                              if(j==12)j=4;
+  76   3                      }
+  77   2          }
+  78   1          return 0;
+  79   1      }
+  80          void time0() interrupt 1
+  81          {
+  82   1              if(++flag_1==20)
+  83   1              {
+  84   2                      flag_1=0;
+  85   2                      flag_2=1;
+  86   2                      sec++;
+  87   2                      if(sec==60)sec=0;
+  88   2              }
+  89   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    412    ----
+   CONSTANT SIZE    =      8    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     24      18
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,481 @@
+C51 COMPILER V9.59.0.0   ________________                                                  05/21/2019 19:43:13 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ________________
+OBJECT MODULE PLACED IN 万年历掉电不丢失.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE 万年历掉电不丢失.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          #define count 50000
+   7          
+   8          #define TH_1 (65536-count)/256
+   9          #define TL_1 (65536-count)%256
+  10          
+  11          bit write=0;     //写入控制变量
+  12          
+  13          sbit LA=P2^2;
+  14          sbit LB=P2^3;
+  15          sbit LC=P2^4;
+  16          
+  17          sbit k1=P3^1;
+  18          sbit k2=P3^0;
+  19          sbit k3=P3^2;
+  20          sbit k4=P3^3;
+  21          
+  22          sbit scl=P2^1;
+  23          sbit sda=P2^0;
+  24          
+  25          uchar duanxuan[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};       //段选  无dp
+  26          uchar duanxuandp[]={0xbf,0x86,0xdb,0xcf,0xe6,0xed,0xfd,0x87,0xff,0xef};        //段选   有dp
+  27          
+  28          uchar seconds=0,minute=0,i=0,hour=0;
+  29          uchar month=1,dat=1;
+  30          uchar year=0,year_h=20;
+  31          uint switch1=0;      //日期时间的判断变量
+  32          
+  33          /*****************延时10us************/
+  34          void yanshi(uint i)
+  35          {
+  36   1        while(i--);
+  37   1      }
+  38          /*****************延时5us************/
+  39          void delay5us()   //误差 0us
+  40          {
+  41   1          unsigned char a;
+  42   1          for(a=1;a>0;a--);
+  43   1      }
+  44          
+  45          /***************开始信号*************/
+  46          void start()
+  47          {
+  48   1        sda=1;
+  49   1        delay5us();
+  50   1        scl=1;
+  51   1        delay5us();
+  52   1        sda=0;
+  53   1        delay5us();
+  54   1        scl=0;
+  55   1        delay5us();
+C51 COMPILER V9.59.0.0   ________________                                                  05/21/2019 19:43:13 PAGE 2   
+
+  56   1      }
+  57          
+  58          /***************停止信号*************/
+  59          void stop()
+  60          {
+  61   1        sda=0;
+  62   1        delay5us();
+  63   1        scl=1;
+  64   1        delay5us();
+  65   1        sda=1;
+  66   1        delay5us();
+  67   1      }
+  68          
+  69          /**************应答信号*************/
+  70          void respons()
+  71          {
+  72   1        uchar i;
+  73   1        scl=1;
+  74   1        delay5us();
+  75   1        while((sda==1)&&(i<255))
+  76   1          i++;
+  77   1        scl=0;
+  78   1        delay5us();
+  79   1      }
+  80          
+  81          /**************初始化*************/
+  82          void init()
+  83          {
+  84   1        sda=1;
+  85   1        delay5us();
+  86   1        scl=1;
+  87   1        delay5us();
+  88   1      }
+  89          
+  90          /***************写一个字节**********/
+  91          void write_byte(uchar date)
+  92          {
+  93   1        uchar i,t;
+  94   1        t=date;
+  95   1        for(i=0;i<8;i++)
+  96   1        {
+  97   2          t=t<<1;
+  98   2          scl=0;
+  99   2          delay5us();
+ 100   2          sda=CY;
+ 101   2          delay5us();
+ 102   2          scl=1;
+ 103   2          delay5us();
+ 104   2        }
+ 105   1        scl=0;
+ 106   1        delay5us();
+ 107   1        sda=1;
+ 108   1        delay5us();
+ 109   1      }
+ 110          
+ 111          /***************读一个字节************/
+ 112          uchar read_byte()
+ 113          {
+ 114   1        uchar i,k;
+ 115   1        scl=0;
+ 116   1        delay5us();
+ 117   1        sda=1;
+C51 COMPILER V9.59.0.0   ________________                                                  05/21/2019 19:43:13 PAGE 3   
+
+ 118   1          delay5us();
+ 119   1        for(i=0;i<8;i++)
+ 120   1        {
+ 121   2          scl=1;
+ 122   2          delay5us();
+ 123   2          k=(k<<1)|sda;
+ 124   2          scl=0;
+ 125   2          delay5us();
+ 126   2        }
+ 127   1        return k;
+ 128   1      }
+ 129          
+ 130          /*****************写数据*******************/
+ 131          void write_add(uchar addr,uchar date)
+ 132          {
+ 133   1        start();
+ 134   1        write_byte(0xa0);
+ 135   1        respons();
+ 136   1        write_byte(addr);
+ 137   1        respons();
+ 138   1        write_byte(date);
+ 139   1        respons();
+ 140   1        stop();
+ 141   1      }
+ 142          
+ 143          /******************读数据*******************/
+ 144          uchar read_addr(uchar addr)
+ 145          {
+ 146   1        uchar date;
+ 147   1        start();
+ 148   1        write_byte(0xa0);
+ 149   1        respons();
+ 150   1        write_byte(addr);
+ 151   1        respons();
+ 152   1        start();
+ 153   1        write_byte(0xa1);
+ 154   1        respons();
+ 155   1        date=read_byte();
+ 156   1        stop();
+ 157   1        return date;
+ 158   1      }
+ 159          
+ 160          /************是否闰年************/
+ 161          uint leapyear()
+ 162          {
+ 163   1         if((year%4==0&&year%100!=0)||(year%400==0))
+ 164   1          return 1;
+ 165   1         else
+ 166   1          return 0;
+ 167   1      }
+ 168          
+ 169          /************判断天数************/
+ 170          uint datnumber()
+ 171          {
+ 172   1        if(month==1||month==3||month==5||month==7||month==8||month==10||month==12)
+ 173   1          return 31;
+ 174   1        else if(month==4||month==6||month==9||month==11)
+ 175   1          return 30;
+ 176   1        else 
+ 177   1        {
+ 178   2          if(leapyear()==1)
+ 179   2            return 29;
+C51 COMPILER V9.59.0.0   ________________                                                  05/21/2019 19:43:13 PAGE 4   
+
+ 180   2          else
+ 181   2            return 28;
+ 182   2        }   
+ 183   1      }
+ 184          
+ 185          /**************日期控制***************/
+ 186          void datekongzhi()
+ 187          {
+ 188   1        static bit song=0;
+ 189   1        if(k3==0&&song==0)
+ 190   1        {
+ 191   2          yanshi(2000);
+ 192   2          if(k3==0)
+ 193   2          {
+ 194   3            song=1;
+ 195   3            dat++;
+ 196   3            if(dat==datnumber()+1)dat=1; 
+ 197   3          }
+ 198   2        }
+ 199   1        if(k2==0&&song==0)
+ 200   1        {
+ 201   2          yanshi(2000);
+ 202   2          if(k2==0)
+ 203   2          {
+ 204   3            song=1;
+ 205   3            month++;
+ 206   3            if(month==13)month=1; 
+ 207   3          }
+ 208   2        }
+ 209   1        if(k1==0&&song==0)
+ 210   1        {
+ 211   2          yanshi(2000);
+ 212   2          if(k1==0)
+ 213   2          {
+ 214   3            song=1;
+ 215   3            year++;
+ 216   3            if(year==100)
+ 217   3            {
+ 218   4              year=0;
+ 219   4              year_h++;
+ 220   4              if(year_h==100)
+ 221   4              year_h=20;
+ 222   4            } 
+ 223   3          }
+ 224   2        }
+ 225   1        if(k1==1&&k2==1&&k3==1){
+ 226   2          song=0;
+ 227   2        }
+ 228   1      }
+ 229           /*************????***************/  
+ 230          void timekongzhi()
+ 231          { 
+ 232   1        static bit song=0;
+ 233   1        if(k3==0&&song==0)
+ 234   1        {
+ 235   2          yanshi(2000);
+ 236   2          if(k3==0)
+ 237   2          {
+ 238   3            song=1;
+ 239   3            seconds++;
+ 240   3            if(seconds==60)seconds=0; 
+ 241   3          }
+C51 COMPILER V9.59.0.0   ________________                                                  05/21/2019 19:43:13 PAGE 5   
+
+ 242   2        }
+ 243   1        if(k2==0&&song==0)
+ 244   1        {
+ 245   2          yanshi(2000);
+ 246   2          if(k2==0)
+ 247   2          {
+ 248   3            song=1;
+ 249   3            minute++;
+ 250   3            if(minute==60)minute=0; 
+ 251   3          }
+ 252   2        }
+ 253   1        if(k1==0&&song==0)
+ 254   1        {
+ 255   2          yanshi(2000);
+ 256   2          if(k1==0)
+ 257   2          {
+ 258   3            song=1;
+ 259   3            hour++;
+ 260   3            if(hour==24)hour=0; 
+ 261   3          }
+ 262   2        }
+ 263   1        if(k1==1&&k2==1&&k3==1){
+ 264   2          song=0;
+ 265   2        }
+ 266   1      }
+ 267          /******************日期位选************************/
+ 268          void dateweixuan()       //38  译码器  日期位选
+ 269          {
+ 270   1        uint i;
+ 271   1        for(i=0;i<8;i++)
+ 272   1        {
+ 273   2          switch(i)
+ 274   2          {
+ 275   3            case 0:LC=0;LB=0;LA=0;
+ 276   3            P0=duanxuan[dat%10];break;            
+ 277   3            case 1:LC=0;LB=0;LA=1;
+ 278   3            P0=duanxuan[dat/10];break;             
+ 279   3            case 2:LC=0;LB=1;LA=0;
+ 280   3            P0=duanxuandp[month%10];break;        
+ 281   3            case 3:LC=0;LB=1;LA=1;
+ 282   3            P0=duanxuan[month/10];break;              
+ 283   3            case 4:LC=1;LB=0;LA=0;
+ 284   3            P0=duanxuandp[year%10];break;     
+ 285   3            case 5:LC=1;LB=0;LA=1;
+ 286   3            P0=duanxuan[year/10];break;
+ 287   3            case 6:LC=1;LB=1;LA=0;
+ 288   3            P0=duanxuan[year_h%10];break;
+ 289   3            case 7:LC=1;LB=1;LA=1;
+ 290   3            P0=duanxuan[year_h/10];break;     
+ 291   3          }
+ 292   2          yanshi(100);
+ 293   2          P0=0x00;
+ 294   2        }
+ 295   1      }
+ 296                 
+ 297          /******************时间位选************************/
+ 298          void timeweixuan()       //38  译码器  时间位选
+ 299          {
+ 300   1        uint i;
+ 301   1        for(i=0;i<6;i++)
+ 302   1        {
+ 303   2          switch(i)
+C51 COMPILER V9.59.0.0   ________________                                                  05/21/2019 19:43:13 PAGE 6   
+
+ 304   2          {
+ 305   3            case 0:LC=0;LB=0;LA=0;
+ 306   3            P0=duanxuan[seconds%10];break;            //秒的个位
+ 307   3            case 1:LC=0;LB=0;LA=1;
+ 308   3            P0=duanxuan[seconds/10];break;             //秒的十位
+ 309   3            case 2:LC=0;LB=1;LA=0;
+ 310   3            P0=duanxuandp[minute%10];break;           //分的个位
+ 311   3            case 3:LC=0;LB=1;LA=1;
+ 312   3            P0=duanxuan[minute/10];break;                 //分的十位
+ 313   3            case 4:LC=1;LB=0;LA=0;
+ 314   3            P0=duanxuandp[hour%10];break;        //小时的个位
+ 315   3            case 5:LC=1;LB=0;LA=1;
+ 316   3            P0=duanxuan[hour/10];break;          //小时的十位
+ 317   3          }
+ 318   2          yanshi(100);
+ 319   2          P0=0x00;
+ 320   2        }
+ 321   1      }
+ 322          
+ 323          /********************主函数**************/
+ 324          int main()
+ 325          { 
+ 326   1        init();
+ 327   1        seconds=read_addr(0x02);
+ 328   1        if(seconds>59)seconds=0;
+ 329   1        minute=read_addr(0x03);
+ 330   1        if(minute>100)minute=0;
+ 331   1        hour=read_addr(0x04);
+ 332   1        if(hour>23)hour=0;
+ 333   1        dat=read_addr(0x05);
+ 334   1        if(dat>31)dat=1;
+ 335   1        month=read_addr(0x06);
+ 336   1        if(month>13)month=1;
+ 337   1        year=read_addr(0x07);
+ 338   1        if(year>20)year=0;
+ 339   1        year_h=read_addr(0x08);
+ 340   1        if(year_h>99||year_h<20)year_h=20;  
+ 341   1        IE=0x82;
+ 342   1        TR0=1;
+ 343   1        TMOD=0x01;
+ 344   1        TL0=TL_1;TH0=TH_1;
+ 345   1        while(1)
+ 346   1        {
+ 347   2          if(switch1==0&&k4==0)
+ 348   2          {
+ 349   3            yanshi(2000);
+ 350   3            if(k4==0)
+ 351   3            {
+ 352   4              switch1=1;
+ 353   4              while(!k4);
+ 354   4            }
+ 355   3          }
+ 356   2          if(switch1==1&&k4==0)
+ 357   2          {
+ 358   3            yanshi(2000);
+ 359   3            if(k4==0)
+ 360   3            {
+ 361   4              switch1=0;
+ 362   4              while(!k4);
+ 363   4            }
+ 364   3          }
+ 365   2          if(switch1==0)
+C51 COMPILER V9.59.0.0   ________________                                                  05/21/2019 19:43:13 PAGE 7   
+
+ 366   2          {
+ 367   3            timekongzhi();
+ 368   3            timeweixuan();
+ 369   3          }
+ 370   2          if(switch1==1)
+ 371   2          {
+ 372   3            datekongzhi();
+ 373   3            dateweixuan();
+ 374   3          }
+ 375   2          if(write==1)
+ 376   2          {
+ 377   3            write=0;
+ 378   3            write_add(0x02,seconds); 
+ 379   3            yanshi(1000);  
+ 380   3            write_add(0x03,minute);
+ 381   3            yanshi(1000);
+ 382   3            write_add(0x04,hour);
+ 383   3            yanshi(1000);
+ 384   3            write_add(0x05,dat); 
+ 385   3            yanshi(1000);
+ 386   3            write_add(0x06,month);
+ 387   3            yanshi(1000);
+ 388   3            write_add(0x07,year);
+ 389   3            yanshi(1000);
+ 390   3            write_add(0x08,year_h);
+ 391   3            yanshi(1000);
+ 392   3          }
+ 393   2        }   
+ 394   1      }
+ 395          
+ 396          /****************定时器中断*******************/
+ 397          void time0() interrupt 1         //定时器中断  T0
+ 398          {
+ 399   1        TL0=TL_1;TH0=TH_1;
+ 400   1        if(++i==20)
+ 401   1        {
+ 402   2          i=0;
+ 403   2          if(seconds<59)           //秒变动
+ 404   2            seconds++;
+ 405   2          else
+ 406   2          {
+ 407   3            seconds=0;
+ 408   3            if(minute<59)       //分钟进位
+ 409   3              minute++;
+ 410   3            else
+ 411   3            {
+ 412   4              minute=0;
+ 413   4              if(hour<23) 
+ 414   4              {      //小时进位
+ 415   5                hour++;
+ 416   5                write=1;
+ 417   5              }
+ 418   4              else
+ 419   4              {
+ 420   5                hour=0;
+ 421   5                if(dat<datnumber())
+ 422   5                  dat++;
+ 423   5                else
+ 424   5                {
+ 425   6                  dat=1;
+ 426   6                  if(month<12)
+ 427   6                    month++;
+C51 COMPILER V9.59.0.0   ________________                                                  05/21/2019 19:43:13 PAGE 8   
+
+ 428   6                  else
+ 429   6                  {
+ 430   7                    month=1;
+ 431   7                    if(year<100)
+ 432   7                    year++;
+ 433   7                    else
+ 434   7                    {
+ 435   8                      year=0;
+ 436   8                      year_h++;
+ 437   8                    }
+ 438   7                  }
+ 439   6                }
+ 440   5              }
+ 441   4            }
+ 442   3          }       
+ 443   2        }   
+ 444   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1408    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     30       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      3    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

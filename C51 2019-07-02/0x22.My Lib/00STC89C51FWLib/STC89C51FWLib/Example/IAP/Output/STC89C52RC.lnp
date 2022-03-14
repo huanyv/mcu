@@ -1,0 +1,6 @@
+"..\Output\STARTUP.obj",
+"..\Output\stc89c51_iap.obj",
+"..\Output\main.obj",
+"..\Output\stc89c51_it.obj" 
+TO "..\Output\STC89C52RC" 
+PRINT("..\Listing\STC89C52RC.m51") RAMSIZE(256) 

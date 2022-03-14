@@ -1,0 +1,164 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    04/09/2019  21:19:29  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\TIME.obj, .\Objects\main.obj TO .\Objects\Project PRINT (.\Listings\Project.m51) R
+>> AMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\TIME.obj (TIME)
+  .\Objects\main.obj (MAIN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?IMUL)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\Project (TIME)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0004H     UNIT         ?DT?TIME
+            IDATA   000CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    009AH     0021H     UNIT         ?PR?TIME0?TIME
+            CODE    00BBH     001BH     UNIT         ?PR?_TIME0_DELAY_MS?TIME
+            CODE    00D6H     0014H     UNIT         ?PR?_TIME0_DELAY_US?TIME
+            CODE    00EAH     0012H     UNIT         ?C?LIB_CODE
+            CODE    00FCH     0010H     UNIT         ?PR?TIME0_INIT?TIME
+            CODE    010CH     000EH     UNIT         ?PR?MAIN?MAIN
+            CODE    011AH     0009H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\Project (TIME)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN
+  +--> ?PR?TIME0_INIT?TIME
+  +--> ?PR?_TIME0_DELAY_MS?TIME
+
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/09/2019  21:19:29  PAGE 2
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\Project (TIME)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        TIME
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:0008H         PUBLIC        TIME_Count
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  C:00FCH         PUBLIC        TIME0_Init
+  C:009AH         PUBLIC        TIME0
+  D:00C8H         PUBLIC        T2CON
+  D:000AH         PUBLIC        _TIME_Flag
+  C:00BBH         PUBLIC        _TIME0_Delay_ms
+  D:00D0H         PUBLIC        PSW
+  C:00D6H         PUBLIC        _TIME0_Delay_us
+  -------         PROC          TIME0_INIT
+  C:00FCH         LINE#         6
+  C:00FCH         LINE#         7
+  C:00FFH         LINE#         8
+  C:0101H         LINE#         9
+  C:0103H         LINE#         10
+  C:0109H         LINE#         11
+  C:010BH         LINE#         12
+  -------         ENDPROC       TIME0_INIT
+  -------         PROC          _TIME0_DELAY_MS
+  D:0006H         SYMBOL        Delay_Time
+  C:00BBH         LINE#         13
+  C:00BBH         LINE#         14
+  C:00BDH         LINE#         15
+  C:00C4H         LINE#         16
+  C:00CEH         LINE#         17
+  C:00D3H         LINE#         18
+  C:00D5H         LINE#         19
+  -------         ENDPROC       _TIME0_DELAY_MS
+  -------         PROC          _TIME0_DELAY_US
+  D:0006H         SYMBOL        Delay_Time
+  C:00D6H         LINE#         20
+  C:00D6H         LINE#         21
+  C:00D8H         LINE#         22
+  C:00E2H         LINE#         23
+  C:00E7H         LINE#         24
+  C:00E9H         LINE#         25
+  -------         ENDPROC       _TIME0_DELAY_US
+  -------         PROC          TIME0
+  C:009AH         LINE#         26
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/09/2019  21:19:29  PAGE 3
+
+
+  C:009CH         LINE#         28
+  C:00AAH         LINE#         29
+  C:00B2H         LINE#         30
+  C:00B8H         LINE#         31
+  C:00B8H         LINE#         32
+  -------         ENDPROC       TIME0
+  -------         ENDMOD        TIME
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A0H.0       PUBLIC        LED1
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:010CH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:010CH         LINE#         6
+  C:010CH         LINE#         7
+  C:010FH         LINE#         8
+  C:010FH         LINE#         9
+  C:0111H         LINE#         10
+  C:0118H         LINE#         11
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?IMUL
+  C:00EAH         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_TIME0_DELAY_US?TIME
+
+Program Size: data=13.0 xdata=0 code=283
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

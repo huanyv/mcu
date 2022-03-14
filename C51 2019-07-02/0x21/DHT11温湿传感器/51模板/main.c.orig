@@ -1,0 +1,35 @@
+#include"reg52.h"
+#include"DHT11.h"
+#include"lcd1602.h"
+
+
+
+
+void display() {
+	int temp;
+int hum;
+	receive(&temp,&hum);
+	LCD_X_Y(1,0,temp/10+48);
+}
+
+void main(void) {
+	LCD_init();
+    while(1) {
+			
+			
+			display();
+			
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

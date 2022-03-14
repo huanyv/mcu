@@ -1,0 +1,99 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              04/28/2019 16:18:19 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include <REG52.H>
+   2          
+   3          typedef unsigned char uchar;
+   4          typedef unsigned int uint;
+   5          
+   6          //unsigned char PWM_COUNT; //计数
+   7          //unsigned int HUXI_COUNT;    //占空比更新时间
+   8          //unsigned char PWM_VLAUE;    //占空比比对值
+   9          //bit direc_flag;             //占空比更新方向
+  10          
+  11          #define LED    P2
+  12          
+  13          void timer0_init()
+  14          {
+  15   1          TMOD=0x02;          //模式设置，00010000，定时器0，工作于模式2（M1=1，M0=0）
+  16   1          TH0=256-100;               //定时器溢出值设置，每隔200us发起一次中断。
+  17   1          TL0=256-100;
+  18   1          TR0=1;                  //定时器0开始计时
+  19   1          ET0=1;                  //开定时器0中断
+  20   1          EA=1;                       //开总中断
+  21   1      //    PWM_COUNT =0;
+  22   1      }
+  23          
+  24          void main()
+  25          {
+  26   1      //    HUXI_COUNT = 0;
+  27   1      //    PWM_COUNT = 0;
+  28   1      //    PWM_VLAUE = 0;
+  29   1      //    direc_flag = 0;
+  30   1          LED = 1;            //默认LED熄灭   
+  31   1          timer0_init();      //定时器0初始化
+  32   1          while(1);
+  33   1      }
+  34          void time0() interrupt 1
+  35          {  
+  36   1        static uchar PWM_COUNT=0; //计数
+  37   1        static uint HUXI_COUNT=0;    //占空比更新时间
+  38   1        static uchar PWM_VLAUE=0;    //占空比比对值
+  39   1        static bit flag=0;  
+  40   1          PWM_COUNT++;//中断次数，每中断一次+1,　　10 归零
+  41   1          HUXI_COUNT++;
+  42   1          if(PWM_COUNT == 10)PWM_COUNT = 0;
+  43   1        
+  44   1          if(PWM_COUNT < PWM_VLAUE)      //判断是否到了点亮LED的时候
+  45   1              LED = 0XFF;                   
+  46   1          else         //当前周期结束
+  47   1              LED = 0X00;    
+  48   1            
+  49   1          if((HUXI_COUNT >= 700) && (flag == 0))
+  50   1          {                               //占空比增加10%
+  51   2              HUXI_COUNT = 0;
+  52   2              PWM_VLAUE++;
+  53   2              if(PWM_VLAUE >= 9)          //占空比更改方向
+  54   2                  flag = 1; 
+  55   2          }
+C51 COMPILER V9.57.0.0   MAIN                                                              04/28/2019 16:18:19 PAGE 2   
+
+  56   1          if((HUXI_COUNT >= 700) && (flag == 1))
+  57   1          {                               //占空比减少10%
+  58   2              HUXI_COUNT = 0;
+  59   2              PWM_VLAUE--;
+  60   2              if(PWM_VLAUE <= 1)          //占空比更改方向
+  61   2                  flag = 0; 
+  62   2          }   
+  63   1      }
+  64          
+  65          
+  66          
+  67          
+  68          
+  69          
+  70          
+  71          
+  72          
+  73          
+  74          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    127    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

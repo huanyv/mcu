@@ -1,0 +1,73 @@
+C51 COMPILER V9.59.0.0   KEY                                                               06/04/2021 17:58:18 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN .\Objects\key.obj
+COMPILER INVOKED BY: D:\ProgramFiles\Keil_v5\C51\BIN\C51.EXE src\key.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\src) DEBUG OBJE
+                    -CTEXTEND PRINT(.\Listings\key.lst) OBJECT(.\Objects\key.obj)
+
+line level    source
+
+   1          #include"reg52.h"
+   2          #include"key.h"
+   3          
+   4          
+   5          
+   6          uchar Read_Key() {
+   7   1              static uchar KEY_STATE  = 0;
+   8   1              static uint  KEY_TIME   = 0;
+   9   1              uchar KEY_COUNT  = 0;   
+  10   1              uchar KEY_RETURN = 0;
+  11   1              KEY_COUNT = 0x3c & P2;
+  12   1              switch(KEY_STATE) {
+  13   2                      case 0:
+  14   2                              if(KEY_COUNT!=0x3c) {
+  15   3                                      KEY_STATE = 1;
+  16   3                                      KEY_TIME  = 0;
+  17   3                              }break;
+  18   2                      case 1:
+  19   2                              if(KEY_COUNT!=0x3c) {
+  20   3                                      KEY_TIME++;
+  21   3                                      if(KEY_TIME>15) {
+  22   4                                              switch(KEY_COUNT) {
+  23   5                                                      case 0x1c:KEY_RETURN = 1;break;
+  24   5                                                      case 0x2c:KEY_RETURN = 2;break;
+  25   5                                                      case 0x34:KEY_RETURN = 3;break;
+  26   5                                                      case 0x38:KEY_RETURN = 4;break;
+  27   5                                              }
+  28   4                                              KEY_STATE = 2;
+  29   4                                      }
+  30   3                              }
+  31   2                              else {
+  32   3                                      KEY_STATE = 0;
+  33   3                              }break;
+  34   2                      case 2:
+  35   2                              if(KEY_COUNT == 0x3c) {
+  36   3                                      KEY_STATE = 0;
+  37   3                              }break;
+  38   2              }
+  39   1              return KEY_RETURN;
+  40   1      }
+  41          
+  42          
+  43          
+  44          
+  45          
+  46          
+  47          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    114    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.59.0.0   KEY                                                               06/04/2021 17:58:18 PAGE 2   
+
+   DATA SIZE        =      3       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

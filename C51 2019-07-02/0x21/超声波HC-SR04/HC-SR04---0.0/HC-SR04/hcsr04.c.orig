@@ -1,0 +1,39 @@
+#include "reg52.h"
+#include "hcsr04.h"
+#include "intrins.h"
+
+void HC_SR04Status(void) {
+	TRIG = 0;
+	TRIG = 1;
+	_nop_();_nop_();_nop_();_nop_();_nop_();
+	_nop_();_nop_();_nop_();_nop_();_nop_();
+	_nop_();_nop_();_nop_();_nop_();_nop_();
+	TRIG = 0;
+}
+int HC_SR04EchoTime(void) {
+	int time = 0;	
+	unsigned long i = 100000;
+while((!ECHO)&&(i>0))
+i--;
+TR0 = 1;
+
+i = 100000;
+while((ECHO)&&(i>0))
+i--;
+TR0 = 0;
+time = TH0;
+time <<= 8;
+time |= TL0;
+
+TH0 = 0x00;TL0 = 0x00;
+
+	return time;
+}
+uint HC_SR04EchoDistance(void) {
+	uint time;
+	uint distance;
+	HC_SR04Status();
+	time = HC_SR04EchoTime();
+	distance = (((double)time*0.0345)/2.0)*10+0.5;
+	return distance;
+}

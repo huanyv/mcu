@@ -1,0 +1,81 @@
+C51 COMPILER V9.01   MAIN                                                                  02/13/2019 16:38:33 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\OBJ\main.obj
+COMPILER INVOKED BY: F:\00000000\000exe\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND OBJECT(..\OBJ\main.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          typedef unsigned int uint;
+   3          typedef unsigned char uchar;
+   4          
+   5          sbit k1=P3^1;
+   6          sbit LA=P2^2;
+   7          sbit LB=P2^3;
+   8          sbit LC=P2^4;
+   9          
+  10          uchar code duanxuan[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,
+  11                                                   0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71};   //共阴数码管 段选  码表
+  12                                                    
+  13          uint i=0;
+  14          
+  15          
+  16          //void yanshi(uint x)
+  17          //{
+  18          //      uint k,j;
+  19          //      for(k=0;k<x;k++)
+  20          //              for(j=0;j<60;j++);
+  21          //}
+  22          void display()
+  23          {
+  24   1              LA=0;LB=0;LC=0;
+  25   1              P0=duanxuan[i];
+  26   1      }
+  27          void key()
+  28          {
+  29   1              static bit flag_song=0;
+  30   1              static uint flag_delay=0;
+  31   1              if(flag_song==0&&k1==0)
+  32   1              {
+  33   2                      flag_delay++;
+  34   2                      if(flag_delay>=700&&k1==0)
+  35   2                      {
+  36   3                              flag_delay=0;
+  37   3                              flag_song=1;
+  38   3                              i++;
+  39   3                              if(i==10)i=0;
+  40   3                      }
+  41   2              }
+  42   1              if(k1==1)
+  43   1              {
+  44   2                      flag_song=0;
+  45   2                      flag_delay=0;
+  46   2              }
+  47   1      }
+  48          int main()
+  49          {       
+  50   1              while(1)
+  51   1              {
+  52   2                      display();
+  53   2                      key();
+  54   2              }
+  55   1              return 0;
+C51 COMPILER V9.01   MAIN                                                                  02/13/2019 16:38:33 PAGE 2   
+
+  56   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     85    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
